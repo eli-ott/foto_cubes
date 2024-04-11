@@ -22,6 +22,10 @@
             <?php endforeach; ?>
         </select>
     </div>
+    <form action="#" method="post">
+        <h2>Rechercher : </h2>
+        <input type="text">
+    </form>
 </aside>
 <section>
     <!-- requete sql -->
