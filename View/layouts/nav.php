@@ -4,7 +4,7 @@
         <p>Foto</p>
     </a>
     <ul class="menu">
-        <li><a href="gallerie">Galerie</a></li>
+        <li><a href="galerie">Galerie</a></li>
         <li><a href="profil">Mon compte</a></li>
     </ul>
 </nav>

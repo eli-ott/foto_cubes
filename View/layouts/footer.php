@@ -11,9 +11,9 @@
         <div>
             <p class="title">Liens rapides</p>
             <ul>
-                <li><a href="./">Accueil</a></li>
-                <li><a href="#">#</a></li>
-                <li><a href="#">#</a></li>
+                <li><a href="accueil">Accueil</a></li>
+                <li><a href="galerie">galerie</a></li>
+                <li><a href="profil">Mon compte</a></li>
             </ul>
         </div>
     </div>
