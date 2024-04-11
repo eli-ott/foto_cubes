@@ -8,8 +8,10 @@
             <input type="number" placeholder="Age">
             <select name="typePref" id="typePref">
                 <option value="" selected disabled hidden>Style de photo préféré</option>
-                <option value="type1">t1</option>
-                <option value="type2">t2</option>
+                <?php require_once("Service/constantes.php") ?>
+                <?php foreach (TYPE_PHOTOS as $typePhoto) : ?>
+                    <option value="<?= $typePhoto ?>"><?= $typePhoto ?></option>
+                <?php endforeach; ?>
             </select>
             <input type="email" placeholder="Email">
             <input type="text" name="Mot de passe">
