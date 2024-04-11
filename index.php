@@ -17,7 +17,7 @@ try {
         case 'accueil':
             echo 'this is test';
             break;
-        case 'gallerie':
+        case 'galerie':
             echo 'this is test';
             break;
         case 'profil':
