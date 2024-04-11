@@ -10,7 +10,9 @@
 </head>
 
 <body>
+    <?php require_once('View/layouts/nav.php'); ?>
     <?= $page_content; ?>
+    <?php require_once('View/layouts/footer.php'); ?>
 </body>
 
 </html>
