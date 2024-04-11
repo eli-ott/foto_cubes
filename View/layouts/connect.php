@@ -4,8 +4,8 @@
         <form action="#" method="post">
             <input type="text" placeholder="Pseudo">
             <input type="text" placeholder="Mot de passe">
-            <a href="mdp-oublie">Mot de passe oublier ?</a>
-            <button type="button">Connextion</button>
+            <a href="mdp-oublie">Mot de passe oublie ?</a>
+            <button type="button">Connexion</button>
         </form>
     </div>
 </section>
