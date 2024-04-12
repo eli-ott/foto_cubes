@@ -1,5 +1,6 @@
 <?php
 
+require_once("./Model/Render.php");
 require_once("./Model/MainManager.php");
 require_once("./Model/PhotoManager.php");
 
