@@ -11,6 +11,10 @@ class Photo implements JsonSerializable
      */
     private $titre;
     /**
+     * @var string $tag Le tag de la photo
+     */
+    private $tag;
+    /**
      * @var string $source La source de la photo sous forme de blob
      */
     private $source;
@@ -32,6 +36,7 @@ class Photo implements JsonSerializable
      * 
      * @param int $id L'id de la photo
      * @param string $titre Le titre de la photo
+     * @param string $tag Le tag de la photo
      * @param mixed $source La source de la photo
      * @param DateTime $datePriseVue La date de la prise de vue
      * @param DateTime $datePublication La date de publication de la photo sur le site
@@ -40,6 +45,7 @@ class Photo implements JsonSerializable
     public function __construct(
         int $id = null,
         string $titre,
+        string $tag,
         mixed $source,
         DateTime $datePriseVue,
         DateTime $datePublication,
@@ -47,6 +53,7 @@ class Photo implements JsonSerializable
     ) {
         $this->id = $id;
         $this->titre = $titre;
+        $this->tag = $tag;
         $this->source = $source;
         $this->datePriseVue = $datePriseVue;
         $this->datePublication = $datePublication;
@@ -69,6 +76,15 @@ class Photo implements JsonSerializable
     public function getTitre(): string
     {
         return $this->titre;
+    }
+
+    /**
+     * Récupère le tag de la photo
+     * 
+     * @return string Le tag
+     */
+    public function getTag(): string {
+        return $this->tag;
     }
 
     /**

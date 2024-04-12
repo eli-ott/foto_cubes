@@ -15,7 +15,7 @@ class PhotoManager extends Model
         $offset = ($page * 10) + $page;
         $limit = 10 + $page;
 
-        $sql = "SELECT photo.id_user, photo.id_photo, photo.titre, photo.source, photo.date_prise_vue, photo.date_publication, photographe.nom, photographe.prenom, photographe.pseudo, photographe.email FROM photo 
+        $sql = "SELECT photo.id_user, photo.id_photo, photo.titre, photo.tag, photo.source, photo.date_prise_vue, photo.date_publication, photographe.nom, photographe.prenom, photographe.pseudo, photographe.email FROM photo 
         LEFT JOIN user as photographe ON photo.id_user = photographe.id_user 
         LIMIT :limit_photo OFFSET :from_offset;";
 
@@ -30,6 +30,7 @@ class PhotoManager extends Model
             $photos[] = new Photo(
                 $row->id_photo,
                 $row->titre,
+                $row->tag,
                 $row->source,
                 $row->date_prise_vue,
                 $row->date_publication,
@@ -58,7 +59,7 @@ class PhotoManager extends Model
         $offset = ($page * 10) + $page;
         $limit = 10 + $page;
 
-        $sql = "SELECT photo.id_user, photo.id_photo, photo.titre, photo.source, photo.date_prise_vue, photo.date_publication, photographe.nom, photographe.prenom, photographe.pseudo, photographe.email FROM photo 
+        $sql = "SELECT photo.id_user, photo.id_photo, photo.titre, photo.tag, photo.source, photo.date_prise_vue, photo.date_publication, photographe.nom, photographe.prenom, photographe.pseudo, photographe.email FROM photo 
         LEFT JOIN user as photographe ON photo.id_user = photographe.id_user
         WHERE photo.id_user = :idUser 
         LIMIT :limitPhoto OFFSET :fromOffset;";
@@ -75,6 +76,7 @@ class PhotoManager extends Model
             $photos[] = new Photo(
                 $row->id_photo,
                 $row->titre,
+                $row->tag,
                 $row->source,
                 $row->date_prise_vue,
                 $row->date_publication,
@@ -95,7 +97,7 @@ class PhotoManager extends Model
      * Permet d'ajouter une photo
      * 
      * @param Photo $photo La photo à ajouter
-     * @return int $status Le code statut
+     * @return int Le code statut de la requête
      */
     public function addPhoto(Photo $photo): int
     {
@@ -113,9 +115,70 @@ class PhotoManager extends Model
         ]);
         $req->execute();
 
-        // A FAIRE LA FIN DE LA REQUETE
-        // VERIFIER QUE LA REQUETE A FONCTIONNER POUR RENVOYER LE STATUS
+        if (!$req) {
+            $status = 500;
+        } else {
+            $status = 200;
+        }
 
-        return 0;
+        return $status;
+    }
+
+    /**
+     * Permet de supprimer une photo
+     * 
+     * @var Photo $photo La photo à supprimer
+     * @return int Le code statut de la requête
+     */
+    public function deletePhoto(Photo $photo): int
+    {
+        if (empty($_SESSION['id_user'])) {
+            throw new Exception('Aucun utilisateur connecté', 400);
+        }
+
+        $sql = "DELETE FROM photo WHERE id_photo = :idPhoto";
+
+        $req = $this->getBDD()->prepare($sql, [
+            "idUser" => $photo->getPhotographe()->getId()
+        ]);
+        $req->execute();
+
+        if (!$req) {
+            $status = 500;
+        } else {
+            $status = 200;
+        }
+
+        return $status;
+    }
+
+    /**
+     * Permet de mettre à jour le titre et le tag d'une photo 
+     * 
+     * @var Photo $photo La photo avec les informations à mettre à jour
+     * @return int Le code statut de la requête
+     */
+    public function updatePhoto(Photo $photo): int
+    {
+        if (empty($_SESSION['id_user'])) {
+            throw new Exception('Aucun utilisateur connecté', 400);
+        }
+
+        $sql = "UPDATE photo SET titre = :titre, tag = :tag WHERE id_photo = :idPhoto";
+
+        $req = $this->getBDD()->prepare($sql, [
+            "titre" => $photo->getTitre(),
+            "tag" => $photo->getTag(),
+            "idPhoto" => $photo->getId()
+        ]);
+        $req->execute();
+
+        if (!$req) {
+            $status = 500;
+        } else {
+            $status = 200;
+        }
+
+        return $status;
     }
 }
