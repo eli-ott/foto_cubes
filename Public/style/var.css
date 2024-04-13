@@ -27,7 +27,7 @@
 	--desktop-font-size-s: 16px;
 	--desktop-font-size-m: 24px;
 	--desktop-font-size-l: 34px;
-	--desktop-font-size-xl: 74px;
+	--desktop-font-size-xl: 60px;
 
 	--mobile--font-size-s: 14px;
 	--mobile--font-size-m: 18px;
@@ -43,4 +43,9 @@
 	--margin-l: 100px;
 	--margin-xl: 150px;
 	--margin-xxl: 300px;
+
+	/** RADIUSES */
+
+	--radius-l: 35px;
+	--radius-m: 15px;
 }
