@@ -15,16 +15,16 @@ try {
     }
     switch ($page) {
         case 'accueil':
-            echo 'this is test';
+            // echo 'this is test';
             break;
         case 'galerie':
-            echo 'this is test';
+            // echo 'this is test';
             break;
         case 'profil':
-            echo 'this is test';
+            // echo 'this is test';
             break;
         case 'inscription':
-            echo 'this is test';
+            // echo 'this is test';
             break;
         default:
             throw new Exception('404: Aucune page trouvé');
@@ -34,3 +34,4 @@ try {
     $page_title = "Oops il y a eu une erreur";
     $page_content = $e->getMessage();
 }
+require_once("View/base.php");
