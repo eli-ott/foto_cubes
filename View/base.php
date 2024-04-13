@@ -11,13 +11,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Cousine:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="<?= URL ?>Public/style/var.css">
     <link rel="stylesheet" href="<?= URL ?>Public/style/main.css">
+    <link rel="stylesheet" href="<?= URL ?>Public/style/signUp.css">
     <title><?= $page_title; ?></title>
 </head>
 
 <body>
-    <?php require_once('View/layouts/nav.php'); ?>
+    <?php require_once("View/layouts/signUp.php"); ?>
+    <!-- <?php require_once('View/layouts/nav.php'); ?>
     <?= $page_content; ?>
-    <?php require_once('View/layouts/footer.php'); ?>
+    <?php require_once('View/layouts/footer.php'); ?> -->
 </body>
 
 </html>
