@@ -1,9 +1,9 @@
-<nav>
-    <a class="logo" href="accueil">
-        <img src="/front/assets/images/LimeWire_AI_Studio_Asset__7_-removebg-preview 1.svg" alt="Logo Foto" />
+<nav class="flex">
+    <a class="logo flex center" href="accueil">
+        <img src="<?= URL ?>Public/assets/image/logo.svg" alt="Logo Foto" />
         <p>Foto</p>
     </a>
-    <ul class="menu">
+    <ul class="menu flex center">
         <li><a href="galerie">Galerie</a></li>
         <li><a href="profil">Mon compte</a></li>
     </ul>
