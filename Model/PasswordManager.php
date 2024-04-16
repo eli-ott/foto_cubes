@@ -1,8 +1,6 @@
 <?php
 require_once('./Model/Model.php');
 
-"udpate - delete - get - create";
-
 class PasswordManager extends Model
 {
     /**
