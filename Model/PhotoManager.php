@@ -25,17 +25,21 @@ class PhotoManager extends Model
         ]);
         $req->execute();
 
+        if (!$req) {
+            throw new Exception('Erreur lors de la récupération des photos', 500);
+        }
+
         $photos = [];
         while ($row = $req->fetch((PDO::FETCH_ASSOC))) {
             $photos[] = new Photo(
-                $row->id_photo,
+                intval($row->id_photo),
                 $row->titre,
                 $row->tag,
                 $row->source,
                 $row->date_prise_vue,
                 $row->date_publication,
                 new Photographe(
-                    $row->idUser,
+                    intval($row->idUser),
                     $row->nom,
                     $row->prenom,
                     $row->pseudo,
@@ -71,17 +75,21 @@ class PhotoManager extends Model
         ]);
         $req->execute();
 
+        if (!$req) {
+            throw new Exception("Erreur lors de la récupération des photos de l'utilisateur id " . $idUser, 500);
+        }
+
         $photos = [];
         while ($row = $req->fetch((PDO::FETCH_ASSOC))) {
             $photos[] = new Photo(
-                $row->id_photo,
+                intval($row->id_photo),
                 $row->titre,
                 $row->tag,
                 $row->source,
                 $row->date_prise_vue,
                 $row->date_publication,
                 new Photographe(
-                    $row->idUser,
+                    intval($row->idUser),
                     $row->nom,
                     $row->prenom,
                     $row->pseudo,
@@ -101,7 +109,7 @@ class PhotoManager extends Model
      */
     public function addPhoto(Photo $photo): int
     {
-        if (empty($_SESSION['id_user'])) {
+        if (empty($_COOKIE['token'])) {
             throw new Exception('Aucun utilisateur connecté', 400);
         }
 
@@ -115,10 +123,10 @@ class PhotoManager extends Model
         ]);
         $req->execute();
 
-        if (!$req) {
-            $status = 500;
-        } else {
+        if ($req) {
             $status = 200;
+        } else {
+            throw new Exception('Erreur lors de la sauvegarde de la photo', 500);
         }
 
         return $status;
@@ -132,7 +140,7 @@ class PhotoManager extends Model
      */
     public function deletePhoto(Photo $photo): int
     {
-        if (empty($_SESSION['id_user'])) {
+        if (empty($_COOKIE['token'])) {
             throw new Exception('Aucun utilisateur connecté', 400);
         }
 
@@ -143,10 +151,10 @@ class PhotoManager extends Model
         ]);
         $req->execute();
 
-        if (!$req) {
-            $status = 500;
-        } else {
+        if ($req) {
             $status = 200;
+        } else {
+            throw new Exception('Erreur lors de la suppression de la photo id ' . $photo->getId(), 500);
         }
 
         return $status;
@@ -160,7 +168,7 @@ class PhotoManager extends Model
      */
     public function updatePhoto(Photo $photo): int
     {
-        if (empty($_SESSION['id_user'])) {
+        if (empty($_COOKIE['token'])) {
             throw new Exception('Aucun utilisateur connecté', 400);
         }
 
@@ -173,10 +181,10 @@ class PhotoManager extends Model
         ]);
         $req->execute();
 
-        if (!$req) {
-            $status = 500;
-        } else {
+        if ($req) {
             $status = 200;
+        } else {
+            throw new Exception('Erreur lors de l\'a mise à jour de la photo id ' . $photo->getId(), 500);
         }
 
         return $status;
