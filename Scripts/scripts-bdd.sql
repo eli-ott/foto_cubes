@@ -3,11 +3,9 @@ USE Foto;
 
 CREATE TABLE IF NOT EXISTS `mot_de_passe` (
     id_mot_de_passe INT PRIMARY KEY NOT NULL AUTO_INCREMENT COMMENT 'L''identifiant du mot de passe',
-    id_user INT NOT NULL COMMENT 'L''identifiant de l''utilisateur',
     `hash` TEXT NOT NULL COMMENT 'Le hash du mot de passe',
     nb_essais INT NOT NULL DEFAULT 0 COMMENT 'Le nombre d''essais de connexion, remis à zéro à chaque connexion réussi',
-    date_reinitialisation INT DEFAULT NULL COMMENT 'La dernière date de réinitialisation',
-    CONSTRAINT id_user_fx FOREIGN KEY (id_user) REFERENCES utilisateur(id_user)
+    date_reinitialisation INT DEFAULT NULL COMMENT 'La dernière date de réinitialisation'
 );
 
 CREATE TABLE IF NOT EXISTS `utilisateur` (
