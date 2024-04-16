@@ -1,4 +1,4 @@
-    <section class="accueil">
+    <section class="accueil flex start column">
         <!-- BANNER -->
         <div class="banner flex start">
             <div class="flex center column">

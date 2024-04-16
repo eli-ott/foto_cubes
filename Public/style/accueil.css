@@ -1,5 +1,5 @@
 .accueil {
-    gap: var(--);
+    gap: var(--margin-m);
 }
 .banner {
 	height: 80vh;
@@ -47,6 +47,8 @@
 	text-decoration: underline 1px var(--light);
 }
 .content {
+	padding: var(--margin-s);
+	gap: var(--margin-s);
 	width: 100vw;
 }
 .content h3 {
