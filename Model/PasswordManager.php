@@ -13,7 +13,7 @@ class PasswordManager extends Model
      */
     public function updatePassword(string $hash, int $nb_essais, int $id_user): int
     {
-        $sql = "UPDATE mot_de_passe SET `hash` = :mdp, nb_essais = :nb_essais JOIN utilisateur ON id_mot_de_passe = id_mot_de_passe WHERE id_user = :id_user";
+        $sql = "UPDATE mot_de_passe mdp JOIN utilisateur user ON mdp.id_mot_de_passe = user.id_mot_de_passe SET `hash` = :mdp, nb_essais = :nb_essais WHERE user.id_user = :id_user";
 
         $req = $this->getBDD()->prepare($sql, [
             "mdp" => $hash,
@@ -39,7 +39,7 @@ class PasswordManager extends Model
      */
     public function deletePassword(int $id_user): int
     {
-        $sql = "DELETE FROM mot_de_passe INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe WHERE id_user = :id_user";
+        $sql = "DELETE mot_de_passe FROM mot_de_passe INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe WHERE utilisateur.id_user = :id_user";
 
         $req = $this->getBDD()->prepare($sql, [
             "id_user" => $id_user
@@ -63,7 +63,7 @@ class PasswordManager extends Model
      */
     public function getPassword(int $id_mot_de_passe): int
     {
-        $sql = "SELECT mot_de_passe.id_mot_de_passe, `hash`, date_reinitialisation, utilisateur.id_user, pseudo FROM mot_de_passe INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe WHERE mot_de_passe.id_mot_de_passe = :id_mot_de_passe";
+        $sql = "SELECT mot_de_passe.id_mot_de_passe, `hash`, date_reinitialisation, utilisateur.id_user, utilisateur.pseudo FROM mot_de_passe INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe WHERE mot_de_passe.id_mot_de_passe = :id_mot_de_passe";
 
         $req = $this->getBDD()->prepare($sql, [
             "id_mot_de_passe" => $id_mot_de_passe
