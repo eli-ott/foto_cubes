@@ -13,7 +13,7 @@ class PasswordManager extends Model
      */
     public function updatePassword(string $hash, int $nb_essais, int $id_user): int
     {
-        $sql = "UPDATE mot_de_passe JOIN utilisateur ON id_mot_de_passe = id_mot_de_passe SET `hash` = :mdp, nb_essais = :nb_essais WHERE id_user = :id_user";
+        $sql = "UPDATE mot_de_passe SET `hash` = :mdp, nb_essais = :nb_essais JOIN utilisateur ON id_mot_de_passe = id_mot_de_passe WHERE id_user = :id_user";
 
         $req = $this->getBDD()->prepare($sql, [
             "mdp" => $hash,
@@ -39,7 +39,7 @@ class PasswordManager extends Model
      */
     public function deletePassword(int $id_user): int
     {
-        $sql = "DELETE FROM mot_de_passe INNER JOIN utilisateur ON id_mot_de_passe = id_mot_de_passe WHERE id_user = :id_user";
+        $sql = "DELETE FROM mot_de_passe INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe WHERE id_user = :id_user";
 
         $req = $this->getBDD()->prepare($sql, [
             "id_user" => $id_user
@@ -58,15 +58,15 @@ class PasswordManager extends Model
     /**
      * Récuperer le password de l'utiliateur
      * 
-     * @param int $id_user Récupère l'id de l'utilisateur 
+     * @param int $id_mot_de_passe Récupère le mdp de l'utilisateur
      * @return int Le code status dela requete
      */
-    public function getPassword(int $id_user): int
+    public function getPassword(int $id_mot_de_passe): int
     {
-        $sql = "SELECT mot_de_passe.id_mot_de_passe, `hash`, date_reinitialisation, utilisateur.id_user, pseudo FROM mot_de_passe INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe WHERE id_mot_de_passe = :id_mot_de_passe";
+        $sql = "SELECT mot_de_passe.id_mot_de_passe, `hash`, date_reinitialisation, utilisateur.id_user, pseudo FROM mot_de_passe INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe WHERE mot_de_passe.id_mot_de_passe = :id_mot_de_passe";
 
         $req = $this->getBDD()->prepare($sql, [
-            "id_user" => $id_user
+            "id_mot_de_passe" => $id_mot_de_passe
         ]);
         $req->execute();
 
@@ -83,11 +83,10 @@ class PasswordManager extends Model
      * Crée un password pour un nouvelle utilisateur
      * 
      * @param int $id_mot_de_passe Crée un id pour le mdp
-     * @param int $id_user Lie le mdp a l'utilisateur
      * @param string $hash Stock le mdp hasher
      * @return int Le code status de la requete
      */
-    public function createPassword(int $id_mot_de_passe, int $id_user, string $hash): int
+    public function createPassword(int $id_mot_de_passe, string $hash): int
     {
         $sql = "INSERT INTO mot_de_passe ( id_mot_de_passe, `hash`) VALUE (:id_mdp, :mdp)";
 
