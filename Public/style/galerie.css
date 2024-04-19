@@ -1,0 +1,10 @@
+.galerie {
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	grid-auto-rows: 5vw;
+	gap: var(--margin-s);
+	padding: var(--margin-s);
+
+	width: calc(100vw - 22.5vw);
+	margin-left: 22.5vw;
+}
