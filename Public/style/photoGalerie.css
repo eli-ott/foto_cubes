@@ -1,4 +1,5 @@
 .image-container {
+	order: 1;
 	gap: var(--margin-xxs);
 	grid-row-end: span 3;
 	grid-column-end: span 5;

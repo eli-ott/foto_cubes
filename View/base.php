@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="<?= URL ?>Public/style/main.css">
     <link rel="stylesheet" href="<?= URL ?>Public/style/filtres.css">
     <link rel="stylesheet" href="<?= URL ?>Public/style/photoGalerie.css">
+    <link rel="stylesheet" href="<?= URL ?>Public/style/paginator.css">
     <link rel="stylesheet" href="<?= URL ?>Public/style/galerie.css">
     <title><?= $page_title; ?></title>
 </head>

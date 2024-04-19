@@ -8,3 +8,9 @@
 	width: calc(100vw - 22.5vw);
 	margin-left: 22.5vw;
 }
+.paginator-container {
+	align-self: center;
+
+	grid-column-end: span 12;
+	order: 10;
+}
