@@ -6,7 +6,7 @@
 	padding: var(--margin-s);
 
 	width: calc(100vw - 22.5vw);
-	margin-left: 22.5vw;
+	/* margin-left: 22.5vw; */
 }
 .paginator-container {
 	align-self: center;
