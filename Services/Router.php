@@ -26,13 +26,13 @@ try {
             $mainController->profil();
             break;
         case 'connexion':
-            if ($_COOKIE['token']) {
+            if (!empty($_COOKIE['token'])) {
                 //TODO: Rediriger vers la page du profil
             } else {
                 $mainController->connexion();
             }
         case 'inscription':
-            if ($_COOKIE['token']) {
+            if (!empty($_COOKIE['token'])) {
                 //TODO: Rediriger vers la page du profil
             } else {
                 $mainController->inscription();
