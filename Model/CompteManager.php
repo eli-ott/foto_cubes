@@ -1,6 +1,6 @@
 <?php
 
-require_once("./Model/Model.php");
+require_once("Services/Model.php");
 
 class CompteManager extends Model
 {

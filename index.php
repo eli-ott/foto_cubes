@@ -14,14 +14,16 @@ try {
     }
     switch ($page) {
         case 'accueil':
-            echo 'this is test';
+            $mainController->accueil();
             break;
-        case 'gallerie':
-            echo 'this is test';
+        case 'galerie':
+            $mainController->galerie();
             break;
         case 'profil':
             echo 'this is test';
             break;
+        case 'connexion': 
+            echo 'this is connexion';
         case 'inscription':
             echo 'this is test';
             break;
