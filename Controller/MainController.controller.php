@@ -65,7 +65,7 @@ class MainController extends Render
         $this->render([
             "title" => 'Profil',
             "description" => 'Profil d\'un utilisateur de Foto',
-            "infos" => $this->compteManager->getUserInfo($_SESSION['idUser']),
+            "infos" => $this->compteManager->getUserInfo($_COOKIE['idUser']),
             'view' => 'View/layouts/profil.php',
             'template' => 'View/base.php'
         ]);
