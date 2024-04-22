@@ -2,10 +2,18 @@
 
 class Render
 {
+    /**
+     * Constructeur
+     */
     public function __construct()
     {
     }
 
+    /**
+     * Affiche une page spécifique en fonction d'une template et d'une vue spéciale
+     * 
+     * @param array $data Les données nécessaire pour afficher la page
+     */
     protected function render(array $data): void
     {
         extract($data, EXTR_OVERWRITE);

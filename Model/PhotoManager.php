@@ -1,14 +1,31 @@
 <?php
 
-require_once('./Model/Model.php');
+require_once('Services/Model.php');
 
 class PhotoManager extends Model
 {
+
+    /**
+     * Permet de récupérer les previews pour la page d'accueil
+     * 
+     * @return array Les 5 dernières photos ajoutées
+     */
+    public function getPreviews(): array
+    {
+        $sql = "SELECT * FROM photo ORDER BY date_publication DESC LIMIT 5";
+
+        $request = $this->getBDD()->prepare($sql);
+        $request->execute();
+        $data = $request->fetchAll(PDO::FETCH_ASSOC);
+
+        return $data;
+    }
+
     /**
      * Récupère les photos en fonction de la page. Retourne 10 photos au maximum
-     * 
+     *
      * @param int $page La page actuelle pour calculer les photos à récupérer
-     * @return Photo Le tableau d'images
+     * @return array Le tableau d'images
      */
     public function getPhotos(int $page): array
     {
@@ -54,7 +71,7 @@ class PhotoManager extends Model
     /**
      * Récupère les photos de l'utilisateur en fonction de la page
      * 
-     * @param int $page La page actuel du paginateur
+     * @param int $page La page actuel du paginator
      * @param int $idUser L'id du user
      * @return array Les photos du user
      */
