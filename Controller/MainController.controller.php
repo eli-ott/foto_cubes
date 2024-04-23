@@ -33,6 +33,9 @@ class MainController extends Render
         $this->render([
             "title" => "Accueil",
             "description" => "Le meilleur site de partage de photo entre amateur | Foto",
+            "showFooter" => true,
+            "showHeader" => true,
+            "pageCss" => ['accueil', 'nav', 'footer'],
             "photos" => $this->photoManager->getPreviews(),
             "view" => 'View/layouts/accueil.php',
             "template" => 'View/base.php'
@@ -47,6 +50,9 @@ class MainController extends Render
         $this->render([
             "title" => "Galerie",
             "description" => "Galerie de Foto",
+            "showFooter" => true,
+            "showHeader" => true,
+            "pageCss" => ['galerie', 'filtres', 'paginator', 'photoGalerie', 'nav', 'footer'],
             "photos" => $this->photoManager->getPhotos(1),
             "view" => "View/layouts/galerie.php",
             "template" => 'View/base.php'
@@ -58,13 +64,16 @@ class MainController extends Render
      */
     public function profil(): void
     {
-        if (!$_COOKIE['token']) {
+        if (empty($_COOKIE['token'])) {
             throw new Exception('Aucun utilisateur connecté', 405); //! Retourne une erreur si personne n'est connecté
         }
 
         $this->render([
             "title" => 'Profil',
             "description" => 'Profil d\'un utilisateur de Foto',
+            "showFooter" => true,
+            "showHeader" => true,
+            "pageCss" => ['profil', 'galerie', 'filtres', 'paginator', 'photoGalerie', 'nav', 'footer'],
             "infos" => $this->compteManager->getUserInfo($_COOKIE['idUser']),
             'view' => 'View/layouts/profil.php',
             'template' => 'View/base.php'
@@ -76,13 +85,16 @@ class MainController extends Render
      */
     public function inscription(): void
     {
-        if ($_COOKIE['token']) {
+        if (!empty($_COOKIE['token'])) {
             throw new Exception('Un utilisateur est déjà connecté', 405); //! retourne une erreur si un utilisateur est déjà connecté
         }
 
         $this->render([
             'title' => 'Inscription',
             'description' => 'Inscription à Foto',
+            "showFooter" => false,
+            "showHeader" => false,
+            "pageCss" => ['signUp', 'nav', 'footer'],
             'view' => 'View/layouts/signUp.php',
             'template' => 'View/base.php'
         ]);
@@ -93,13 +105,16 @@ class MainController extends Render
      */
     public function connexion(): void
     {
-        if ($_COOKIE['token']) {
+        if (!empty($_COOKIE['token'])) {
             throw new Exception('Un utilisateur est déjà connecté', 405); //! retourne une erreur si un utilisateur est déjà connecté
         }
 
         $this->render([
             'title' => 'Connexion',
             'description' => 'Connexion à Foto',
+            "showFooter" => false,
+            "showHeader" => false,
+            "pageCss" => ['connect', 'nav', 'footer'],
             'view' => 'View/layouts/connect.php',
             'template' => 'View/base.php'
         ]);
@@ -116,6 +131,9 @@ class MainController extends Render
         $this->render([
             'title' => 'Erreur',
             'description' => 'Oups il s\'emblerait qu\'il y ai une erreur',
+            "showFooter" => false,
+            "showHeader" => false,
+            "pageCss" => ['error', 'nav', 'footer'],
             'code' => $code,
             'message' => $message,
             'view' => 'View/layouts/error.php',
