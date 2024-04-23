@@ -38,6 +38,13 @@ try {
                 $mainController->inscription();
             }
             break;
+        case 'ajouter':
+            if (empty($_COOKIE['token'])) {
+                //TODO: Redirigé vers la page de connexion
+            } else {
+                $mainController->ajouter();
+            }
+            break;
         default:
             throw new Exception('Aucune page trouvé', 404);
     }
