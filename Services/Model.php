@@ -5,7 +5,7 @@ abstract class Model
     /**
      * @var PDO $pdo le PDO de la base
      */
-    private static PDO $pdo;
+    private static ?PDO $pdo = null;
 
     /**
      * Set la connexion à la base de donnée
@@ -17,7 +17,7 @@ abstract class Model
     }
 
     /**
-     * Créer une connexion à la base de donée
+     * Créer une connexion à la base de donnée
      * 
      * @return PDO Le PDO de la base
      */
