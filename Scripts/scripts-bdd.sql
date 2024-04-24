@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `photo` (
     titre varchar(50) NOT NULL COMMENT 'Le titre de la photo',
     date_prise_vue DATETIME NOT NULL COMMENT 'La date de prise de vue',
     source BLOB NOT NULL COMMENT 'La source de la photo',
+    tag varchar(50) NOT NULL COMMENT 'Le tag de la photo',
     date_publication DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'La date de publication de la photo sur le site',
     CONSTRAINT id_user_FK FOREIGN KEY (id_user) REFERENCES utilisateur(id_user)
 );
