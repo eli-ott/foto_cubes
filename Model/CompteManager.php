@@ -11,7 +11,7 @@ class CompteManager extends Model
      * @var int L'id du mot de passe 
      * @return Photographe Le dernier compte ajouté
      */
-    public function addUser(Photographe $photographe, int $idMdp): array
+    public function addUser(Photographe $photographe): array
     {
         if (!empty($_COOKIE['token'])) {
             throw new Exception('Un utilisateur est déjà connecté', 400);
@@ -21,7 +21,7 @@ class CompteManager extends Model
             VALUES (:idMdp, :pseudo, :nom, :prenom, :email, :age, :typePhotoPref)";
 
         $addUserReq = $this->getBDD()->prepare($addUserSql, [
-            "idMdp" => $idMdp,
+            "idMdp" => $photographe->getIdMdp(),
             "pseudo" => $photographe->getPseudo(),
             "nom" => $photographe->getNom(),
             "prenom" => $photographe->getPrenom(),
@@ -43,6 +43,7 @@ class CompteManager extends Model
                 while ($row = $lastInsertedRowReq->fetch(PDO::FETCH_ASSOC)) {
                     $data[] = new Photographe(
                         intval($row->id_user),
+                        intval($row->id_mot_de_passe),
                         $row->nom,
                         $row->prenom,
                         $row->pseudo,
@@ -75,7 +76,7 @@ class CompteManager extends Model
             throw new Exception('Aucun utilisateur connecté', 400);
         }
 
-        $sql = "UPDATE user SET psuedo = :pseudo, nom = :nom, prenom = :prenom, age = :age, email = :email WHERE id_user = :idUser";
+        $sql = "UPDATE user SET pseudo = :pseudo, nom = :nom, prenom = :prenom, age = :age, email = :email WHERE id_user = :idUser";
 
         $req = $this->getBDD()->prepare($sql, [
             "idUser" => $photographe->getId(),
@@ -132,7 +133,8 @@ class CompteManager extends Model
      */
     public function getUserInfo(int $idUser): Photographe
     {
-        $sql = "SELECT id_user, nom, prenom, email, pseudo, date_creation, type_photo_pref, age FROM user WHERE id_user = :idUser";
+        $sql = "SELECT id_user, id_mot_de_passe, nom, prenom, email, pseudo, date_creation, type_photo_pref, age, warn, compte_valide 
+            FROM user WHERE id_user = :idUser";
 
         $req = $this->getBDD()->prepare($sql, [
             "idUser" => $idUser
@@ -141,13 +143,17 @@ class CompteManager extends Model
 
         while ($row = $req->fetch(PDO::FETCH_ASSOC)) {
             $data = new Photographe(
-                $row->id,
+                intval($row->id),
+                intval($row->id_mot_de_passe),
                 $row->nom,
                 $row->prenom,
                 $row->pseudo,
                 $row->email,
-                $row->age,
+                intval($row->age),
                 $row->type_photo_pref,
+                $row->date_creation,
+                boolval($row->warn),
+                boolval($row->compte_valide),
             );
         }
 
