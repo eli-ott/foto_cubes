@@ -1,0 +1,13 @@
+.paginator {
+	width: 100%;
+
+	gap: var(--margin-xxs);
+}
+.paginator a {
+	text-decoration: none;
+
+	font-size: var(--desktop-font-size-s);
+}
+.paginator a:hover {
+	text-decoration: underline 1px var(--dark);
+}
