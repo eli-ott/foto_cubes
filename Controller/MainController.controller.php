@@ -140,4 +140,20 @@ class MainController extends Render
             'template' => 'View/base.php'
         ]);
     }
+
+    /**
+     * Permet d'afficher la d'upload de photo
+     */
+    public function ajouter(): void
+    {
+        $this->render([
+            'title' => 'Ajouter une photo',
+            'description' => 'Ajouter une photo à Foto',
+            "showFooter" => false,
+            "showHeader" => false,
+            "pageCss" => ['upload', 'nav', 'footer'],
+            'view' => 'View/layouts/upload.php',
+            'template' => 'View/base.php'
+        ]);
+    }
 }
