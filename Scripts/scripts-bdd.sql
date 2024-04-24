@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
     date_creation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'La date de création de son compte',
     warn BOOLEAN NOT NULL DEFAULT 0 COMMENT 'Si le compte a été warn ou non',
     is_admin BOOLEAN NOT NULL DEFAULT 0 COMMENT 'Si l''utilisateur est admin ou non',
+    compte_valide BOOLEAN NOT NULL DEFAULT 0 COMMENT 'Si l''utilisateur a validé son compte par email ou non',
     CONSTRAINT id_mot_de_passe_fk FOREIGN KEY (id_mot_de_passe) REFERENCES utilisateur(id_user)
 );
 
@@ -29,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `photo` (
     titre varchar(50) NOT NULL COMMENT 'Le titre de la photo',
     date_prise_vue DATETIME NOT NULL COMMENT 'La date de prise de vue',
     source BLOB NOT NULL COMMENT 'La source de la photo',
+    tag varchar(50) NOT NULL COMMENT 'Le tag de la photo',
     date_publication DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'La date de publication de la photo sur le site',
     CONSTRAINT id_user_FK FOREIGN KEY (id_user) REFERENCES utilisateur(id_user)
 );
