@@ -17,3 +17,8 @@ const TYPE_PHOTOS = [
     "Astro-photographie",
     "Boudoir"
 ];
+
+/**
+ * @var int Le nombre d'image par page
+ */
+const IMAGES_PAR_PAGE = 10;

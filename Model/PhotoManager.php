@@ -1,5 +1,6 @@
 <?php
 
+require_once('Services/constantes.php');
 require_once('Services/Model.php');
 
 class PhotoManager extends Model
@@ -65,7 +66,10 @@ class PhotoManager extends Model
             );
         }
 
-        return $photos;
+        return [
+            'pages' => count($photos) / IMAGES_PAR_PAGE,
+            'photos' => $photos
+        ];
     }
 
     /**
@@ -115,7 +119,10 @@ class PhotoManager extends Model
             );
         }
 
-        return $photos;
+        return [
+            'pages' => count($photos) / IMAGES_PAR_PAGE,
+            'photos' => $photos
+        ];
     }
 
     /**

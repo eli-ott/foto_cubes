@@ -8,7 +8,7 @@
             <input type="number" placeholder="Age">
             <select name="typePref" id="typePref">
                 <option selected disabled hidden>Style de photo préféré</option>
-                <?php require_once("Service/constantes.php") ?>
+                <?php require_once("Services/constantes.php") ?>
                 <?php foreach (TYPE_PHOTOS as $typePhoto) : ?>
                     <option value="<?= $typePhoto ?>"><?= $typePhoto ?></option>
                 <?php endforeach; ?>
