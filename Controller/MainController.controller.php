@@ -156,4 +156,20 @@ class MainController extends Render
             'template' => 'View/base.php'
         ]);
     }
+
+    /**
+     * Permet d'afficher la page de reset du mot de passe
+     */
+    public function resetMdp(): void
+    {
+        $this->render([
+            'title' => 'Reinitialisation le mot de passe',
+            'description' => 'Réinitialiser le mot de passe de mon compte Foto',
+            'showFooter' => false,
+            'showHeader' => false,
+            'pageCss' => ['reset'],
+            'view' => 'View/layouts/reset.php',
+            'template' => 'View/base.php'
+        ]);
+    }
 }
