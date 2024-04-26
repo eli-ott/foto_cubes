@@ -159,4 +159,22 @@ class CompteManager extends Model
 
         return $data;
     }
+
+    /**
+     * Permet de récupérer l'identifiant d'un utilisateur à partir de son pseudo
+     * 
+     * @param string $pseudo Le pseudo
+     * @return int L'identifiant de l'utilisateur
+     */
+    public function getUserId(string $pseudo): int
+    {
+        $sql = "SELECT id_user, pseudo FROM utilisateur WHERE pseudo = :pseudo";
+
+        $req = $this->getBDD()->prepare($sql, [
+            "pseudo" => $pseudo
+        ]);
+        $req->execute();
+
+        return $req->fetch(PDO::FETCH_ASSOC)->id_user;
+    }
 }

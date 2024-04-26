@@ -55,28 +55,34 @@ class PasswordManager extends Model
     }
 
     /**
-     * Récupérer le password de l'utilisateur
+     * Récupérer le password de l'utilisateur en fonction de son pseudo
      * 
-     * @param int $id_mot_de_passe Récupère le mdp de l'utilisateur
+     * @param int $idUser L'identifiant du user
      * @return array Les données du mot de passe
      */
-    public function getPassword(int $id_mot_de_passe): array
+    public function getPassword(int $idUser): array
     {
-        $sql = "SELECT mot_de_passe.id_mot_de_passe, `hash`, ng_essais, date_reinitialisation, utilisateur.id_user, utilisateur.pseudo FROM mot_de_passe INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe WHERE mot_de_passe.id_mot_de_passe = :id_mot_de_passe";
+        $sql = "SELECT mot_de_passe.id_mot_de_passe, `hash`, ng_essais, date_reinitialisation, utilisateur.id_user, utilisateur.pseudo 
+            FROM mot_de_passe 
+            INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe 
+            WHERE utilisateur.id_user = :idUser";
 
         $req = $this->getBDD()->prepare($sql, [
-            "id_mot_de_passe" => $id_mot_de_passe
+            "idUser" => $idUser
         ]);
         $req->execute();
 
-        $data = [];
-        while($row = $req->fetch(PDO::FETCH_ASSOC)) {
-            $data[] = new MotDePasse(
-                $row->id_mot_de_passe,
-                $row->hash,
-                $row->nb_essais,
-                $row->date_reinitialisation
-            );
+        while ($row = $req->fetch(PDO::FETCH_ASSOC)) {
+            $data = [
+                'password' =>
+                new MotDePasse(
+                    $row->id_mot_de_passe,
+                    $row->hash,
+                    $row->nb_essais,
+                    $row->date_reinitialisation
+                ),
+                'userId' => $row->id_user
+            ];
         }
 
         return $data;
