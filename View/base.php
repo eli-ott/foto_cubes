@@ -1,3 +1,5 @@
+<?php session_start() ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -23,7 +25,7 @@
     <?php if ($showHeader) : ?>
         <?php require_once('View/layouts/nav.php'); ?>
     <?php endif; ?>
-    <?= $page_content; ?> 
+    <?= $page_content; ?>
     <?php if ($showFooter) : ?>
         <?php require_once('View/layouts/footer.php'); ?>
     <?php endif; ?>

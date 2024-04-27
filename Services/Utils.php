@@ -22,4 +22,27 @@ class Utils
     {
         return $hours * 3600;
     }
+
+    /**
+     * Permet de redirigé de manière efficiente
+     * 
+     * @param string $url L'url pour la redirection
+     */
+    public static function redirect(string $url): void
+    {
+        header("Location: " . $url);
+        exit();
+    }
+
+    /**
+     * Permet d'ajouter un message pour l'utilisateur
+     * 
+     * @param string $message Le message à afficher
+     * @param int $type Le type de message
+     */
+    public static function newAlert(string $message, int $type): void
+    {
+        $_SESSION['alert']['message'] = $message;
+        $_SESSION['alert']['type'] = $type;
+    }
 }

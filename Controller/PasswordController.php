@@ -4,8 +4,6 @@ require_once("Model/PasswordManager.php");
 require_once("Model/CompteManager.php");
 require_once("Model/CompteController.php");
 
-//TODO: Au lieu de retourner le code status, directement redirigé en mettant dans la session comme dans le pdf une toolbox pour afficher si tout c'est bien passé ou non
-
 class PasswordController
 {
     /**
@@ -36,9 +34,8 @@ class PasswordController
      * 
      * @param ?string $pseudoParam Le pseudo
      * @param ?string $passwordParam Le mot de passe
-     * @return int Le code status
      */
-    public function validateConnection(?string $pseudoParam = null, ?string $passwordParam = null): int
+    public function validateConnection(?string $pseudoParam = null, ?string $passwordParam = null): void
     {
         $pseudo = $pseudoParam ?? Securite::secureHTML($_POST['pseudo']);
         $password = $passwordParam ?? Securite::secureHTML($_POST['password']);
@@ -52,12 +49,14 @@ class PasswordController
                 setcookie('token', Utils::generateToken(), time() + Utils::hoursToSeconds(24));
                 setcookie('id', $ret['userId'], time() + Utils::hoursToSeconds(24));
 
-                return 200;
+                Utils::redirect(URL . 'profil');
             } else {
-                throw new Exception('Le compte n\'a pas été validé', 405);
+                Utils::newAlert('Le compte n\'a pas été validé', Constants::TYPES_MESSAGES['error']);
+                Utils::redirect(URL . 'connexion');
             }
         } else {
-            return 405;
+            Utils::newAlert('Mot de passe incorrect ou pseudo incorrect', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
         }
     }
 
@@ -87,27 +86,34 @@ class PasswordController
      * @param ?string $passwordParam Le mot de passe actuel
      * @param ?string $newPassParam Le nouveau mot de passe
      * @param ?string $newPassValidationParam La validation du nouveau mot de passe
-     * @return int Le code status
      */
     public function updatePassword(
         ?string $pseudoParam = null,
         ?string $passwordParam = null,
         ?string $newPassParam = null,
         ?string $newPassValidationParam = null
-    ): int {
+    ): void {
         $pseudoParam = $pseudoParam ?? Securite::secureHTML($_POST['pseudo']);
         $passwordParam = $passwordParam ??  Securite::secureHTML($_POST['password']);
         $newPassParam = $newPassParam ?? Securite::secureHTML($_POST['newPass']);
         $newPassValidationParam = $newPassValidationParam ?? Securite::secureHTML($_POST['newPassValidation']);
 
         if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 405);
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
         }
 
         if ($this->validateConnection($pseudoParam, $passwordParam) === 200 && $newPassParam === $newPassValidationParam) {
-            return $this->passwordManager->updatePassword(password_hash($newPassParam, PASSWORD_DEFAULT), $_COOKIE['id']);
+            if ($this->passwordManager->updatePassword(password_hash($newPassParam, PASSWORD_DEFAULT), $_COOKIE['id']) === 200) {
+                Utils::newAlert('Mot de passe changé avec succès', Constants::TYPES_MESSAGES['success']);
+                Utils::redirect(URL . 'profil');
+            } else {
+                Utils::newAlert('Erreur lors de la modification du mot de passe', Constants::TYPES_MESSAGES['error']);
+                Utils::redirect(URL . 'profil');
+            }
         } else {
-            return 405;
+            Utils::newAlert('Mot de passe ou pseudo incorrect', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'profil');
         }
     }
 
@@ -115,21 +121,19 @@ class PasswordController
      * Permet de supprimer un mot de passe
      * 
      * @param ?string $pseudoParam Le pseudo
+     * @return ?int Le code status
      */
-    public function deletePassword(?string $pseudoParam = null): void
+    public function deletePassword(?string $pseudoParam = null): ?int
     {
         $pseudo = $pseudoParam ?? Securite::secureHTML($_POST['pseudo']);
-        
+
         $idUser = $this->compteManager->getUserId($pseudo);
 
-        if(empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté',405); //TODO: Redirigé directement ou ajouter une alerte comme quoi personne n'est connecté
+        if (empty($_COOKIE['token'])) {
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
         } else {
-            if($this->passwordManager->deletePassword($idUser) === 200) {
-                //TODO: Redirigé vers la page d'accueil avec un message comme quoi tout s'est bien passé
-            } else {
-                //TODO: Bah l'inverse finalement, resté sur la page et dire que ça c'est mal passé
-            }
+            return $this->passwordManager->deletePassword($idUser);
         }
     }
 }
