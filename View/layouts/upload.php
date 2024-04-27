@@ -11,8 +11,7 @@
                 <input type="text" placeholder="Date de prise de vue">
                 <select name="tag">
                     <option selected disabled hidden>Tag</option>
-                    <?php require_once("Services/constantes.php") ?>
-                    <?php foreach (TYPE_PHOTOS as $typePhoto) : ?>
+                    <?php foreach (Constants::TYPE_PHOTOS as $typePhoto) : ?>
                         <option value="<?= $typePhoto ?>"><?= $typePhoto ?></option>
                     <?php endforeach; ?>
                 </select>

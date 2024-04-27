@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `mot_de_passe` (
 CREATE TABLE IF NOT EXISTS `utilisateur` (
     id_user INT PRIMARY KEY NOT NULL AUTO_INCREMENT COMMENT 'L''id du user',
     id_mot_de_passe INT NOT NULL COMMENT 'L''id du mot de passe',
-    pseudo varchar(30) NOT NULL COMMENT 'Son pseudo',
+    pseudo varchar(30) NOT NULL UNIQUE COMMENT 'Son pseudo',
     nom varchar(50) NOT NULL COMMENT 'Son nom',
     prenom varchar(50) NOT NULL COMMENT 'Son prénom',
     email varchar(100) NOT NULL COMMENT 'Son email',
