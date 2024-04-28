@@ -29,4 +29,9 @@ class Constants
         'error' => 'error',
         'success' => 'success'
     ];
+
+    /**
+     * @var string DELETE_CONFIRMATION La phrase pour confirmer la suppression de son compte
+     */
+    static const DELETE_CONFIRMATION = 'SUPPRIMER MON COMPTE';
 }

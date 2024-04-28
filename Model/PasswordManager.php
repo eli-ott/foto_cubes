@@ -21,13 +21,11 @@ class PasswordManager extends Model
         ]);
         $req->execute();
 
-        if (!$req) {
-            $status = 500;
+        if ($req) {
+            return 200;
         } else {
-            $status = 200;
+            throw new Exception('Erreur lors de la mise à jour du mot de passe', 500);
         }
-
-        return $status;
     }
 
     /**
@@ -45,22 +43,20 @@ class PasswordManager extends Model
         ]);
         $req->execute();
 
-        if (!$req) {
-            $status = 500;
+        if ($req) {
+            return 200;
         } else {
-            $status = 200;
+            throw new Exception('Erreur lors de la suppression du mot de passe', 500);
         }
-
-        return $status;
     }
 
     /**
      * Récupérer le password de l'utilisateur en fonction de son pseudo
      * 
      * @param int $idUser L'identifiant du user
-     * @return array Les données du mot de passe
+     * @return MotDePasse Les données du mot de passe
      */
-    public function getPassword(int $idUser): array
+    public function getPassword(int $idUser): MotDePasse
     {
         $sql = "SELECT mot_de_passe.id_mot_de_passe, `hash`, ng_essais, date_reinitialisation, utilisateur.id_user, utilisateur.pseudo 
             FROM mot_de_passe 
@@ -73,16 +69,12 @@ class PasswordManager extends Model
         $req->execute();
 
         while ($row = $req->fetch(PDO::FETCH_ASSOC)) {
-            $data = [
-                'password' =>
-                new MotDePasse(
-                    $row->id_mot_de_passe,
-                    $row->hash,
-                    $row->nb_essais,
-                    $row->date_reinitialisation
-                ),
-                'userId' => $row->id_user
-            ];
+            $data = new MotDePasse(
+                $row->id_mot_de_passe,
+                $row->hash,
+                $row->nb_essais,
+                $row->date_reinitialisation
+            );
         }
 
         return $data;
@@ -103,12 +95,10 @@ class PasswordManager extends Model
         ]);
         $req->execute();
 
-        if (!$req) {
-            $status = 500;
+        if ($req) {
+            return 200;
         } else {
-            $status = 200;
+            throw new Exception('Erreur lors de la création du mot de passe', 500);
         }
-
-        return $status;
     }
 }

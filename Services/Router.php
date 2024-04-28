@@ -27,20 +27,23 @@ try {
             break;
         case 'connexion':
             if (!empty($_COOKIE['token'])) {
-                //TODO: Rediriger vers la page du profil
+                Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
+                Utils::redirect(URL . 'profil');
             } else {
                 $mainController->connexion();
             }
         case 'inscription':
             if (!empty($_COOKIE['token'])) {
-                //TODO: Rediriger vers la page du profil
+                Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
+                Utils::redirect(URL . 'profil');
             } else {
                 $mainController->inscription();
             }
             break;
         case 'ajouter':
             if (empty($_COOKIE['token'])) {
-                //TODO: Redirigé vers la page de connexion
+                Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+                Utils::redirect(URL . 'connexion');
             } else {
                 $mainController->ajouter();
             }
