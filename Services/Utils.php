@@ -45,4 +45,15 @@ class Utils
         $_SESSION['alert']['message'] = $message;
         $_SESSION['alert']['type'] = $type;
     }
+
+    /**
+     * Permet de hash un mot de passe
+     * 
+     * @param string $password Le mot de passe
+     * @return string Le mot de passe hash
+     */
+    public static function hashPassword(string $password): string
+    {
+        return password_hash($password, PASSWORD_DEFAULT);
+    }
 }
