@@ -22,12 +22,10 @@ class MessageManager extends Model
         ]);
         $req->execute();
 
-        if (!$req) {
-            $status = 500;
+        if ($req) {
+            return 200;
         } else {
-            $status = 200;
+            return 500;
         }
-
-        return $status;
     }
 };
