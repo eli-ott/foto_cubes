@@ -22,8 +22,7 @@
     <div class="input-container flex column start">
         <h4>Catégories :</h4>
         <select name="tri" id="tri">
-            <?php require_once("Service/constantes.php") ?>
-            <?php foreach (TYPE_PHOTOS as $typePhoto) : ?>
+            <?php foreach (Constants::TYPE_PHOTOS as $typePhoto) : ?>
                 <option value="<?= $typePhoto ?>"><?= $typePhoto ?></option>
             <?php endforeach; ?>
         </select>

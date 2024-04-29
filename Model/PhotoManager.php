@@ -56,16 +56,19 @@ class PhotoManager extends Model
                 $row->date_prise_vue,
                 $row->date_publication,
                 new Photographe(
-                    intval($row->idUser),
-                    $row->nom,
-                    $row->prenom,
-                    $row->pseudo,
-                    $row->email
+                    id: intval($row->idUser),
+                    nom: $row->nom,
+                    prenom: $row->prenom,
+                    pseudo: $row->pseudo,
+                    email: $row->email
                 )
             );
         }
 
-        return $photos;
+        return [
+            'pages' => count($photos) / Constants::IMAGES_PAR_PAGE,
+            'photos' => $photos
+        ];
     }
 
     /**
@@ -106,16 +109,19 @@ class PhotoManager extends Model
                 $row->date_prise_vue,
                 $row->date_publication,
                 new Photographe(
-                    intval($row->idUser),
-                    $row->nom,
-                    $row->prenom,
-                    $row->pseudo,
-                    $row->email
+                    id: intval($row->idUser),
+                    nom: $row->nom,
+                    prenom: $row->prenom,
+                    pseudo: $row->pseudo,
+                    email: $row->email
                 )
             );
         }
 
-        return $photos;
+        return [
+            'pages' => count($photos) / Constants::IMAGES_PAR_PAGE,
+            'photos' => $photos
+        ];
     }
 
     /**

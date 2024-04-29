@@ -30,14 +30,12 @@ class CompteManager extends Model
             "typePhotoPref" => $photographe->getTypePhotoPref()
         ]);
         $addUserReq->execute();
-        $addUserReq->closeCursor();
 
         if ($addUserReq) {
             $lastInsertedRowSql = "SELECT * FROM user ORDER BY id_user DESC LIMIT 1";
 
             $lastInsertedRowReq = $this->getBDD()->prepare($lastInsertedRowSql);
             $lastInsertedRowReq->execute();
-
             if ($lastInsertedRowReq) {
                 $data = [];
                 while ($row = $lastInsertedRowReq->fetch(PDO::FETCH_ASSOC)) {
@@ -58,7 +56,7 @@ class CompteManager extends Model
                 throw new Exception('Erreur lors de la récupération du dernier compte ajouté', 500);
             }
         } else {
-            throw new Exception('Erreur lors de la sauvegarde de l\'utilisateur', 500);
+            throw new Exception('Erreur lors de la création du compte', 500);
         }
 
         return $data;
@@ -67,24 +65,22 @@ class CompteManager extends Model
     /**
      * Mets à jour un compte d'un photographe
      * 
-     * @param Photographe $photographe Le compte à mettre à jour
+     * @param string $field Le nom de la colonne à mettre à jour
+     * @param string $newValue La valeur à mettre à jour
      * @return int Le code statut 
      */
-    public function updateUser(Photographe $photographe): int
+    public function updateUser(string $field, string $newValue): int
     {
         if (empty($_COOKIE['token'])) {
             throw new Exception('Aucun utilisateur connecté', 400);
         }
 
-        $sql = "UPDATE user SET pseudo = :pseudo, nom = :nom, prenom = :prenom, age = :age, email = :email WHERE id_user = :idUser";
+        $sql = "UPDATE user SET :field = :newValue WHERE id_user = :idUser";
 
         $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $photographe->getId(),
-            "pseudo" => $photographe->getPseudo(),
-            "nom" => $photographe->getPrenom(),
-            "prenom" => $photographe->getPrenom(),
-            "age" => $photographe->getAge(),
-            "email" => $photographe->getEmail()
+            "idUser" => $_COOKIE['id'],
+            "field" => $field,
+            "newValue"=> $newValue,
         ]);
         $req->execute();
 
@@ -100,10 +96,10 @@ class CompteManager extends Model
     /**
      * Permet de supprimer un compte
      * 
-     * @param Photographe $photographe Le photographe à supprimer
+     * @param int $idUser L'identifiant de l'utilisateur à supprimer
      * @return int Le code statut 
      */
-    public function deleteUser(Photographe $photographe): int
+    public function deleteUser(int $idUser): int
     {
         if (empty($_COOKIE['token'])) {
             throw new Exception('Aucun utilisateur connecté', 400);
@@ -112,14 +108,14 @@ class CompteManager extends Model
         $sql = "DELETE FROM user WHERE id_user = :idUser";
 
         $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $photographe->getId()
+            "idUser" => $idUser
         ]);
         $req->execute();
 
         if ($req) {
             $status = 200;
         } else {
-            throw new Exception('Erreur lors de la suppression du compte id ' . $photographe->getID(), 500);
+            throw new Exception('Erreur lors de la suppression du compte id ' . $idUser, 500);
         }
 
         return $status;
@@ -158,5 +154,60 @@ class CompteManager extends Model
         }
 
         return $data;
+    }
+
+    /**
+     * Permet de récupérer l'identifiant d'un utilisateur à partir de son pseudo
+     * 
+     * @param string $pseudo Le pseudo
+     * @return int L'identifiant de l'utilisateur
+     */
+    public function getUserId(string $pseudo): int
+    {
+        $sql = "SELECT id_user, pseudo FROM utilisateur WHERE pseudo = :pseudo";
+
+        $req = $this->getBDD()->prepare($sql, [
+            "pseudo" => $pseudo
+        ]);
+        $req->execute();
+
+        return $req->fetch(PDO::FETCH_ASSOC)->id_user;
+    }
+
+    /**
+     * Permet de récupérer si un compte est actif ou non
+     * 
+     * @param int $idUser L'identifiant de l'utilisateur
+     * @return bool Si le compte est actif ou non
+     */
+    public function compteActif(int $idUser): bool
+    {
+        $sql = "SELECT compte_valide, id_user FROM utilisateur WHERE id_user = :idUser";
+
+        $req = $this->getBDD()->prepare($sql, [
+            "idUser" => $idUser
+        ]);
+        $req->execute();
+
+        return $req->fetch(PDO::FETCH_ASSOC)->compte_valide;
+    }
+
+    /**
+     * Récupère le nombre d'utilisateur utilisant le pseudo 
+     * Ce nombre est toujours censé être 0 ou 1
+     * 
+     * @param string $pseudo
+     * @return int Le nombre d'user utilisant le $pseudo
+     */
+    public function nbPseudo(string $pseudo): int
+    {
+        $sql = 'SELECT COUNT(*) as nombre FROM utilisateur WHERE pseudo = :pseudo';
+
+        $req = $this->getBDD()->prepare($sql, [
+            'pseudo' => $pseudo
+        ]);
+        $req->execute();
+
+        return $req->fetch(PDO::FETCH_ASSOC)->nombre;
     }
 }

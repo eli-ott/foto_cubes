@@ -64,7 +64,7 @@ class Photographe implements JsonSerializable
      */
     public function __construct(
         int $id = null,
-        int $idMdp,
+        int $idMdp = null,
         string $nom,
         string $prenom,
         string $pseudo,
