@@ -33,6 +33,11 @@ class PasswordController
      */
     public function validateConnection(): void
     {
+        if(!empty($_COOKIE['token'])) {
+            Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'profil');
+        }
+        
         $pseudo = Securite::secureHTML($_POST['pseudo']);
         $password = Securite::secureHTML($_POST['password']);
 

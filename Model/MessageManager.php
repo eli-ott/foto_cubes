@@ -25,7 +25,7 @@ class MessageManager extends Model
         if ($req) {
             return 200;
         } else {
-            return 500;
+            throw new Exception('Erreur lors de la sauvegarde du message', 500);
         }
     }
 };
