@@ -1,5 +1,5 @@
 <?php
-require_once('./Model/Model.php');
+require_once('./Services/Model.php');
 
 class PasswordManager extends Model
 {

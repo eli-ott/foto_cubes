@@ -1,7 +1,8 @@
 <?php
 
-require_once('Controller/PasswordManager.php');
+require_once('Model/PasswordManager.php');
 require_once('Model/CompteManager.php');
+
 
 class CompteController
 {
@@ -47,7 +48,6 @@ class CompteController
     public function addCompte(): void
     {
         $photographe = new Photographe(
-            idMdp: Securite::secureHTML($_POST['idMdp']),
             pseudo: Securite::secureHTML($_POST['pseudo']),
             nom: Securite::secureHTML($_POST['nom']),
             prenom: Securite::secureHTML($_POST['prenom']),
@@ -67,7 +67,6 @@ class CompteController
             Utils::newAlert('Les mots de passes ne sont pas identiques', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'inscription');
         }
-
 
         try {
             //vérifie que le pseudo est unique

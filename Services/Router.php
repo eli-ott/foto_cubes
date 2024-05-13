@@ -1,9 +1,22 @@
 <?php
+session_start();
 define("URL", str_replace("index.php", "", (isset($_SERVER['HTTPS']) ? "https" : "http") .
     "://" . $_SERVER['HTTP_HOST'] . $_SERVER["PHP_SELF"]));
 
+require_once('Services/types/Photographe.php');
+require_once('Services/Securite.php');
+
 require_once("./controller/MainController.controller.php");
+require_once("./controller/CompteController.php");
+require_once("./controller/MessageController.php");
+require_once("./controller/PhotoController.php");
+require_once("./controller/PasswordController.php");
+
 $mainController = new MainController();
+$compteController = new CompteController();
+$messageController = new MessageController();
+$photoController = new PhotoController();
+$passwordController = new PasswordController();
 
 //Permet de récupérer le bon URL
 if (empty($_GET['page'])) {
@@ -11,6 +24,9 @@ if (empty($_GET['page'])) {
 } else {
     $url = explode("/", filter_var($_GET['page']), FILTER_SANITIZE_URL);
     $page = $url[0];
+    if (!empty($url[1])) {
+        $param = $url[1];
+    }
 }
 
 //Le router
@@ -46,6 +62,13 @@ try {
                 Utils::redirect(URL . 'connexion');
             } else {
                 $mainController->ajouter();
+            }
+            break;
+        case 'form':
+            switch ($param) {
+                case 'signUp':
+                    $compteController->addCompte();
+                    break;
             }
             break;
         default:
