@@ -50,30 +50,30 @@ class Photographe implements JsonSerializable
     /**
      * Constructor
      * 
-     * @param int $id L'identifiant
-     * @param int $idMdp L'identifiant du mot de passe
+     * @param ?int $id L'identifiant
+     * @param ?int $idMdp L'identifiant du mot de passe
      * @param string $nom Le nom
      * @param string $prenom Le prénom
      * @param string $pseudo Le pseudo
      * @param string $email L'email
-     * @param int $age L'age
-     * @param string $typePhotoPref Le type de photo préféré du photographe
-     * @param DateTime $dateCreation La date de création du compte
-     * @param bool $warn Si l'utilisateur est warn
-     * @param bool $compteValide Si le compte a été validé ou non
+     * @param ?int $age L'age
+     * @param ?string $typePhotoPref Le type de photo préféré du photographe
+     * @param ?DateTime $dateCreation La date de création du compte
+     * @param ?bool $warn Si l'utilisateur est warn
+     * @param ?bool $compteValide Si le compte a été validé ou non
      */
     public function __construct(
-        int $id = null,
-        int $idMdp = null,
         string $nom,
         string $prenom,
         string $pseudo,
         string $email,
-        int $age = null,
-        string $typePhotoPref = null,
-        DateTime $dateCreation = null,
-        bool $warn = null,
-        bool $compteValide = null
+        ?int $id = null,
+        ?int $idMdp = null,
+        ?int $age = null,
+        ?string $typePhotoPref = null,
+        ?DateTime $dateCreation = null,
+        ?bool $warn = null,
+        ?bool $compteValide = null
     ) {
         $this->id = $id;
         $this->idMdp = $idMdp;
@@ -106,6 +106,16 @@ class Photographe implements JsonSerializable
     public function getIdMdp(): int
     {
         return $this->idMdp;
+    }
+
+    /**
+     * Permettre de définir l'id du mot de passe
+     * 
+     * @param int $idMdp L'id du mot de passe
+     */
+    public function setIdMdp(int $idMdp): void
+    {
+        $this->idMdp = $idMdp;
     }
 
     /**

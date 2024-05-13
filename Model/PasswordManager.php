@@ -90,13 +90,12 @@ class PasswordManager extends Model
     {
         $sql = "INSERT INTO mot_de_passe (`hash`) VALUE (:mdp)";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "mdp" => $hash
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('mdp', $hash, PDO::PARAM_STR);
         $req->execute();
 
         if ($req) {
-            return 200;
+            return $this->getBDD()->lastInsertId();
         } else {
             throw new Exception('Erreur lors de la création du mot de passe', 500);
         }

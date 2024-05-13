@@ -74,7 +74,9 @@ class CompteController
                 throw new Exception('Le pseudo est déjà utilisé, veuillez en choisir un autre ou vous connecter', 405);
             }
 
-            $this->passwordManager->createPassword(Utils::hashPassword($password));
+            $passwordId = $this->passwordManager->createPassword(Utils::hashPassword($password));
+
+            $photographe->setIdMdp($passwordId);
 
             $newPhotographe = $this->compteManager->addUser($photographe);
 

@@ -7,7 +7,7 @@
             <input type="text" name="prenom" placeholder="Prénom" required>
             <input type="number" name="age" placeholder="Age" required>
             <select name="typePhotoPref" id="typePref" required>
-                <option selected disabled hidden>Style de photo préféré</option>
+                <option value="" disabled selected>Style de photo préféré</option>
                 <?php foreach (Constants::TYPE_PHOTOS as $typePhoto) : ?>
                     <option value="<?= $typePhoto ?>"><?= $typePhoto ?></option>
                 <?php endforeach; ?>

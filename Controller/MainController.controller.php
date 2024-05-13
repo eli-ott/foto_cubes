@@ -70,14 +70,15 @@ class MainController extends Render
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
         }
-
+        var_dump($_COOKIE);
+        
         $this->render([
             "title" => 'Profil',
             "description" => 'Profil d\'un utilisateur de Foto',
             "showFooter" => true,
             "showHeader" => true,
             "pageCss" => ['profil', 'galerie', 'filtres', 'paginator', 'photoGalerie', 'nav', 'footer'],
-            "infos" => $this->compteManager->getUserInfo($_COOKIE['idUser']),
+            "infos" => $this->compteManager->getUserInfo($_COOKIE['id']),
             'view' => 'View/layouts/profil.php',
             'template' => 'View/base.php'
         ]);
