@@ -80,7 +80,7 @@ class Utils
         if ($_SESSION['codeVerif'] == $code) {
             return 200;
         } else {
-            return 500;
+            throw new Exception('Ce n\'est pas le bon code', 500);
         };
     }
 }
