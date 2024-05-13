@@ -4,7 +4,7 @@
             <div class="flex center column">
                 <h2 class="title_accueil">Foto, le meilleur site de partage de photo entre amateur</h2>
                 <div class="buttons flex start">
-                    <a href="gallerie" class="cta">Voir la galerie</a>
+                    <a href="galerie" class="cta">Voir la galerie</a>
                     <a href="ajouter">Ajouter des photos</a>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                 <div class="pic"></div>
                 <div class="pic"></div>
             </div>
-            <a href="gallerie" class="more">Voir plus</a>
+            <a href="galerie" class="more">Voir plus</a>
         </div>
         <!-- CCM -->
         <div class="flex center content">
