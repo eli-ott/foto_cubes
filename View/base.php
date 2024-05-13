@@ -30,7 +30,7 @@
 
     <?php if (!empty($pageScripts)) : ?>
         <?php foreach ($pageScripts as $js) : ?>
-            <script lang="text/javascript" href="<?= URL ?>Public/javascript/<?= $js ?>.js"></script>
+            <script lang="text/javascript" src="<?= URL ?>Public/javascript/<?= $js ?>.js"></script>
         <?php endforeach; ?>
     <?php endif; ?>
 </body>

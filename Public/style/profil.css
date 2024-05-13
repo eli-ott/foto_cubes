@@ -28,6 +28,22 @@ h2 {
 	width: 100%;
 	transform: translateY(-2px);
 }
+.buttons {
+	gap: var(--margin-m);
+}
+.buttons button {
+	cursor: pointer;
+
+	background: none;
+	border: none;
+
+	font-family: var(--font-family);
+	font-size: var(--desktop-font-size-s);
+
+	color: var(--dark);
+
+	text-decoration: underline 1px;
+}
 .photos {
 	margin-left: var(--margin-m);
 	margin-bottom: var(--margin-s);

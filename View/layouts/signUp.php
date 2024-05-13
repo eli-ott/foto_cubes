@@ -19,5 +19,3 @@
         </form>
     </div>
 </section>
-
-<?php var_dump($_SESSION['alert']['message']) ?>

@@ -11,12 +11,14 @@ require_once("./controller/CompteController.php");
 require_once("./controller/MessageController.php");
 require_once("./controller/PhotoController.php");
 require_once("./controller/PasswordController.php");
+require_once("./controller/ConnexionController.php");
 
 $mainController = new MainController();
 $compteController = new CompteController();
 $messageController = new MessageController();
 $photoController = new PhotoController();
 $passwordController = new PasswordController();
+$connexionController = new ConnexionController();
 
 //Permet de récupérer le bon URL
 if (empty($_GET['page'])) {
@@ -39,7 +41,12 @@ try {
             $mainController->galerie();
             break;
         case 'profil':
-            $mainController->profil();
+            if (empty($_COOKIE['token'])) {
+                Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+                Utils::redirect(URL . 'connexion');
+            } else {
+                $mainController->profil();
+            }
             break;
         case 'connexion':
             if (!empty($_COOKIE['token'])) {
@@ -66,8 +73,16 @@ try {
             break;
         case 'form':
             switch ($param) {
+                case 'connexion':
+                    $passwordController->validateConnection();
                 case 'signUp':
                     $compteController->addCompte();
+                    break;
+                case 'disconnect':
+                    $connexionController->disconnect();
+                    break;
+                case 'delete-account':
+                    $compteController->deleteCompte();
                     break;
             }
             break;

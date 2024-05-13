@@ -108,9 +108,8 @@ class CompteManager extends Model
 
         $sql = "DELETE FROM utilisateur WHERE id_user = :idUser";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $idUser
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser);
         $req->execute();
 
         if ($req) {
@@ -133,24 +132,24 @@ class CompteManager extends Model
         $sql = "SELECT id_user, id_mot_de_passe, nom, prenom, email, pseudo, date_creation, type_photo_pref, age, warn, compte_valide 
             FROM utilisateur WHERE id_user = :idUser";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $idUser
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser);
         $req->execute();
 
+        $data = null;
         while ($row = $req->fetch(PDO::FETCH_ASSOC)) {
             $data = new Photographe(
-                intval($row->id),
-                intval($row->id_mot_de_passe),
-                $row->nom,
-                $row->prenom,
-                $row->pseudo,
-                $row->email,
-                intval($row->age),
-                $row->type_photo_pref,
-                $row->date_creation,
-                boolval($row->warn),
-                boolval($row->compte_valide),
+                (int)$row['id_user'],
+                (int)$row['id_mot_de_passe'],
+                $row['nom'],
+                $row['prenom'],
+                $row['pseudo'],
+                $row['email'],
+                (int)$row['age'],
+                $row['type_photo_pref'],
+                $row['date_creation'],
+                (bool)$row['warn'],
+                (bool)$row['compte_valide'],
             );
         }
 
@@ -167,12 +166,17 @@ class CompteManager extends Model
     {
         $sql = "SELECT id_user, pseudo FROM utilisateur WHERE pseudo = :pseudo";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "pseudo" => $pseudo
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('pseudo', $pseudo);
         $req->execute();
 
-        return $req->fetch(PDO::FETCH_ASSOC)->id_user;
+        $idSelected = $req->fetch(PDO::FETCH_ASSOC)['id_user'];
+
+        if (is_int($idSelected)) {
+            return $idSelected;
+        } else {
+            throw new Exception('Aucun utilisateur associé au pseudo', 400);
+        }
     }
 
     /**
@@ -185,12 +189,11 @@ class CompteManager extends Model
     {
         $sql = "SELECT compte_valide, id_user FROM utilisateur WHERE id_user = :idUser";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $idUser
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser);
         $req->execute();
 
-        return $req->fetch(PDO::FETCH_ASSOC)->compte_valide;
+        return $req->fetch(PDO::FETCH_ASSOC)['compte_valide'];
     }
 
     /**
@@ -221,11 +224,10 @@ class CompteManager extends Model
     {
         $sql = 'SELECT is_admin FROM utilisateur WHERE id_user = :idUser';
 
-        $req = $this->getBdd()->prepare($sql, [
-            'idUser' => $idUser
-        ]);
+        $req = $this->getBdd()->prepare($sql);
+        $req->bindValue('idUser', $idUser);
         $req->execute();
 
-        return $req->fetch(PDO::FETCH_ASSOC)->id_admin;
+        return $req->fetch(PDO::FETCH_ASSOC)['is_admin'];
     }
 }

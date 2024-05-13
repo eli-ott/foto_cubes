@@ -35,7 +35,7 @@ class Photographe implements JsonSerializable
      */
     private $typePhotoPref;
     /**
-     * @var DateTime $dateCreation la date de création de son compte
+     * @var string $dateCreation la date de création de son compte
      */
     private $dateCreation;
     /**
@@ -58,7 +58,7 @@ class Photographe implements JsonSerializable
      * @param string $email L'email
      * @param ?int $age L'age
      * @param ?string $typePhotoPref Le type de photo préféré du photographe
-     * @param ?DateTime $dateCreation La date de création du compte
+     * @param ?string $dateCreation La date de création du compte
      * @param ?bool $warn Si l'utilisateur est warn
      * @param ?bool $compteValide Si le compte a été validé ou non
      */
@@ -71,7 +71,7 @@ class Photographe implements JsonSerializable
         string $email,
         ?int $age = null,
         ?string $typePhotoPref = null,
-        ?DateTime $dateCreation = null,
+        ?string $dateCreation = null,
         ?bool $warn = null,
         ?bool $compteValide = null
     ) {
@@ -181,9 +181,9 @@ class Photographe implements JsonSerializable
     /**
      * Récupère la date de création du compte du photographe
      * 
-     * @return DateTime La date de création du compte
+     * @return string La date de création du compte
      */
-    public function getDateCreation(): DateTime
+    public function getDateCreation(): string
     {
         return $this->dateCreation;
     }
@@ -191,7 +191,7 @@ class Photographe implements JsonSerializable
     /**
      * Récupère si le compte est warn ou non
      * 
-     * @return DateTime Si le compte est warn ou non
+     * @return string Si le compte est warn ou non
      */
     public function getWarn(): bool
     {
