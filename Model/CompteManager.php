@@ -80,7 +80,7 @@ class CompteManager extends Model
         $req = $this->getBDD()->prepare($sql, [
             "idUser" => $_COOKIE['id'],
             "field" => $field,
-            "newValue"=> $newValue,
+            "newValue" => $newValue,
         ]);
         $req->execute();
 
@@ -201,7 +201,7 @@ class CompteManager extends Model
      */
     public function nbPseudo(string $pseudo): int
     {
-        $sql = 'SELECT COUNT(*) as nombre FROM utilisateur WHERE pseudo = :pseudo';
+        $sql = 'SELECT COUNT(id_user) as nombre FROM utilisateur WHERE pseudo = :pseudo';
 
         $req = $this->getBDD()->prepare($sql, [
             'pseudo' => $pseudo
@@ -209,5 +209,23 @@ class CompteManager extends Model
         $req->execute();
 
         return $req->fetch(PDO::FETCH_ASSOC)->nombre;
+    }
+
+    /**
+     * Permet de savoir si un utilisateur est admin ou non
+     * 
+     * @param int $idUser L'identifiant de l'utilisateur
+     * @param bool Si l'utilisateur est admin ou non
+     */
+    public function isAdmin(int $idUser): bool
+    {
+        $sql = 'SELECT is_admin FROM utilisateur WHERE id_user = :idUser';
+
+        $req = $this->getBdd()->prepare($sql, [
+            'idUser' => $idUser
+        ]);
+        $req->execute();
+
+        return $req->fetch(PDO::FETCH_ASSOC)->id_admin;
     }
 }

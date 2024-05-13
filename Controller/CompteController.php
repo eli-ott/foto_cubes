@@ -81,6 +81,7 @@ class CompteController
 
             setcookie('token', Utils::generateToken(), time() + Utils::hoursToSeconds(24), '/');
             setcookie('id', $newPhotographe->getId(), time() + Utils::hoursToSeconds(24), '/');
+            setcookie('isAdmin', $this->compteManager->isAdmin($photographe->getId()), time() + Utils::hoursToSeconds(24), '/');
 
             Utils::newAlert('Compte créée avec succès', Constants::TYPES_MESSAGES['success']);
             Utils::redirect(URL . 'profil');

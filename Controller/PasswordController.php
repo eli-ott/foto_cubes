@@ -33,11 +33,11 @@ class PasswordController
      */
     public function validateConnection(): void
     {
-        if(!empty($_COOKIE['token'])) {
+        if (!empty($_COOKIE['token'])) {
             Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil');
         }
-        
+
         $pseudo = Securite::secureHTML($_POST['pseudo']);
         $password = Securite::secureHTML($_POST['password']);
 
@@ -48,6 +48,7 @@ class PasswordController
 
             setcookie('token', Utils::generateToken(), time() + Utils::hoursToSeconds(24), '/');
             setcookie('id', $idUser, time() + Utils::hoursToSeconds(24), '/');
+            setcookie('isAdmin', $this->compteManager->isAdmin($idUser), time() + Utils::hoursToSeconds(24), '/');
 
             Utils::redirect(URL . 'profil');
         } catch (Exception $e) {

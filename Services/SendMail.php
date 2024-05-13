@@ -10,7 +10,7 @@ class SendMail
      * @param string $message Le message du mail
      * @return int Le code statut
      */
-    public function sendMail(string $receiver, string $object, string $message): int
+    public static function sendMail(string $receiver, string $object, string $message): int
     {
         if (mail($receiver, $object, $message)) {
             $status = 200;
