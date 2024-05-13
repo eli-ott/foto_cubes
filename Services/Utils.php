@@ -75,9 +75,9 @@ class Utils
      * @param int $code code de verification
      * @return int le code status de la fonction
      */
-    public function verifCode(string $code): int
+    public function verifCode(int $code): int
     {
-        if ($_SESSION['codeVerif'] == $code) {
+        if (intval($_SESSION['codeVerif']) === $code) {
             return 200;
         } else {
             throw new Exception('Ce n\'est pas le bon code', 500);
