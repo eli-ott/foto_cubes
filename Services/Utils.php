@@ -56,4 +56,15 @@ class Utils
     {
         return password_hash($password, PASSWORD_DEFAULT);
     }
+    /**
+     * permet d'envoyer un mail de verification
+     * 
+     * @param $mail le mail du receveur
+     */
+    public function verifMail(string $mail)
+    {
+        $objet = 'votre code de verification';
+        $message = rand(1000, 9999);
+        SendMail::sendMail($mail, $objet, $message);
+    }
 }
