@@ -60,7 +60,9 @@ class ConnexionController
 
         unset($_COOKIE['token']);
         unset($_COOKIE['id']);
+        unset($_COOKIE['isAdmin']);
         setcookie('token', '', 1, '/');
         setcookie('id', '', 1, '/');
+        setcookie('isAdmin', '', 1, '/');
     }
 }

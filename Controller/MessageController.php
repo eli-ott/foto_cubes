@@ -1,5 +1,6 @@
 <?php
 
+require_once('Services/SendMail.php');
 require_once('Model/MessageManager.php');
 
 class MessageController
@@ -28,7 +29,7 @@ class MessageController
         $receiver = Securite::secureHTML($_POST['receiver']);
 
         try {
-            mail($receiver, $objet, $message);
+            SendMail::sendMail($sender, $objet, $message);
             $this->messageManager->saveMail($message, $receiver, $sender);
 
             Utils::newAlert('Mail envoyé avec succès', Constants::TYPES_MESSAGES['success']);

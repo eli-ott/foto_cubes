@@ -48,7 +48,7 @@ class Photo implements JsonSerializable
         string $tag,
         mixed $source,
         DateTime $datePriseVue,
-        DateTime $datePublication,
+        DateTime $datePublication = null,
         Photographe $photographe
     ) {
         $this->id = $id;
