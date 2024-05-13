@@ -12,7 +12,7 @@ abstract class Model
      */
     private static function setBDD()
     {
-        self::$pdo = new PDO("mysql:host=localhost;dbname=foto;charset=utf8", "root", "toor");
+        self::$pdo = new PDO("mysql:host=localhost;dbname=foto;charset=utf8", "root", "");
         self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     }
 

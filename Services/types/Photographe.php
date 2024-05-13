@@ -63,12 +63,12 @@ class Photographe implements JsonSerializable
      * @param ?bool $compteValide Si le compte a été validé ou non
      */
     public function __construct(
+        ?int $id = null,
+        ?int $idMdp = null,
         string $nom,
         string $prenom,
         string $pseudo,
         string $email,
-        ?int $id = null,
-        ?int $idMdp = null,
         ?int $age = null,
         ?string $typePhotoPref = null,
         ?DateTime $dateCreation = null,
