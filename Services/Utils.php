@@ -122,4 +122,31 @@ class Utils
             throw new Exception('Erreur lors de la suppression du fichier', 500);
         }
     }
+
+    /**
+     * permet d'envoyer un mail de verification
+     * 
+     * @param string $mail le mail du receveur
+     */
+    public function verifMail(string $mail)
+    {
+        $objet = 'votre code de verification';
+        $_SESSION['codeVerif'] = $message = rand(1000, 9999);
+        SendMail::sendMail($mail, $objet, $message);
+    }
+
+    /**
+     * verifie si le code envoyer par mail est le bon
+     * 
+     * @param int $code code de verification
+     * @return int le code status de la fonction
+     */
+    public function verifCode(int $code): int
+    {
+        if (intval($_SESSION['codeVerif']) === $code) {
+            return 200;
+        } else {
+            throw new Exception('Ce n\'est pas le bon code', 500);
+        };
+    }
 }
