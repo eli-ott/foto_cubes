@@ -172,7 +172,7 @@ class CompteController
 
         try {
             if (Utils::verifCode($code)) {
-                $this->compteManager->validateAccount();
+                $this->compteManager->validateAccount($_COOKIE['id']);
 
                 Utils::newAlert('Compte validé avec succès', Constants::TYPES_MESSAGES['success']);
                 Utils::redirect(URL . 'profil');
@@ -215,4 +215,56 @@ class CompteController
             Utils::redirect(URL . 'mdp-oublie');
         }
     }
-}
+
+    /**
+     * Permet d'ajouter un flag sur un Compte
+     */
+    public function flagUser(): void
+    {
+        $pseudo = Securite::secureHTML($_POST['pseudo']);
+
+        if (!Utils::userConnected()) {
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
+        }
+
+        try {
+            if ($this->compteManager->isAdmin($_COOKIE['id'])) {
+                $this->compteManager->flagUser($this->compteManager->getUserId($pseudo));
+
+                Utils::newAlert('Flag ajouté avec succès', Constants::TYPES_MESSAGES['success']);
+            } else {
+                Utils::newAlert('Vous n\'êtes pas administrateur', Constants::TYPES_MESSAGES['error']);
+            }
+        } catch (Exception $e) {
+            Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'erreur');
+        }
+    }
+
+    /**
+     * Permet de passer un autre utilisateur comme étant admin
+     */
+    public function makeUserAdmin(): void
+    {
+        $pseudo = Securite::secureHTML($_POST['pseudo']);
+
+        if (!Utils::userConnected()) {
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
+        }
+
+        try {
+            if ($this->compteManager->isAdmin($_COOKIE['id'])) {
+                $this->compteManager->makeUserAdmin($this->compteManager->getUserId($pseudo));
+
+                Utils::newAlert('L\'utilisateur est maintenant admin', Constants::TYPES_MESSAGES['success']);
+            } else {
+                Utils::newAlert('Erreur lors de l\'ajout de l\'utilisateur comme étant admin', Constants::TYPES_MESSAGES['error']);
+            }
+        } catch (Exception $e) {
+            Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'erreur');
+        }
+    }
+} 

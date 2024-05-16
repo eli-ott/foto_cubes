@@ -18,13 +18,13 @@ class CompteManager extends Model
 
         $addUserReq = $this->getBDD()->prepare($addUserSql);
 
-        $addUserReq->bindValue("idMdp", $photographe->getIdMdp());
-        $addUserReq->bindValue("pseudo", $photographe->getPseudo());
-        $addUserReq->bindValue("nom", $photographe->getNom());
-        $addUserReq->bindValue("prenom", $photographe->getPrenom());
-        $addUserReq->bindValue("email", $photographe->getEmail());
-        $addUserReq->bindValue("age", $photographe->getAge());
-        $addUserReq->bindValue("typePhotoPref", $photographe->getTypePhotoPref());
+        $addUserReq->bindValue("idMdp", $photographe->getIdMdp(), PDO::PARAM_INT);
+        $addUserReq->bindValue("pseudo", $photographe->getPseudo(), PDO::PARAM_STR);
+        $addUserReq->bindValue("nom", $photographe->getNom(), PDO::PARAM_STR);
+        $addUserReq->bindValue("prenom", $photographe->getPrenom(), PDO::PARAM_STR);
+        $addUserReq->bindValue("email", $photographe->getEmail(), PDO::PARAM_STR);
+        $addUserReq->bindValue("age", $photographe->getAge(), PDO::PARAM_INT);
+        $addUserReq->bindValue("typePhotoPref", $photographe->getTypePhotoPref(), PDO::PARAM_STR);
 
         $addUserReq->execute();
 
@@ -62,14 +62,15 @@ class CompteManager extends Model
     /**
      * Mets à jour un compte d'un photographe
      * 
+     * @param int $idUser L'identifiant de l'utilisateur
      * @return int Le code statut 
      */
-    public function validateAccount(): int
+    public function validateAccount(int $idUser): int
     {
         $sql = "UPDATE utilisateur SET compte_valide = 1 WHERE id_user = :idUser";
 
         $req = $this->getBDD()->prepare($sql);
-        $req->bindValue("idUser", $_COOKIE['id']);
+        $req->bindValue("idUser", $idUser, PDO::PARAM_INT);
         $req->execute();
 
         if ($req) {
@@ -92,7 +93,7 @@ class CompteManager extends Model
         $sql = "DELETE FROM utilisateur WHERE id_user = :idUser";
 
         $req = $this->getBDD()->prepare($sql);
-        $req->bindValue('idUser', $idUser);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
         $req->execute();
 
         if ($req) {
@@ -116,7 +117,7 @@ class CompteManager extends Model
             FROM utilisateur WHERE id_user = :idUser";
 
         $req = $this->getBDD()->prepare($sql);
-        $req->bindValue('idUser', $idUser);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
         $req->execute();
 
         $data = null;
@@ -150,7 +151,7 @@ class CompteManager extends Model
         $sql = "SELECT id_user, pseudo FROM utilisateur WHERE pseudo = :pseudo";
 
         $req = $this->getBDD()->prepare($sql);
-        $req->bindValue('pseudo', $pseudo);
+        $req->bindValue('pseudo', $pseudo, PDO::PARAM_STR);
         $req->execute();
 
         $idSelected = $req->fetch(PDO::FETCH_ASSOC)['id_user'];
@@ -173,7 +174,7 @@ class CompteManager extends Model
         $sql = "SELECT compte_valide, id_user FROM utilisateur WHERE id_user = :idUser";
 
         $req = $this->getBDD()->prepare($sql);
-        $req->bindValue('idUser', $idUser);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
         $req->execute();
 
         return $req->fetch(PDO::FETCH_ASSOC)['compte_valide'];
@@ -208,7 +209,7 @@ class CompteManager extends Model
         $sql = 'SELECT is_admin FROM utilisateur WHERE id_user = :idUser';
 
         $req = $this->getBdd()->prepare($sql);
-        $req->bindValue('idUser', $idUser);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
         $req->execute();
 
         return $req->fetch(PDO::FETCH_ASSOC)['is_admin'];
@@ -225,9 +226,51 @@ class CompteManager extends Model
         $sql = 'SELECT email FROM utilisateur WHERE id_user = :idUser';
 
         $req = $this->getBDD()->prepare($sql);
-        $req->bindValue('idUser', $idUser);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
         $req->execute();
 
         return $req->fetch(PDO::FETCH_ASSOC)['email'];
+    }
+
+    /**
+     * Permet d'ajouter un flag à un utilisateur
+     * 
+     * @param int $idUSer L'identifiant de l'utilisateur à Flag
+     * @return ?int Le code status
+     */
+    public function flagUser(int $idUSer): ?int
+    {
+        $sql = 'UPDATE utilisateur SET warn = 1 WHERE id_user = :idUser';
+
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUSer, PDO::PARAM_INT);
+        $req->execute();
+
+        if ($req) {
+            return 200;
+        } else {
+            throw new Exception('Erreur lors de l\'ajout du warn');
+        }
+    }
+
+    /**
+     * Permet de passer un utilisateur administrateur
+     * 
+     * @param int $idUser L'identifiant de l'utilisateur
+     * @return ?int Le code status
+     */
+    public function makeUserAdmin(int $idUser): ?int
+    {
+        $sql = 'UPDATE utilisateur SET id_admin = 1 WHERE id_user = :idUser';
+
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
+        $req->execute();
+
+        if ($req) {
+            return 200;
+        } else {
+            throw new Exception('Erreur lors de l\'ajout de l\'utilisateur comme administrateur');
+        }
     }
 }

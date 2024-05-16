@@ -66,7 +66,7 @@ class PhotoManager extends Model
         }
 
         return [
-            'pages' => count($photos) / Constants::IMAGES_PAR_PAGE,
+            'pages' => ceil(count($photos) / Constants::IMAGES_PAR_PAGE),
             'photos' => $photos
         ];
     }
@@ -101,6 +101,8 @@ class PhotoManager extends Model
 
         $photos = [];
         while ($row = $req->fetch((PDO::FETCH_ASSOC))) {
+            list($width, $height) = getimagesize($row["source"]);
+
             $photos[] = new Photo(
                 intval($row->id_photo),
                 $row->titre,
@@ -114,12 +116,13 @@ class PhotoManager extends Model
                     prenom: $row->prenom,
                     pseudo: $row->pseudo,
                     email: $row->email
-                )
+                ),
+                $width / $height > 1 ? 'horizontal' : 'vertical'
             );
         }
 
         return [
-            'pages' => count($photos) / Constants::IMAGES_PAR_PAGE,
+            'pages' => ceil(count($photos) / Constants::IMAGES_PAR_PAGE),
             'photos' => $photos
         ];
     }
