@@ -38,9 +38,9 @@ class Utils
      * Permet d'ajouter un message pour l'utilisateur
      * 
      * @param string $message Le message à afficher
-     * @param int $type Le type de message
+     * @param string $type Le type de message
      */
-    public static function newAlert(string $message, int $type): void
+    public static function newAlert(string $message, string $type): void
     {
         $_SESSION['alert']['message'] = $message;
         $_SESSION['alert']['type'] = $type;

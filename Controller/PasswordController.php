@@ -2,6 +2,7 @@
 
 require_once("Model/PasswordManager.php");
 require_once("Model/CompteManager.php");
+require_once("Controller/ConnexionController.php");
 
 class PasswordController
 {

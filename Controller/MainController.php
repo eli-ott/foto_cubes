@@ -1,8 +1,10 @@
 <?php
 
-require_once("./Model/Render.php");
-require_once("./Model/PhotoManager.php");
-require_once("./Model/CompteManager.php");
+require_once('Services/Utils.php');
+require_once('Services/constantes.php');
+require_once("Model/Render.php");
+require_once("Model/PhotoManager.php");
+require_once("Model/CompteManager.php");
 
 class MainController extends Render
 {
@@ -65,16 +67,18 @@ class MainController extends Render
     public function profil(): void
     {
         if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 405); //! Retourne une erreur si personne n'est connecté
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
         }
-
+        
         $this->render([
             "title" => 'Profil',
             "description" => 'Profil d\'un utilisateur de Foto',
             "showFooter" => true,
             "showHeader" => true,
+            "pageScripts" => ['profil'],
             "pageCss" => ['profil', 'galerie', 'filtres', 'paginator', 'photoGalerie', 'nav', 'footer'],
-            "infos" => $this->compteManager->getUserInfo($_COOKIE['idUser']),
+            "infos" => $this->compteManager->getUserInfo($_COOKIE['id']),
             'view' => 'View/layouts/profil.php',
             'template' => 'View/base.php'
         ]);
@@ -86,7 +90,8 @@ class MainController extends Render
     public function inscription(): void
     {
         if (!empty($_COOKIE['token'])) {
-            throw new Exception('Un utilisateur est déjà connecté', 405); //! retourne une erreur si un utilisateur est déjà connecté
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
         }
 
         $this->render([
@@ -106,7 +111,8 @@ class MainController extends Render
     public function connexion(): void
     {
         if (!empty($_COOKIE['token'])) {
-            throw new Exception('Un utilisateur est déjà connecté', 405); //! retourne une erreur si un utilisateur est déjà connecté
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
         }
 
         $this->render([

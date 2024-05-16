@@ -1,7 +1,8 @@
 <?php
 
-require_once('Controller/PasswordManager.php');
+require_once('Model/PasswordManager.php');
 require_once('Model/CompteManager.php');
+
 
 class CompteController
 {
@@ -47,13 +48,17 @@ class CompteController
     public function addCompte(): void
     {
         $photographe = new Photographe(
-            idMdp: Securite::secureHTML($_POST['idMdp']),
-            pseudo: Securite::secureHTML($_POST['pseudo']),
-            nom: Securite::secureHTML($_POST['nom']),
-            prenom: Securite::secureHTML($_POST['prenom']),
-            email: Securite::secureHTML($_POST['email']),
-            age: Securite::secureHTML($_POST['age']),
-            typePhotoPref: Securite::secureHTML($_POST['typePhotoPref']),
+            null,
+            null,
+            Securite::secureHTML($_POST['nom']),
+            Securite::secureHTML($_POST['prenom']),
+            Securite::secureHTML($_POST['pseudo']),
+            Securite::secureHTML($_POST['email']),
+            Securite::secureHTML($_POST['age']),
+            Securite::secureHTML($_POST['typePhotoPref']),
+            null,
+            null,
+            null
         );
         $password = Securite::secureHTML($_POST['password']);
         $passwordValidation = Securite::secureHTML($_POST['passwordValidation']);
@@ -68,20 +73,21 @@ class CompteController
             Utils::redirect(URL . 'inscription');
         }
 
-
         try {
             //vérifie que le pseudo est unique
             if ($this->pseudoUtilise($photographe->getPseudo())) {
                 throw new Exception('Le pseudo est déjà utilisé, veuillez en choisir un autre ou vous connecter', 405);
             }
 
-            $this->passwordManager->createPassword(Utils::hashPassword($password));
+            $passwordId = $this->passwordManager->createPassword(Utils::hashPassword($password));
+
+            $photographe->setIdMdp($passwordId);
 
             $newPhotographe = $this->compteManager->addUser($photographe);
 
             setcookie('token', Utils::generateToken(), time() + Utils::hoursToSeconds(24), '/');
             setcookie('id', $newPhotographe->getId(), time() + Utils::hoursToSeconds(24), '/');
-            setcookie('isAdmin', $this->compteManager->isAdmin($photographe->getId()), time() + Utils::hoursToSeconds(24), '/');
+            setcookie('isAdmin', $this->compteManager->isAdmin($newPhotographe->getId()), time() + Utils::hoursToSeconds(24), '/');
 
             Utils::newAlert('Compte créée avec succès', Constants::TYPES_MESSAGES['success']);
             Utils::redirect(URL . 'profil');
@@ -96,22 +102,27 @@ class CompteController
      */
     public function deleteCompte(): void
     {
-        $confirmation = Securite::secureHTML($_POST['confirmation']);
-
         if (empty($_COOKIE['token'])) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
         }
 
-        if ($confirmation !== Constants::DELETE_CONFIRMATION) {
-            Utils::newAlert('La phrase de confirmation est incorrect', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
-        }
-
         try {
+            $this->compteManager->deleteUser($_COOKIE['id']);
+
             $this->passwordManager->deletePassword($_COOKIE['id']);
 
-            $this->compteManager->deleteUser($_COOKIE['id']);
+            unset($_COOKIE['token']);
+            unset($_COOKIE['id']);
+            unset($_COOKIE['isAdmin']);
+            setcookie('token', '', 1, '/');
+            setcookie('id', '', 1, '/');
+            setcookie('isAdmin', '', 1, '/');
+
+            //TODO: Test if the account deletion remove the token
+
+            Utils::newAlert('Votre compte a été supprimé avec succès', Constants::TYPES_MESSAGES['success']);
+            Utils::redirect(URL . 'accueil');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil');

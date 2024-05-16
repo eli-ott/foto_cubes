@@ -22,6 +22,12 @@
             <button><img src="Public/assets/image/pen.svg" alt=""></button>
         </p>
     </div>
+    <div class="buttons flex start">
+        <form action="form/disconnect" method="post">
+            <button type="submit">Me déconnecter</button>
+        </form>
+        <button type="submit" style="color: red" onclick="validateDeletion()">Supprimer mon compte</button>
+    </div>
 </section>
 <h2 class="photos">Mes photos :</h2>
 <?php require_once('View/layouts/galerie.php'); ?>

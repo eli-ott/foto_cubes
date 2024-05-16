@@ -1,5 +1,6 @@
 <?php
-require_once('./Model/Model.php');
+require_once('./Services/Model.php');
+require_once('./Services/types/MotDePasse.php');
 
 class PasswordManager extends Model
 {
@@ -31,16 +32,15 @@ class PasswordManager extends Model
     /**
      * Supprime le compte de l'utilisateur
      * 
-     * @param int $id_user Récupère l'id de l'utilisateur qui souhaite supprimer son compte
+     * @param int $idUser Récupère l'id de l'utilisateur qui souhaite supprimer son compte
      * @return int Le code status de la requête
      */
-    public function deletePassword(int $id_user): int
+    public function deletePassword(int $idUser): int
     {
-        $sql = "DELETE mot_de_passe FROM mot_de_passe INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe WHERE utilisateur.id_user = :id_user";
+        $sql = "DELETE mot_de_passe FROM mot_de_passe INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe WHERE utilisateur.id_user = :idUser";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "id_user" => $id_user
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser);
         $req->execute();
 
         if ($req) {
@@ -58,22 +58,21 @@ class PasswordManager extends Model
      */
     public function getPassword(int $idUser): MotDePasse
     {
-        $sql = "SELECT mot_de_passe.id_mot_de_passe, `hash`, ng_essais, date_reinitialisation, utilisateur.id_user, utilisateur.pseudo 
+        $sql = "SELECT mot_de_passe.id_mot_de_passe, `hash`, nb_essais, date_reinitialisation, utilisateur.id_user, utilisateur.pseudo 
             FROM mot_de_passe 
             INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe 
             WHERE utilisateur.id_user = :idUser";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $idUser
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser);
         $req->execute();
 
         while ($row = $req->fetch(PDO::FETCH_ASSOC)) {
             $data = new MotDePasse(
-                $row->id_mot_de_passe,
-                $row->hash,
-                $row->nb_essais,
-                $row->date_reinitialisation
+                $row['id_mot_de_passe'],
+                $row['hash'],
+                $row['nb_essais'],
+                $row['date_reinitialisation']
             );
         }
 
@@ -90,13 +89,12 @@ class PasswordManager extends Model
     {
         $sql = "INSERT INTO mot_de_passe (`hash`) VALUE (:mdp)";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "mdp" => $hash
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('mdp', $hash, PDO::PARAM_STR);
         $req->execute();
 
         if ($req) {
-            return 200;
+            return $this->getBDD()->lastInsertId();
         } else {
             throw new Exception('Erreur lors de la création du mot de passe', 500);
         }
