@@ -62,19 +62,14 @@ class CompteManager extends Model
     /**
      * Mets à jour un compte d'un photographe
      * 
-     * @param string $field Le nom de la colonne à mettre à jour
-     * @param string $newValue La valeur à mettre à jour
      * @return int Le code statut 
      */
-    public function updateUser(string $field, string $newValue): int
+    public function validateAccount(): int
     {
-        $sql = "UPDATE utilisateur SET :field = :newValue WHERE id_user = :idUser";
+        $sql = "UPDATE utilisateur SET compte_valide = 1 WHERE id_user = :idUser";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $_COOKIE['id'],
-            "field" => $field,
-            "newValue" => $newValue,
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue("idUser", $_COOKIE['id']);
         $req->execute();
 
         if ($req) {
@@ -217,5 +212,22 @@ class CompteManager extends Model
         $req->execute();
 
         return $req->fetch(PDO::FETCH_ASSOC)['is_admin'];
+    }
+
+    /**
+     * Permet de récupérer l'email de l'utilisateur en fonction de son id_mot_de_passe
+     * 
+     * @param int $idUser L'identifiant de l'utilisateur
+     * @return string Son email
+     */
+    public function getUserEmail(int $idUser): string
+    {
+        $sql = 'SELECT email FROM utilisateur WHERE id_user = :idUser';
+
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser);
+        $req->execute();
+
+        return $req->fetch(PDO::FETCH_ASSOC)['email'];
     }
 }

@@ -7,6 +7,7 @@ require_once('Services/types/Photographe.php');
 require_once('Services/Securite.php');
 
 require_once('Model/Render.php');
+require_once("Model/CompteManager.php");
 require_once('Services/types/Photo.php');
 require_once("./controller/MainController.php");
 require_once("./controller/CompteController.php");
@@ -21,6 +22,7 @@ $messageController = new MessageController();
 $photoController = new PhotoController();
 $passwordController = new PasswordController();
 $connexionController = new ConnexionController();
+$compteManager = new CompteManager();
 
 //Permet de récupérer le bon URL
 if (empty($_GET['page'])) {
@@ -51,8 +53,9 @@ try {
             $mainController->profil();
             break;
         case 'connexion':
-            if (!Utils::userConnected()) {
-                Utils::redirect(URL . 'connexion');
+            if (Utils::userConnected()) {
+                Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
+                Utils::redirect(URL . 'profil');
             }
 
             $mainController->connexion();
@@ -73,6 +76,14 @@ try {
 
             $mainController->ajouter();
             break;
+        case 'valider':
+            if (!Utils::userConnected()) {
+                Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+                Utils::redirect(URL . 'connexion');
+            }
+
+            $mainController->validateEmail();
+            break;
         case 'form':
             switch ($param) {
                 case 'connexion':
@@ -91,6 +102,19 @@ try {
                     break;
                 case 'delete-photo':
                     $photoController->deletePhoto();
+                    break;
+                case 'validate-email':
+                    $compteController->validateEmail();
+                    break;
+                case 'revalidate-email':
+                    try {
+                        Utils::verifMail($_POST['mail']);
+
+                        Utils::redirect(URL . 'valider');
+                    } catch (Exception $e) {
+                        Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+                        Utils::redirect(URL . 'profil');
+                    }
                     break;
             }
             break;

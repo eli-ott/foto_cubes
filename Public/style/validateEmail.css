@@ -5,7 +5,7 @@
 	background: center / cover url('../assets/image/form-background.jpg') no-repeat;
 }
 .sign-up .form-container {
-	height: 75%;
+	height: 45%;
 	width: 65%;
 
 	gap: var(--margin-m);
@@ -24,9 +24,9 @@
 .sign-up .form-container form {
 	justify-content: space-between;
 	gap: var(--margin-s);
+	width: 100%;
 }
-.sign-up .form-container form input,
-.sign-up .form-container form select {
+.sign-up .form-container form input {
 	background: none;
 	outline: none;
 
@@ -38,10 +38,6 @@
 	border: solid 2px var(--light);
 	border-radius: var(--radius-m);
 }
-.sign-up .form-container form select option {
-	color: var(--dark);
-	padding: 40px;
-}
 .sign-up .form-container form input::placeholder {
 	color: var(--light-50);
 	opacity: 1;
@@ -52,9 +48,7 @@
 .sign-up .form-container form button {
 	outline: none;
 	cursor: pointer;
-	align-self: end;
 
-	margin-left: auto;
 	transition: 0.15s;
 	width: 45%;
 	padding: var(--margin-xs);
@@ -69,25 +63,4 @@
 .sign-up .form-container form button:hover {
 	background: var(--light);
 	color: var(--dark);
-}
-.sign-up .form-container form button[type='submit'] {
-	outline: none;
-	cursor: pointer;
-	align-self: end;
-
-	margin-left: auto;
-	transition: 0.15s;
-	width: 45%;
-	padding: var(--margin-xs);
-
-	font-size: var(--desktop-font-size-s);
-
-	background: var(--light);
-	color: var(--dark);
-	border: solid 2px var(--light);
-	border-radius: var(--radius-m);
-}
-.sign-up .form-container form button[type='submit']:hover {
-	background: var(--blue);
-	color: var(--light);
 }

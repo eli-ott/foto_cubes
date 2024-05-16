@@ -72,6 +72,8 @@ class MainController extends Render
             "pageScripts" => ['profil'],
             "pageCss" => ['profil', 'galerie', 'filtres', 'paginator', 'photoGalerie', 'nav', 'footer'],
             "infos" => $this->compteManager->getUserInfo($_COOKIE['id']),
+            "compteActif" => $this->compteManager->compteActif($_COOKIE["id"]),
+            "mailUser" => $this->compteManager->getUserEmail($_COOKIE['id']),
             'view' => 'View/layouts/profil.php',
             'template' => 'View/base.php'
         ]);
@@ -82,9 +84,9 @@ class MainController extends Render
      */
     public function inscription(): void
     {
-        if (!Utils::userConnected()) {
-            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'connexion');
+        if (Utils::userConnected()) {
+            Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'profil');
         }
 
         $this->render([
@@ -103,9 +105,9 @@ class MainController extends Render
      */
     public function connexion(): void
     {
-        if (!Utils::userConnected()) {
-            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'connexion');
+        if (Utils::userConnected()) {
+            Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'profil');
         };
 
         $this->render([
@@ -168,6 +170,22 @@ class MainController extends Render
             'showHeader' => false,
             'pageCss' => ['reset'],
             'view' => 'View/layouts/reset.php',
+            'template' => 'View/base.php'
+        ]);
+    }
+
+    /**
+     * Permet d'afficher la page de validation d'email
+     */
+    public function validateEmail(): void
+    {
+        $this->render([
+            'title' => 'Valider l\'email',
+            'description' => 'Valider votre email',
+            'showFooter' => false,
+            'showHeader' => false,
+            'pageCss' => ['validateEmail'],
+            'view' => 'View/layouts/validateEmail.php',
             'template' => 'View/base.php'
         ]);
     }

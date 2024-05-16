@@ -65,7 +65,7 @@ class Utils
      */
     public static function userConnected(): bool
     {
-        return !empty($_COOKIE['token']);
+        return isset($_COOKIE['token']);
     }
 
     /**
@@ -128,7 +128,7 @@ class Utils
      * 
      * @param string $mail le mail du receveur
      */
-    public function verifMail(string $mail)
+    public static function verifMail(string $mail)
     {
         $objet = 'votre code de verification';
         $_SESSION['codeVerif'] = $message = rand(1000, 9999);
@@ -136,14 +136,15 @@ class Utils
     }
 
     /**
-     * verifie si le code envoyer par mail est le bon
+     * Vérifie si le code envoyer par mail est le bon
      * 
      * @param int $code code de verification
      * @return int le code status de la fonction
      */
-    public function verifCode(int $code): int
+    public static function verifCode(int $code): int
     {
         if (intval($_SESSION['codeVerif']) === $code) {
+            unset($_SESSION['codeVerif']);
             return 200;
         } else {
             throw new Exception('Ce n\'est pas le bon code', 500);

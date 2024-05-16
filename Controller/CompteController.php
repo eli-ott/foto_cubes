@@ -89,8 +89,10 @@ class CompteController
             setcookie('id', $newPhotographe->getId(), time() + Utils::hoursToSeconds(24), '/');
             setcookie('isAdmin', $this->compteManager->isAdmin($newPhotographe->getId()), time() + Utils::hoursToSeconds(24), '/');
 
+            Utils::verifMail($photographe->getEmail());
+
             Utils::newAlert('Compte créée avec succès', Constants::TYPES_MESSAGES['success']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'valider');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'inscription');
@@ -141,13 +143,41 @@ class CompteController
         }
 
         try {
-            $this->compteManager->updateUser($field, $value);
+            // $this->compteManager->updateUser($field, $value); //TODO: Créer une fonction pour modifier les infos du user
 
             Utils::newAlert($field . ' modifié avec succès', Constants::TYPES_MESSAGES['success']);
             Utils::redirect(URL . 'profil');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil');
+        }
+    }
+
+    /**
+     * Permet de vérifier si le code entrée est le bon
+     */
+    public function validateEmail(): void
+    {
+        $code = Securite::secureHTML($_POST['code']);
+
+        if (!Utils::userConnected()) {
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
+        }
+
+        try {
+            if (Utils::verifCode($code)) {
+                $this->compteManager->validateAccount();
+
+                Utils::newAlert('Compte validé avec succès', Constants::TYPES_MESSAGES['success']);
+                Utils::redirect(URL . 'profil');
+            } else {
+                Utils::newAlert('Mauvais code', Constants::TYPES_MESSAGES['error']);
+                Utils::redirect(URL . 'valider');
+            }
+        } catch (Exception $e) {
+            Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'valider');
         }
     }
 }
