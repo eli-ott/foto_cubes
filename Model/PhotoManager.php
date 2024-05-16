@@ -29,17 +29,17 @@ class PhotoManager extends Model
      */
     public function getPhotos(int $page): array
     {
-        $offset = ($page * 10) + $page;
+        $offset = (($page - 1) * 10) + $page - 1;
         $limit = 10 + $page;
 
-        $sql = "SELECT photo.id_user, photo.id_photo, photo.titre, photo.tag, photo.source, photo.date_prise_vue, photo.date_publication, photographe.nom, photographe.prenom, photographe.pseudo, photographe.email FROM photo 
-        LEFT JOIN user as photographe ON photo.id_user = photographe.id_user 
+        $sql = "SELECT photo.id_user, photo.id_photo, photo.titre, photo.tag, photo.source, photo.date_prise_vue, photo.date_publication, photographe.nom, photographe.prenom, photographe.pseudo, photographe.email 
+        FROM photo 
+        LEFT JOIN utilisateur as photographe ON photo.id_user = photographe.id_user 
         LIMIT :limit_photo OFFSET :from_offset;";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "limit_photo" => $limit,
-            "from_offset" => $offset
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('limit_photo', $limit, PDO::PARAM_INT);
+        $req->bindValue('from_offset', $offset, PDO::PARAM_INT);
         $req->execute();
 
         if (!$req) {
@@ -83,16 +83,16 @@ class PhotoManager extends Model
         $offset = ($page * 10) + $page;
         $limit = 10 + $page;
 
-        $sql = "SELECT photo.id_user, photo.id_photo, photo.titre, photo.tag, photo.source, photo.date_prise_vue, photo.date_publication, photographe.nom, photographe.prenom, photographe.pseudo, photographe.email FROM photo 
-        LEFT JOIN user as photographe ON photo.id_user = photographe.id_user
+        $sql = "SELECT photo.id_user, photo.id_photo, photo.titre, photo.tag, photo.source, photo.date_prise_vue, photo.date_publication, photographe.nom, photographe.prenom, photographe.pseudo, photographe.email 
+        FROM photo 
+        LEFT JOIN utilisateur as photographe ON photo.id_user = photographe.id_user
         WHERE photo.id_user = :idUser 
         LIMIT :limitPhoto OFFSET :fromOffset;";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "limitPhoto" => $limit,
-            "fromOffset" => $offset,
-            "idUser" => $idUser
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
+        $req->bindValue('limitPhoto', $limit, PDO::PARAM_INT);
+        $req->bindValue('fromOffset', $offset, PDO::PARAM_INT);
         $req->execute();
 
         if (!$req) {
@@ -102,18 +102,19 @@ class PhotoManager extends Model
         $photos = [];
         while ($row = $req->fetch((PDO::FETCH_ASSOC))) {
             $photos[] = new Photo(
-                intval($row->id_photo),
-                $row->titre,
-                $row->tag,
-                $row->source,
-                $row->date_prise_vue,
-                $row->date_publication,
+                intval($row['id_photo']),
+                $row['titre'],
+                $row['tag'],
+                $row['source'],
+                $row['date_prise_vue'],
+                $row['date_publication'],
                 new Photographe(
-                    id: intval($row->idUser),
-                    nom: $row->nom,
-                    prenom: $row->prenom,
-                    pseudo: $row->pseudo,
-                    email: $row->email
+                    intval($row['id_user']),
+                    null,
+                    $row['nom'],
+                    $row['prenom'],
+                    $row['pseudo'],
+                    $row['email']
                 )
             );
         }

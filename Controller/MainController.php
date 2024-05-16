@@ -13,14 +13,18 @@ class MainController extends Render
      * @var CompteController Le controlleur pour le compte 
      */
     private $compteController;
+    /** 
+     * @var PhotoController Le controlleur pour les photos 
+     */
+    private $photoController;
 
     /**
      * Constructeur
      */
     public function __construct()
     {
-        parent::__construct(Render::class);
         $this->photoManager = new PhotoManager;
+        $this->photoController = new PhotoController;
         $this->compteController = new CompteController;
     }
 
@@ -76,6 +80,7 @@ class MainController extends Render
             "pageScripts" => ['profil'],
             "pageCss" => ['profil', 'galerie', 'filtres', 'paginator', 'photoGalerie', 'nav', 'footer'],
             "infos" => $this->compteController->getUserInfo(),
+            "photos" => $this->photoController->getPhotosByUser(),
             'view' => 'View/layouts/profil.php',
             'template' => 'View/base.php'
         ]);

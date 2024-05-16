@@ -5,7 +5,7 @@ define("URL", str_replace("index.php", "", (isset($_SERVER['HTTPS']) ? "https" :
 
 require_once('Services/types/Photographe.php');
 require_once('Services/Securite.php');
-
+require_once("Services/types/Photo.php");
 require_once("./controller/MainController.php");
 require_once("./controller/CompteController.php");
 require_once("./controller/MessageController.php");

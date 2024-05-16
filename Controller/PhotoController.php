@@ -37,7 +37,7 @@ class PhotoController
             titre: Securite::secureHTML($_POST['titre']),
             tag: Securite::secureHTML($_POST['tag']),
             source: Securite::secureHTML($_POST['source']),
-            datePriseVue: new DateTime(Securite::secureHTML($_POST['datePriseVue'])),
+            datePriseVue: Securite::secureHTML($_POST['datePriseVue']),
             photographe: $this->compteManager->getUserInfo($_COOKIE['id'])
         );
 
@@ -63,7 +63,7 @@ class PhotoController
             titre: Securite::secureHTML($_POST['titre']),
             tag: Securite::secureHTML($_POST['tag']),
             source: Securite::secureHTML($_POST['source']),
-            datePriseVue: new DateTime(Securite::secureHTML($_POST['datePriseVue'])),
+            datePriseVue: Securite::secureHTML($_POST['datePriseVue']),
             photographe: $this->compteManager->getUserInfo(Securite::secureHTML($_POST['idUser']))
         );
 
@@ -89,7 +89,7 @@ class PhotoController
             titre: Securite::secureHTML($_POST['titre']),
             tag: Securite::secureHTML($_POST['tag']),
             source: Securite::secureHTML($_POST['source']),
-            datePriseVue: new DateTime(Securite::secureHTML($_POST['datePriseVue'])),
+            datePriseVue: Securite::secureHTML($_POST['datePriseVue']),
             photographe: $this->compteManager->getUserInfo($_COOKIE['id'])
         );
 
@@ -123,13 +123,13 @@ class PhotoController
      */
     public function getPhotosByUser(): ?array
     {
-        if (empty($_GET['idUser'])) {
+        if (empty($_COOKIE['id'])) {
             Utils::newAlert('L\'utilisateur n\'a pas été trouvé', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'erreur');
         }
 
         try {
-            return $this->photoManager->getPhotosByUser(Securite::secureHTML($_GET['page']) ?? 1, Securite::secureHTML($_GET['idUSer']));
+            return $this->photoManager->getPhotosByUser(Securite::secureHTML((int)$_GET['page']) ?? 1, Securite::secureHTML($_COOKIE['id']));
         } catch (Exception $e) {
             Utils::newAlert('Erreur lors de la récupération des photos de l\'utilisateur', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil');

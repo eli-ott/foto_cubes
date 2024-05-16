@@ -11,9 +11,10 @@
 .image-container .image {
 	width: 100%;
 	height: 100%;
-	object-fit: cover;
-
-	background: var(--dark);
+	background-image: var(--bg-image);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position-y: center;
 }
 
 .image-container .description {
