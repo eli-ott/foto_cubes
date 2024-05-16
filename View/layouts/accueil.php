@@ -19,14 +19,23 @@
             </p>
         </div>
         <!-- Dernière photos poster -->
-        <div class="preview flex center column">
-            <div class="pictures flex center">
-                <?php foreach ($photos as $preview) : ?>
-                    <div class="pic" style="--bg-image: url('<?= URL ?>Public/photos/<?= $preview["source"] ?>');"></div>
-                <?php endforeach; ?>
+        <?php if (!empty($photos)) : ?>
+            <div class="preview flex center column">
+                <div class="pictures flex center">
+                    <?php foreach ($photos as $preview) : ?>
+                        <div class="pic" style="--bg-image: url('<?= URL ?>Public/photos/<?= $preview["source"] ?>');"></div>
+                    <?php endforeach; ?>
+                </div>
+                <a href="galerie" class="more">Voir plus</a>
             </div>
-            <a href="galerie" class="more">Voir plus</a>
-        </div>
+        <?php else : ?>
+            <div class="preview-default flex center column">
+                <div class="pictures-default flex center">
+                    <p>Pas de photos disponible pour le moment</p>
+                </div>
+                <a href="ajouter" class="more">Ajouter des photos</a>
+            </div>
+        <?php endif; ?>
         <!-- CCM -->
         <div class="flex center content">
             <p class="description">

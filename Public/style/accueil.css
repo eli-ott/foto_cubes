@@ -98,3 +98,36 @@
 	border-color: var(--blue);
 	color: var(--light);
 }
+
+/* ------------- default for preview ------------*/
+
+.preview-default {
+	width: 100%;
+	height: 20vh;
+	padding: var(--margin-s);
+	background: var(--dark);
+}
+.preview-default .pictures-default {
+	width: 100%;
+	height: 100%;
+}
+.preview-default .pictures-default p {
+	color: #ffff;
+}
+.preview-default a {
+	text-decoration: none;
+
+	transition: 0.25s;
+	border: solid 1px var(--light);
+	border-radius: var(--radius-m);
+	font-size: var(--desktop-font-size-s);
+	color: var(--light);
+	padding: var(--margin-xs) var(--margin-s);
+	background: var(--light);
+	color: var(--dark);
+}
+.preview-default a:hover {
+	background: var(--blue);
+	border-color: var(--blue);
+	color: var(--light);
+}
