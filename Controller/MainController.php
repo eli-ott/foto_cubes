@@ -1,10 +1,7 @@
 <?php
 
-require_once('Services/Utils.php');
-require_once('Services/constantes.php');
+
 require_once("Model/Render.php");
-require_once("Model/PhotoManager.php");
-require_once("Model/CompteManager.php");
 
 class MainController extends Render
 {
@@ -13,9 +10,9 @@ class MainController extends Render
      */
     private $photoManager;
     /** 
-     * @var CompteManager Le manager pour le compte 
+     * @var CompteController Le controlleur pour le compte 
      */
-    private $compteManager;
+    private $compteController;
 
     /**
      * Constructeur
@@ -24,7 +21,7 @@ class MainController extends Render
     {
         parent::__construct(Render::class);
         $this->photoManager = new PhotoManager;
-        $this->compteManager = new CompteManager;
+        $this->compteController = new CompteController;
     }
 
     /**
@@ -70,7 +67,7 @@ class MainController extends Render
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
         }
-        
+
         $this->render([
             "title" => 'Profil',
             "description" => 'Profil d\'un utilisateur de Foto',
@@ -78,7 +75,7 @@ class MainController extends Render
             "showHeader" => true,
             "pageScripts" => ['profil'],
             "pageCss" => ['profil', 'galerie', 'filtres', 'paginator', 'photoGalerie', 'nav', 'footer'],
-            "infos" => $this->compteManager->getUserInfo($_COOKIE['id']),
+            "infos" => $this->compteController->getUserInfo(),
             'view' => 'View/layouts/profil.php',
             'template' => 'View/base.php'
         ]);

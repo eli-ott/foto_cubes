@@ -152,4 +152,23 @@ class CompteController
             Utils::redirect(URL . 'profil');
         }
     }
+    /**
+     * Permet de recuperer les infos de l'utilisateur'
+     * 
+     * @return Photographe Le photographe
+     */
+    public function getUserInfo(): ?Photographe
+    {
+        if (empty($_COOKIE['token'])) {
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
+        }
+
+        try {
+            return $this->compteManager->getUserInfo($_COOKIE['id']);
+        } catch (Exception $e) {
+            Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'profil');
+        }
+    }
 }
