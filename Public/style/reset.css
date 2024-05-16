@@ -6,6 +6,7 @@
 }
 .reset .form-container {
 	width: 65%;
+	height: 65%;
 
 	gap: var(--margin-m);
 	background: var(--dark-25);

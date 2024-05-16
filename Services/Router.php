@@ -84,6 +84,14 @@ try {
 
             $mainController->validateEmail();
             break;
+        case 'mdp-oublie':
+            if (Utils::userConnected()) {
+                Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
+                Utils::redirect(URL . 'profil');
+            }
+
+            $mainController->resetMdp();
+            break;
         case 'form':
             switch ($param) {
                 case 'connexion':
@@ -116,10 +124,13 @@ try {
                         Utils::redirect(URL . 'profil');
                     }
                     break;
+                case 'reset-mdp':
+                    $compteController->resetMdp();
+                    break;
             }
             break;
         default:
-            throw new Exception('Aucune page trouvé', 404);
+            // throw new Exception('Aucune page trouvé', 404);
     }
 } catch (Exception $e) {
     Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);

@@ -15,6 +15,10 @@ class CompteController
      * @var PasswordManager $passwordManager Le controller pour les mots de passes
      */
     private $passwordManager;
+    /**
+     * @var ConnexionController $connexionController Le controller pour les connexions
+     */
+    private $connexionController;
 
     /**
      * Constructeur
@@ -23,6 +27,7 @@ class CompteController
     {
         $this->compteManager = new CompteManager;
         $this->passwordManager = new PasswordManager;
+        $this->connexionController = new ConnexionController;
     }
 
     /**
@@ -178,6 +183,36 @@ class CompteController
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'valider');
+        }
+    }
+
+    /**
+     * Permet de reset le mot de passe de l'utilisateur
+     */
+    public function resetMdp(): void
+    {
+        $pseudo = Securite::secureHTML($_POST['pseudo']);
+        $password = Securite::secureHTML($_POST['password']);
+        $newPass = Securite::secureHTML($_POST['newPass']);
+        $newPassValidation = Securite::secureHTML($_POST['newPassValidation']);
+
+        if ($newPass !== $newPassValidation) {
+            Utils::newAlert('Les nouveaux mots de passes ne correspondent pas', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'mdp-oublie');
+        }
+
+        try {
+            $idUser = $this->compteManager->getUserId($pseudo);
+
+            if ($this->connexionController->validateConnection($idUser, $password)) {
+                $this->passwordManager->updatePassword(Utils::hashPassword($newPass), $idUser);
+
+                Utils::newAlert('Mot de passe modifié avec succès', Constants::TYPES_MESSAGES['success']);
+                Utils::redirect(URL . 'connexion');
+            }
+        } catch (Exception $e) {
+            Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'mdp-oublie');
         }
     }
 }
