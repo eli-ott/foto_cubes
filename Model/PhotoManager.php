@@ -132,18 +132,16 @@ class PhotoManager extends Model
      */
     public function addPhoto(Photo $photo): int
     {
-        if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 400);
-        }
+        $sql = "INSERT INTO photo (id_user, titre, date_prise_vue, source, tag) VALUES (:idUser, :titre, :datePriseVue, :source, :tag)";
 
-        $sql = "INSERT INTO photo (id_user, titre, date_prise_vue, source) VALUES (:idUser, :titre, :datePriseVue, :source)";
+        $req = $this->getBDD()->prepare($sql);
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $photo->getPhotographe()->getId(),
-            "titre" => $photo->getTitre(),
-            "datePriseVue" => $photo->getDatePriseVue(),
-            "source" => $photo->getSource()
-        ]);
+        $req->bindValue("idUser", $photo->getPhotographe()->getId(), PDO::PARAM_INT);
+        $req->bindValue("titre", $photo->getTitre(), PDO::PARAM_STR);
+        $req->bindValue("datePriseVue", $photo->getDatePriseVue(), PDO::PARAM_STR);
+        $req->bindValue("source", $photo->getSource(), PDO::PARAM_STR);
+        $req->bindValue("tag", $photo->getTag(), PDO::PARAM_STR);
+
         $req->execute();
 
         if ($req) {
@@ -163,15 +161,12 @@ class PhotoManager extends Model
      */
     public function deletePhoto(Photo $photo): int
     {
-        if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 400);
-        }
+        Utils::deleteFile($photo->getSource());
 
         $sql = "DELETE FROM photo WHERE id_photo = :idPhoto";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $photo->getPhotographe()->getId()
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue("idUser", $photo->getPhotographe()->getId());
         $req->execute();
 
         if ($req) {
@@ -191,9 +186,6 @@ class PhotoManager extends Model
      */
     public function updatePhoto(Photo $photo): int
     {
-        if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 400);
-        }
 
         $sql = "UPDATE photo SET titre = :titre, tag = :tag WHERE id_photo = :idPhoto";
 

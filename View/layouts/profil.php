@@ -26,8 +26,16 @@
         <form action="form/disconnect" method="post">
             <button type="submit">Me déconnecter</button>
         </form>
-        <button type="submit" style="color: red" onclick="validateDeletion()">Supprimer mon compte</button>
+        <form action="form/delete-account" method="post" style="visibility: hidden;" id="deleteAccount"></form>
+        <button style="color: red" onclick="validateDeletion()">Supprimer mon compte</button>
     </div>
 </section>
-<h2 class="photos">Mes photos :</h2>
+<? var_dump($_SESSION['alert']); ?>
+<div class="photos-container flex">
+    <h2 class="photos">Mes photos :</h2>
+    <a href="ajouter" class="flex center">
+        <img src="Public/assets/image/add-photo.svg" alt="">
+        Ajouter une photo
+    </a>
+</div>
 <?php require_once('View/layouts/galerie.php'); ?>

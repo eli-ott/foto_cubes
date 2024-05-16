@@ -1,11 +1,5 @@
 <?php
 
-require_once('Services/Utils.php');
-require_once('Services/constantes.php');
-require_once("Model/Render.php");
-require_once("Model/PhotoManager.php");
-require_once("Model/CompteManager.php");
-
 class MainController extends Render
 {
     /** 
@@ -22,7 +16,6 @@ class MainController extends Render
      */
     public function __construct()
     {
-        parent::__construct(Render::class);
         $this->photoManager = new PhotoManager;
         $this->compteManager = new CompteManager;
     }
@@ -66,11 +59,11 @@ class MainController extends Render
      */
     public function profil(): void
     {
-        if (empty($_COOKIE['token'])) {
+        if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
-        }
-        
+        };
+
         $this->render([
             "title" => 'Profil',
             "description" => 'Profil d\'un utilisateur de Foto',
@@ -89,7 +82,7 @@ class MainController extends Render
      */
     public function inscription(): void
     {
-        if (!empty($_COOKIE['token'])) {
+        if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
         }
@@ -110,10 +103,10 @@ class MainController extends Render
      */
     public function connexion(): void
     {
-        if (!empty($_COOKIE['token'])) {
+        if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
-        }
+        };
 
         $this->render([
             'title' => 'Connexion',

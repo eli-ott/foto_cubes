@@ -19,11 +19,11 @@ class Photo implements JsonSerializable
      */
     private $source;
     /** 
-     * @var DateTime $datePriseVue La date de prise de vue
+     * @var string $datePriseVue La date de prise de vue
      */
     private $datePriseVue;
     /**
-     * @var DateTime $datePublication La date de publication de la photo
+     * @var string $datePublication La date de publication de la photo
      */
     private $datePublication;
     /**
@@ -38,8 +38,8 @@ class Photo implements JsonSerializable
      * @param string $titre Le titre de la photo
      * @param string $tag Le tag de la photo
      * @param mixed $source La source de la photo
-     * @param DateTime $datePriseVue La date de la prise de vue
-     * @param DateTime $datePublication La date de publication de la photo sur le site
+     * @param string $datePriseVue La date de la prise de vue
+     * @param string $datePublication La date de publication de la photo sur le site
      * @param Photographe Le photographe
      */
     public function __construct(
@@ -47,8 +47,8 @@ class Photo implements JsonSerializable
         string $titre,
         string $tag,
         mixed $source,
-        DateTime $datePriseVue,
-        DateTime $datePublication = null,
+        string $datePriseVue = null,
+        string $datePublication = null,
         Photographe $photographe
     ) {
         $this->id = $id;
@@ -83,7 +83,8 @@ class Photo implements JsonSerializable
      * 
      * @return string Le tag
      */
-    public function getTag(): string {
+    public function getTag(): string
+    {
         return $this->tag;
     }
 
@@ -100,9 +101,9 @@ class Photo implements JsonSerializable
     /**
      * Récupère la date de prise de vue de la photo
      * 
-     * @return DateTime La date de prise de vue
+     * @return string La date de prise de vue
      */
-    public function getDatePriseVue(): DateTime
+    public function getDatePriseVue(): string
     {
         return $this->datePriseVue;
     }
@@ -110,9 +111,9 @@ class Photo implements JsonSerializable
     /**
      * Récupère la date de publication de la photo
      * 
-     * @return DateTime La date de publication de la photo
+     * @return string La date de publication de la photo
      */
-    public function getDatePublication(): DateTime
+    public function getDatePublication(): string
     {
         return $this->datePublication;
     }

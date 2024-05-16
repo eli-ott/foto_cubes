@@ -6,7 +6,9 @@ define("URL", str_replace("index.php", "", (isset($_SERVER['HTTPS']) ? "https" :
 require_once('Services/types/Photographe.php');
 require_once('Services/Securite.php');
 
-require_once("./controller/MainController.controller.php");
+require_once('Model/Render.php');
+require_once('Services/types/Photo.php');
+require_once("./controller/MainController.php");
 require_once("./controller/CompteController.php");
 require_once("./controller/MessageController.php");
 require_once("./controller/PhotoController.php");
@@ -41,35 +43,35 @@ try {
             $mainController->galerie();
             break;
         case 'profil':
-            if (empty($_COOKIE['token'])) {
+            if (!Utils::userConnected()) {
                 Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
                 Utils::redirect(URL . 'connexion');
-            } else {
-                $mainController->profil();
             }
+
+            $mainController->profil();
             break;
         case 'connexion':
-            if (!empty($_COOKIE['token'])) {
-                Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
-                Utils::redirect(URL . 'profil');
-            } else {
-                $mainController->connexion();
+            if (!Utils::userConnected()) {
+                Utils::redirect(URL . 'connexion');
             }
+
+            $mainController->connexion();
+            break;
         case 'inscription':
-            if (!empty($_COOKIE['token'])) {
+            if (Utils::userConnected()) {
                 Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
                 Utils::redirect(URL . 'profil');
-            } else {
-                $mainController->inscription();
             }
+
+            $mainController->inscription();
             break;
         case 'ajouter':
-            if (empty($_COOKIE['token'])) {
+            if (!Utils::userConnected()) {
                 Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
                 Utils::redirect(URL . 'connexion');
-            } else {
-                $mainController->ajouter();
             }
+
+            $mainController->ajouter();
             break;
         case 'form':
             switch ($param) {
@@ -84,11 +86,18 @@ try {
                 case 'delete-account':
                     $compteController->deleteCompte();
                     break;
+                case 'ajouter-photo':
+                    $photoController->addPhoto();
+                    break;
+                case 'delete-photo':
+                    $photoController->deletePhoto();
+                    break;
             }
             break;
         default:
             throw new Exception('Aucune page trouvé', 404);
     }
 } catch (Exception $e) {
-    //TODO: Gérer les erreurs en PHP avec un handler qui redirect vers la page d'erreur avec le bon code et message
+    Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+    Utils::redirect(URL . 'error');
 }

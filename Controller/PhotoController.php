@@ -28,24 +28,29 @@ class PhotoController
      */
     public function addPhoto(): void
     {
-        if (empty($_COOKIE['token'])) {
+        if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
         }
 
-        $photo = new Photo(
-            titre: Securite::secureHTML($_POST['titre']),
-            tag: Securite::secureHTML($_POST['tag']),
-            source: Securite::secureHTML($_POST['source']),
-            datePriseVue: new DateTime(Securite::secureHTML($_POST['datePriseVue'])),
-            photographe: $this->compteManager->getUserInfo($_COOKIE['id'])
-        );
-
         try {
+            $photo = new Photo(
+                id: null,
+                titre: Securite::secureHTML($_POST['titre']),
+                tag: Securite::secureHTML($_POST['tag']),
+                source: Utils::uploadFile($_FILES['source']),
+                datePriseVue: Securite::secureHTML($_POST['datePriseVue']),
+                photographe: $this->compteManager->getUserInfo($_COOKIE['id']),
+                datePublication: null
+            );
+
             $this->photoManager->addPhoto($photo);
+
+            Utils::newAlert('Photo enregistré avec succès', Constants::TYPES_MESSAGES['success']);
+            Utils::redirect(URL . 'profil');
         } catch (Exception $e) {
-            Utils::newAlert('Erreur lors de la sauvegarde de la photo', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'upload');
+            Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'ajouter');
         }
     }
 
@@ -54,7 +59,7 @@ class PhotoController
      */
     public function deletePhoto(): void
     {
-        if (empty($_COOKIE['token'])) {
+        if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
         }
@@ -63,7 +68,7 @@ class PhotoController
             titre: Securite::secureHTML($_POST['titre']),
             tag: Securite::secureHTML($_POST['tag']),
             source: Securite::secureHTML($_POST['source']),
-            datePriseVue: new DateTime(Securite::secureHTML($_POST['datePriseVue'])),
+            datePriseVue: Securite::secureHTML($_POST['datePriseVue']),
             photographe: $this->compteManager->getUserInfo(Securite::secureHTML($_POST['idUser']))
         );
 
@@ -80,7 +85,7 @@ class PhotoController
      */
     public function updatePhoto(): void
     {
-        if (empty($_COOKIE['token'])) {
+        if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
         }
@@ -89,7 +94,7 @@ class PhotoController
             titre: Securite::secureHTML($_POST['titre']),
             tag: Securite::secureHTML($_POST['tag']),
             source: Securite::secureHTML($_POST['source']),
-            datePriseVue: new DateTime(Securite::secureHTML($_POST['datePriseVue'])),
+            datePriseVue: Securite::secureHTML($_POST['datePriseVue']),
             photographe: $this->compteManager->getUserInfo($_COOKIE['id'])
         );
 

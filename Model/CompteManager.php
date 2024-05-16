@@ -13,10 +13,6 @@ class CompteManager extends Model
      */
     public function addUser(Photographe $photographe): Photographe
     {
-        if (!empty($_COOKIE['token'])) {
-            throw new Exception('Un utilisateur est déjà connecté', 400);
-        }
-
         $addUserSql = "INSERT INTO utilisateur (id_mot_de_passe, pseudo, nom, prenom, email, age, type_photo_pref) 
             VALUES (:idMdp, :pseudo, :nom, :prenom, :email, :age, :typePhotoPref)";
 
@@ -72,10 +68,6 @@ class CompteManager extends Model
      */
     public function updateUser(string $field, string $newValue): int
     {
-        if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 400);
-        }
-
         $sql = "UPDATE utilisateur SET :field = :newValue WHERE id_user = :idUser";
 
         $req = $this->getBDD()->prepare($sql, [
@@ -102,10 +94,6 @@ class CompteManager extends Model
      */
     public function deleteUser(int $idUser): int
     {
-        if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 400);
-        }
-
         $sql = "DELETE FROM utilisateur WHERE id_user = :idUser";
 
         $req = $this->getBDD()->prepare($sql);

@@ -63,7 +63,7 @@ class CompteController
         $password = Securite::secureHTML($_POST['password']);
         $passwordValidation = Securite::secureHTML($_POST['passwordValidation']);
 
-        if (!empty($_COOKIE['token'])) {
+        if (Utils::userConnected()) {
             Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil');
         }
@@ -102,7 +102,7 @@ class CompteController
      */
     public function deleteCompte(): void
     {
-        if (empty($_COOKIE['token'])) {
+        if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
         }
@@ -119,9 +119,7 @@ class CompteController
             setcookie('id', '', 1, '/');
             setcookie('isAdmin', '', 1, '/');
 
-            //TODO: Test if the account deletion remove the token
-
-            Utils::newAlert('Votre compte a été supprimé avec succès', Constants::TYPES_MESSAGES['success']);
+            // Utils::newAlert('Votre compte a été supprimé avec succès', Constants::TYPES_MESSAGES['success']);
             Utils::redirect(URL . 'accueil');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
@@ -137,7 +135,7 @@ class CompteController
         $field = Securite::secureHTML($_POST['info']);
         $value = Securite::secureHTML($_POST['value']);
 
-        if (empty($_COOKIE['token'])) {
+        if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
         }

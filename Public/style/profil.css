@@ -44,6 +44,27 @@ h2 {
 
 	text-decoration: underline 1px;
 }
+.photos-container {
+	justify-content: space-between;
+}
+.photos-container a {
+	cursor: pointer;
+	text-decoration: none;
+
+	font-size: var(--desktop-font-size-s);
+	gap: var(--margin-xs);
+	padding: 0 var(--margin-s);
+	margin-right: var(--margin-m);
+	transition: 0.15s;
+
+	background: var(--blue);
+	border: solid 2px var(--dark);
+	border-radius: var(--radius-m);
+}
+.photos-container a:hover {
+	background: var(--light);
+	border: solid 2px var(--blue);
+}
 .photos {
 	margin-left: var(--margin-m);
 	margin-bottom: var(--margin-s);
