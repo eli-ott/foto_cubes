@@ -51,14 +51,14 @@ try {
         case 'connexion':
             if (!empty($_COOKIE['token'])) {
                 Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
-                Utils::redirect(URL . 'profil');
+                Utils::redirect(URL . 'profil/1');
             } else {
                 $mainController->connexion();
             }
         case 'inscription':
             if (!empty($_COOKIE['token'])) {
                 Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
-                Utils::redirect(URL . 'profil');
+                Utils::redirect(URL . 'profil/1');
             } else {
                 $mainController->inscription();
             }

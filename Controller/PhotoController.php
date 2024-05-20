@@ -71,7 +71,7 @@ class PhotoController
             $this->photoManager->deletePhoto($photo);
         } catch (Exception $e) {
             Utils::newAlert('Erreur lors de la suppression de la photo', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
     }
 
@@ -97,7 +97,7 @@ class PhotoController
             $this->photoManager->updatePhoto($photo);
         } catch (Exception $e) {
             Utils::newAlert('Erreur lors de la modification de la photo', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
     }
 
@@ -134,7 +134,7 @@ class PhotoController
             return $this->photoManager->getPhotosByUser(Securite::secureHTML(end($url)) ?? 1, Securite::secureHTML($_COOKIE['id']));
         } catch (Exception $e) {
             Utils::newAlert('Erreur lors de la récupération des photos de l\'utilisateur', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
     }
 }

@@ -23,7 +23,7 @@
         </p>
     </div>
     <div class="buttons flex start">
-        <form action="form/disconnect" method="post">
+        <form action="<?= URL ?>form/disconnect" method="post">
             <button type="submit">Me déconnecter</button>
         </form>
         <button type="submit" style="color: red" onclick="validateDeletion()">Supprimer mon compte</button>

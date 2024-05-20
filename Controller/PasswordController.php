@@ -36,7 +36,7 @@ class PasswordController
     {
         if (!empty($_COOKIE['token'])) {
             Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
 
         $pseudo = Securite::secureHTML($_POST['pseudo']);
@@ -51,7 +51,7 @@ class PasswordController
             setcookie('id', $idUser, time() + Utils::hoursToSeconds(24), '/');
             setcookie('isAdmin', $this->compteManager->isAdmin($idUser), time() + Utils::hoursToSeconds(24), '/');
 
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
@@ -74,7 +74,7 @@ class PasswordController
 
         if ($newPassword !== $newPasswordValidation) {
             Utils::newAlert('Les deux mots de passes ne sont pas identiques', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
 
         try {
@@ -83,10 +83,10 @@ class PasswordController
             $this->passwordManager->updatePassword(Utils::hashPassword($newPassword), $_COOKIE['id']);
 
             Utils::newAlert('Mot de passe changé avec succès', Constants::TYPES_MESSAGES['success']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
     }
 }

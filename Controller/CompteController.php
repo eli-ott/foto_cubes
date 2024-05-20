@@ -65,7 +65,7 @@ class CompteController
 
         if (!empty($_COOKIE['token'])) {
             Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
 
         if ($password !== $passwordValidation) {
@@ -90,7 +90,7 @@ class CompteController
             setcookie('isAdmin', $this->compteManager->isAdmin($newPhotographe->getId()), time() + Utils::hoursToSeconds(24), '/');
 
             Utils::newAlert('Compte créée avec succès', Constants::TYPES_MESSAGES['success']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'inscription');
@@ -125,7 +125,7 @@ class CompteController
             Utils::redirect(URL . 'accueil');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
     }
 
@@ -146,10 +146,10 @@ class CompteController
             $this->compteManager->updateUser($field, $value);
 
             Utils::newAlert($field . ' modifié avec succès', Constants::TYPES_MESSAGES['success']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
     }
     /**
@@ -168,7 +168,7 @@ class CompteController
             return $this->compteManager->getUserInfo($_COOKIE['id']);
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
     }
 }
