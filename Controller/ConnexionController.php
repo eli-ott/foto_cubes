@@ -2,6 +2,8 @@
 
 require_once('Model/CompteManager.php');
 require_once('Model/MessageManager.php');
+require_once('Services/constantes.php');
+require_once('Services/Utils.php');
 
 class ConnexionController
 {
@@ -64,5 +66,8 @@ class ConnexionController
         setcookie('token', '', 1, '/');
         setcookie('id', '', 1, '/');
         setcookie('isAdmin', '', 1, '/');
+
+        Utils::newAlert('Vous êtes déconnecté', Constants::TYPES_MESSAGES['success']);
+        Utils::redirect(URL . 'connexion');
     }
 }

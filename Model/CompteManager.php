@@ -11,55 +11,56 @@ class CompteManager extends Model
      * @var int L'id du mot de passe 
      * @return Photographe Le dernier compte ajouté
      */
-    public function addUser(Photographe $photographe): array
+    public function addUser(Photographe $photographe): Photographe
     {
         if (!empty($_COOKIE['token'])) {
             throw new Exception('Un utilisateur est déjà connecté', 400);
         }
 
-        $addUserSql = "INSERT INTO user (id_mot_de_passe, pseudo, nom, prenom, email, age, type_photo_pref) 
+        $addUserSql = "INSERT INTO utilisateur (id_mot_de_passe, pseudo, nom, prenom, email, age, type_photo_pref) 
             VALUES (:idMdp, :pseudo, :nom, :prenom, :email, :age, :typePhotoPref)";
 
-        $addUserReq = $this->getBDD()->prepare($addUserSql, [
-            "idMdp" => $photographe->getIdMdp(),
-            "pseudo" => $photographe->getPseudo(),
-            "nom" => $photographe->getNom(),
-            "prenom" => $photographe->getPrenom(),
-            "email" => $photographe->getEmail(),
-            "age" => $photographe->getAge(),
-            "typePhotoPref" => $photographe->getTypePhotoPref()
-        ]);
+        $addUserReq = $this->getBDD()->prepare($addUserSql);
+
+        $addUserReq->bindValue("idMdp", $photographe->getIdMdp());
+        $addUserReq->bindValue("pseudo", $photographe->getPseudo());
+        $addUserReq->bindValue("nom", $photographe->getNom());
+        $addUserReq->bindValue("prenom", $photographe->getPrenom());
+        $addUserReq->bindValue("email", $photographe->getEmail());
+        $addUserReq->bindValue("age", $photographe->getAge());
+        $addUserReq->bindValue("typePhotoPref", $photographe->getTypePhotoPref());
+
         $addUserReq->execute();
 
         if ($addUserReq) {
-            $lastInsertedRowSql = "SELECT * FROM user ORDER BY id_user DESC LIMIT 1";
+            $lastInsertedRowSql = "SELECT * FROM utilisateur ORDER BY id_user DESC LIMIT 1";
 
             $lastInsertedRowReq = $this->getBDD()->prepare($lastInsertedRowSql);
             $lastInsertedRowReq->execute();
             if ($lastInsertedRowReq) {
-                $data = [];
+                $data = null;
                 while ($row = $lastInsertedRowReq->fetch(PDO::FETCH_ASSOC)) {
-                    $data[] = new Photographe(
-                        intval($row->id_user),
-                        intval($row->id_mot_de_passe),
-                        $row->nom,
-                        $row->prenom,
-                        $row->pseudo,
-                        $row->email,
-                        intval($row->age),
-                        $row->type_photo_pref,
-                        $row->date_creation,
-                        boolval($row->warn),
+                    $data = new Photographe(
+                        (int)$row['id_user'],
+                        (int)$row['id_mot_de_passe'],
+                        $row['nom'],
+                        $row['prenom'],
+                        $row['pseudo'],
+                        $row['email'],
+                        (int)$row['age'],
+                        $row['type_photo_pref'],
+                        $row['date_creation'],
+                        (bool)$row['warn'],
                     );
                 }
+
+                return $data;
             } else {
                 throw new Exception('Erreur lors de la récupération du dernier compte ajouté', 500);
             }
         } else {
             throw new Exception('Erreur lors de la création du compte', 500);
         }
-
-        return $data;
     }
 
     /**
@@ -75,7 +76,7 @@ class CompteManager extends Model
             throw new Exception('Aucun utilisateur connecté', 400);
         }
 
-        $sql = "UPDATE user SET :field = :newValue WHERE id_user = :idUser";
+        $sql = "UPDATE utilisateur SET :field = :newValue WHERE id_user = :idUser";
 
         $req = $this->getBDD()->prepare($sql, [
             "idUser" => $_COOKIE['id'],
@@ -105,11 +106,10 @@ class CompteManager extends Model
             throw new Exception('Aucun utilisateur connecté', 400);
         }
 
-        $sql = "DELETE FROM user WHERE id_user = :idUser";
+        $sql = "DELETE FROM utilisateur WHERE id_user = :idUser";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $idUser
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser);
         $req->execute();
 
         if ($req) {
@@ -130,26 +130,26 @@ class CompteManager extends Model
     public function getUserInfo(int $idUser): Photographe
     {
         $sql = "SELECT id_user, id_mot_de_passe, nom, prenom, email, pseudo, date_creation, type_photo_pref, age, warn, compte_valide 
-            FROM user WHERE id_user = :idUser";
+            FROM utilisateur WHERE id_user = :idUser";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $idUser
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser);
         $req->execute();
 
+        $data = null;
         while ($row = $req->fetch(PDO::FETCH_ASSOC)) {
             $data = new Photographe(
-                intval($row->id),
-                intval($row->id_mot_de_passe),
-                $row->nom,
-                $row->prenom,
-                $row->pseudo,
-                $row->email,
-                intval($row->age),
-                $row->type_photo_pref,
-                $row->date_creation,
-                boolval($row->warn),
-                boolval($row->compte_valide),
+                (int)$row['id_user'],
+                (int)$row['id_mot_de_passe'],
+                $row['nom'],
+                $row['prenom'],
+                $row['pseudo'],
+                $row['email'],
+                (int)$row['age'],
+                $row['type_photo_pref'],
+                $row['date_creation'],
+                (bool)$row['warn'],
+                (bool)$row['compte_valide'],
             );
         }
 
@@ -166,12 +166,17 @@ class CompteManager extends Model
     {
         $sql = "SELECT id_user, pseudo FROM utilisateur WHERE pseudo = :pseudo";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "pseudo" => $pseudo
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('pseudo', $pseudo);
         $req->execute();
 
-        return $req->fetch(PDO::FETCH_ASSOC)->id_user;
+        $idSelected = $req->fetch(PDO::FETCH_ASSOC)['id_user'];
+
+        if (is_int($idSelected)) {
+            return $idSelected;
+        } else {
+            throw new Exception('Aucun utilisateur associé au pseudo', 400);
+        }
     }
 
     /**
@@ -184,12 +189,11 @@ class CompteManager extends Model
     {
         $sql = "SELECT compte_valide, id_user FROM utilisateur WHERE id_user = :idUser";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $idUser
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser);
         $req->execute();
 
-        return $req->fetch(PDO::FETCH_ASSOC)->compte_valide;
+        return $req->fetch(PDO::FETCH_ASSOC)['compte_valide'];
     }
 
     /**
@@ -201,14 +205,13 @@ class CompteManager extends Model
      */
     public function nbPseudo(string $pseudo): int
     {
-        $sql = 'SELECT COUNT(id_user) as nombre FROM utilisateur WHERE pseudo = :pseudo';
+        $sql = 'SELECT COUNT(id_user) as nombre FROM utilisateur WHERE `pseudo` = :pseudo';
 
-        $req = $this->getBDD()->prepare($sql, [
-            'pseudo' => $pseudo
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('pseudo', $pseudo, PDO::PARAM_STR);
         $req->execute();
 
-        return $req->fetch(PDO::FETCH_ASSOC)->nombre;
+        return $req->fetch(PDO::FETCH_ASSOC)['nombre'];
     }
 
     /**
@@ -221,11 +224,10 @@ class CompteManager extends Model
     {
         $sql = 'SELECT is_admin FROM utilisateur WHERE id_user = :idUser';
 
-        $req = $this->getBdd()->prepare($sql, [
-            'idUser' => $idUser
-        ]);
+        $req = $this->getBdd()->prepare($sql);
+        $req->bindValue('idUser', $idUser);
         $req->execute();
 
-        return $req->fetch(PDO::FETCH_ASSOC)->id_admin;
+        return $req->fetch(PDO::FETCH_ASSOC)['is_admin'];
     }
 }
