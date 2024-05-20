@@ -3,23 +3,23 @@
     <div class="info flex start wrap">
         <p class="flex start">
             <i>Nom:</i> <b><?= $infos->getNom() ?></b>
-            <button><img src="Public/assets/image/pen.svg" alt=""></button>
+            <button><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
         </p>
         <p class="flex start">
             <i>Prénom:</i> <b><?= $infos->getPrenom() ?></b>
-            <button><img src="Public/assets/image/pen.svg" alt=""></button>
+            <button><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
         </p>
         <p class="flex start">
             <i>Pseudo:</i> <b><?= $infos->getPseudo() ?></b>
-            <button><img src="Public/assets/image/pen.svg" alt=""></button>
+            <button><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
         </p>
         <p class="flex start">
             <i>Adresse Mail:</i> <b><?= $infos->getEmail() ?></b>
-            <button><img src="Public/assets/image/pen.svg" alt=""></button>
+            <button><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
         </p>
         <p class="flex start">
             <i>Age:</i> <b><?= $infos->getAge() ?></b>
-            <button><img src="Public/assets/image/pen.svg" alt=""></button>
+            <button><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
         </p>
     </div>
     <div class="buttons flex start">

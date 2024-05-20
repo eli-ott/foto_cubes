@@ -56,7 +56,7 @@ class MainController extends Render
             "showFooter" => true,
             "showHeader" => true,
             "pageCss" => ['galerie', 'filtres', 'paginator', 'photoGalerie', 'nav', 'footer'],
-            "photos" => $this->photoManager->getPhotos(1),
+            "photos" => $this->photoController->getPhotos(),
             "view" => "View/layouts/galerie.php",
             "template" => 'View/base.php'
         ]);

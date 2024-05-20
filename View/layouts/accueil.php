@@ -4,8 +4,8 @@
             <div class="flex center column">
                 <h2 class="title_accueil">Foto, le meilleur site de partage de photo entre amateur</h2>
                 <div class="buttons flex start">
-                    <a href="galerie" class="cta">Voir la galerie</a>
-                    <a href="ajouter">Ajouter des photos</a>
+                    <a href="<?= URL ?>galerie/1" class="cta">Voir la galerie</a>
+                    <a href="<?= URL ?>ajouter">Ajouter des photos</a>
                 </div>
             </div>
         </div>
@@ -26,14 +26,14 @@
                         <div class="pic" style="--bg-image: url('<?= URL ?>Public/photos/<?= $preview["source"] ?>"></div>
                     <?php endforeach; ?>
                 </div>
-                <a href="galerie" class="more">Voir plus</a>
+                <a href="<?= URL ?>galerie/1" class="more">Voir plus</a>
             </div>
         <?php else : ?>
             <div class="preview-default flex center column">
                 <div class="pictures-default flex center">
                     <p>Pas de photos disponible pour le moment</p>
                 </div>
-                <a href="ajouter" class="more">Ajouter des photos</a>
+                <a href="<?= URL ?>ajouter" class="more">Ajouter des photos</a>
             </div>
         <?php endif; ?>
         <!-- CCM -->

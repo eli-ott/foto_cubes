@@ -109,7 +109,8 @@ class PhotoController
     public function getPhotos(): ?array
     {
         try {
-            return $this->photoManager->getPhotos(Securite::secureHTML($_GET['page']) ?? 1);
+            $url = explode('/', $_GET['page']);
+            return $this->photoManager->getPhotos(Securite::secureHTML(end($url)) ?? 1);
         } catch (Exception $e) {
             Utils::newAlert('Erreur lors de la récupération des photos', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'galerie');
@@ -129,7 +130,8 @@ class PhotoController
         }
 
         try {
-            return $this->photoManager->getPhotosByUser(Securite::secureHTML((int)$_GET['page']) ?? 1, Securite::secureHTML($_COOKIE['id']));
+            $url = explode('/', $_GET['page']);
+            return $this->photoManager->getPhotosByUser(Securite::secureHTML(end($url)) ?? 1, Securite::secureHTML($_COOKIE['id']));
         } catch (Exception $e) {
             Utils::newAlert('Erreur lors de la récupération des photos de l\'utilisateur', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil');
