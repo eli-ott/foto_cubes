@@ -273,4 +273,53 @@ class CompteManager extends Model
             throw new Exception('Erreur lors de l\'ajout de l\'utilisateur comme administrateur');
         }
     }
+
+    /**
+     * Permet de mettre à jour les infos de l'utilisateur
+     * 
+     * @param int $idUSer L'identifiant de l'utilisateur
+     * @param string $field Le champs à mettre à jour
+     * @param string $value La nouvelle valeur
+     * @return ?int Le code status
+     */
+    public function updateUser(string $field, string $value, int $idUser,): ?int
+    {
+        $column = '';
+
+        switch ($field) {
+            case 'nom':
+                $column = 'nom';
+                break;
+            case 'prenom':
+                $column = 'prenom';
+                break;
+            case 'pseudo':
+                $column = 'pseudo';
+                break;
+            case 'email':
+                $column = 'email';
+                break;
+            case 'mail':
+                $column = 'email';
+                break;
+            case 'age':
+                $column = 'age';
+                break;
+            default:
+                throw new Exception('La colonne choisit n\'existe pas', 400);
+        }
+
+        $sql = 'UPDATE utilisateur SET (' . $column . ') VALUES (:newVal) WHERE id_user = :idUser';
+
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('newVal', $value);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
+        $req->execute();
+
+        if ($req) {
+            return 200;
+        } else {
+            throw new Exception('Erreur lors de la mise à jour de la colonne ' . $field, 500);
+        }
+    }
 }

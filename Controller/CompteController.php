@@ -148,7 +148,7 @@ class CompteController
         }
 
         try {
-            // $this->compteManager->updateUser($field, $value); //TODO: Créer une fonction pour modifier les infos du user
+            $this->compteManager->updateUser($field, $value, $_COOKIE['id']);
 
             Utils::newAlert($field . ' modifié avec succès', Constants::TYPES_MESSAGES['success']);
             Utils::redirect(URL . 'profil/1');
