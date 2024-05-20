@@ -1,3 +1,5 @@
+<?php var_dump($_SESSION['alert']); ?>
+
 <?php if (!$compteActif) : ?>
     <form action="form/revalidate-email" method="post">
         <input type="email" name="mail" value="<?= $mailUser ?>">

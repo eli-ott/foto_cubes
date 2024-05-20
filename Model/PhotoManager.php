@@ -189,7 +189,7 @@ class PhotoManager extends Model
         $sql = "DELETE FROM photo WHERE id_photo = :idPhoto";
 
         $req = $this->getBDD()->prepare($sql);
-        $req->bindValue("idUser", $photo->getPhotographe()->getId());
+        $req->bindValue("idPhoto", $photo->getId());
         $req->execute();
 
         if ($req) {

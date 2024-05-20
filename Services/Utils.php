@@ -116,7 +116,7 @@ class Utils
      */
     public static function deleteFile(string $fileName): ?int
     {
-        if (unlink(Constants::URL_DOCUMENT . $fileName)) {
+        if (unlink($fileName)) {
             return 200;
         } else {
             throw new Exception('Erreur lors de la suppression du fichier', 500);

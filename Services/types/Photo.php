@@ -3,9 +3,9 @@
 class Photo implements JsonSerializable
 {
     /**
-     * @var int $id L'identifiant de la photo
+     * @var ?int $id L'identifiant de la photo
      */
-    private int $id;
+    private ?int $id;
     /** 
      * @var string $titre Le titre de la photo  
      */
@@ -25,20 +25,20 @@ class Photo implements JsonSerializable
     /**
      * @var string $datePublication La date de publication de la photo
      */
-    private string $datePublication;
+    private ?string $datePublication;
     /**
      * @var Photographe Le photographe
      */
-    private Photographe $photographe;
+    private ?Photographe $photographe;
     /**
      * @var string $orientation L'orientation de l'image
      */
-    private string $orientation;
+    private ?string $orientation;
 
     /**
      * Le constructeur
      * 
-     * @param int $id L'id de la photo
+     * @param ?int $id L'id de la photo
      * @param string $titre Le titre de la photo
      * @param string $tag Le tag de la photo
      * @param mixed $source La source de la photo
@@ -48,14 +48,14 @@ class Photo implements JsonSerializable
      * @param string $orientation
      */
     public function __construct(
-        int $id = null,
+        ?int $id = null,
         string $titre,
         string $tag,
         mixed $source,
         string $datePriseVue = null,
-        string $datePublication = null,
-        Photographe $photographe,
-        string $orientation = null
+        ?string $datePublication = null,
+        ?Photographe $photographe,
+        ?string $orientation = null
     ) {
         $this->id = $id;
         $this->titre = $titre;

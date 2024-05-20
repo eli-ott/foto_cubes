@@ -65,17 +65,20 @@ class PhotoController
         }
 
         $photo = new Photo(
+            id: Securite::secureHTML($_POST['idPhoto']),
             titre: Securite::secureHTML($_POST['titre']),
             tag: Securite::secureHTML($_POST['tag']),
             source: Securite::secureHTML($_POST['source']),
             datePriseVue: Securite::secureHTML($_POST['datePriseVue']),
-            photographe: $this->compteManager->getUserInfo(Securite::secureHTML($_POST['idUser']))
+            datePublication: null,
+            photographe: $this->compteManager->getUserInfo(Securite::secureHTML($_POST['idUser'])),
+            orientation: null
         );
 
         try {
             $this->photoManager->deletePhoto($photo);
         } catch (Exception $e) {
-            Utils::newAlert('Erreur lors de la suppression de la photo', Constants::TYPES_MESSAGES['error']);
+            Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil/1');
         }
     }
