@@ -26,7 +26,7 @@
         <form action="<?= URL ?>form/disconnect" method="post">
             <button type="submit">Me déconnecter</button>
         </form>
-        <button type="submit" style="color: red" onclick="validateDeletion()">Supprimer mon compte</button>
+        <button type="submit" style="color: red" onclick="validateDeletion('<?= URL ?>')">Supprimer mon compte</button>
     </div>
 </section>
 <h2 class="photos">Mes photos :</h2>

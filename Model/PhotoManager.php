@@ -36,12 +36,12 @@ class PhotoManager extends Model
         FROM photo 
         LEFT JOIN utilisateur as photographe ON photo.id_user = photographe.id_user 
         LIMIT :limit_photo OFFSET :from_offset;";
-        $getPages = "SELECT COUNT(id_user) as pages FROM photo";
 
         $req = $this->getBDD()->prepare($sql);
         $req->bindValue('limit_photo', $limit, PDO::PARAM_INT);
         $req->bindValue('from_offset', $offset, PDO::PARAM_INT);
         $req->execute();
+
         $photos = [];
         while ($row = $req->fetch((PDO::FETCH_ASSOC))) {
             $photos[] = new Photo(
@@ -61,7 +61,10 @@ class PhotoManager extends Model
                 )
             );
         }
+
         $req->closeCursor();
+
+        $getPages = "SELECT COUNT(id_user) as pages FROM photo";
 
         $reqPages = $this->getBDD()->prepare($getPages);
         $reqPages->execute();
@@ -69,7 +72,6 @@ class PhotoManager extends Model
         if (!$req) {
             throw new Exception('Erreur lors de la récupération des photos', 500);
         }
-
 
         return [
             'pages' => ceil((int)$reqPages->fetch(PDO::FETCH_ASSOC)['pages'] / Constants::IMAGES_PAR_PAGE),
@@ -94,13 +96,13 @@ class PhotoManager extends Model
         LEFT JOIN utilisateur as photographe ON photo.id_user = photographe.id_user
         WHERE photo.id_user = :idUser 
         LIMIT :limitPhoto OFFSET :fromOffset;";
-        $getPages = "SELECT COUNT(id_user) as pages FROM photo";
 
         $req = $this->getBDD()->prepare($sql);
         $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
         $req->bindValue('limitPhoto', $limit, PDO::PARAM_INT);
         $req->bindValue('fromOffset', $offset, PDO::PARAM_INT);
         $req->execute();
+
         $photos = [];
         while ($row = $req->fetch((PDO::FETCH_ASSOC))) {
             $photos[] = new Photo(
@@ -120,16 +122,18 @@ class PhotoManager extends Model
                 )
             );
         }
+
         $req->closeCursor();
 
+        $getPages = "SELECT COUNT(id_user) as pages FROM photo WHERE id_user = :idUser";
+
         $reqPages = $this->getBDD()->prepare($getPages);
+        $reqPages->bindValue("idUSer", $idUser, PDO::PARAM_INT);
         $reqPages->execute();
 
         if (!$req) {
             throw new Exception("Erreur lors de la récupération des photos de l'utilisateur id " . $idUser, 500);
         }
-
-
 
         return [
             'pages' => ceil($reqPages->fetch(PDO::FETCH_ASSOC)['pages'] / Constants::IMAGES_PAR_PAGE),

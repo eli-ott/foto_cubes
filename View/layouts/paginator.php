@@ -1,6 +1,5 @@
 <?php
 $url = explode('/', $_GET['page']);
-// var_dump($photos['pages'])
 ?>
 
 <?php if ($photos['pages'] > 0) : ?>
