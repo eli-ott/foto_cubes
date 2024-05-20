@@ -48,6 +48,8 @@ class PhotoManager extends Model
 
         $photos = [];
         while ($row = $req->fetch((PDO::FETCH_ASSOC))) {
+            list($width, $height) = getimagesize($row["source"]);
+            
             $photos[] = new Photo(
                 intval($row->id_photo),
                 $row->titre,
@@ -61,7 +63,8 @@ class PhotoManager extends Model
                     prenom: $row->prenom,
                     pseudo: $row->pseudo,
                     email: $row->email
-                )
+                ),
+                $width / $height > 1 ? 'horizontal' : 'vertical'
             );
         }
 
@@ -81,7 +84,7 @@ class PhotoManager extends Model
     public function getPhotosByUser(int $page, int $idUser): array
     {
         $offset = ($page * 10) + $page;
-        $limit = 10 + $page;
+        $limit = 10;
 
         $sql = "SELECT photo.id_user, photo.id_photo, photo.titre, photo.tag, photo.source, photo.date_prise_vue, photo.date_publication, photographe.nom, photographe.prenom, photographe.pseudo, photographe.email FROM photo 
         LEFT JOIN user as photographe ON photo.id_user = photographe.id_user
