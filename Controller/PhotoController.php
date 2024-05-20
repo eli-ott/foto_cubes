@@ -47,7 +47,7 @@ class PhotoController
             $this->photoManager->addPhoto($photo);
 
             Utils::newAlert('Photo enregistré avec succès', Constants::TYPES_MESSAGES['success']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'ajouter');
@@ -76,7 +76,7 @@ class PhotoController
             $this->photoManager->deletePhoto($photo);
         } catch (Exception $e) {
             Utils::newAlert('Erreur lors de la suppression de la photo', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
     }
 
@@ -102,7 +102,7 @@ class PhotoController
             $this->photoManager->updatePhoto($photo);
         } catch (Exception $e) {
             Utils::newAlert('Erreur lors de la modification de la photo', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
     }
 
@@ -114,7 +114,8 @@ class PhotoController
     public function getPhotos(): ?array
     {
         try {
-            return $this->photoManager->getPhotos(Securite::secureHTML($_GET['page']) ?? 1);
+            $url = explode('/', $_GET['page']);
+            return $this->photoManager->getPhotos(Securite::secureHTML(end($url)) ?? 1);
         } catch (Exception $e) {
             Utils::newAlert('Erreur lors de la récupération des photos', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'galerie');
@@ -128,16 +129,17 @@ class PhotoController
      */
     public function getPhotosByUser(): ?array
     {
-        if (empty($_GET['idUser'])) {
+        if (empty($_COOKIE['id'])) {
             Utils::newAlert('L\'utilisateur n\'a pas été trouvé', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'erreur');
         }
 
         try {
-            return $this->photoManager->getPhotosByUser(Securite::secureHTML($_GET['page']) ?? 1, Securite::secureHTML($_GET['idUSer']));
+            $url = explode('/', $_GET['page']);
+            return $this->photoManager->getPhotosByUser(Securite::secureHTML(end($url)) ?? 1, Securite::secureHTML($_COOKIE['id']));
         } catch (Exception $e) {
             Utils::newAlert('Erreur lors de la récupération des photos de l\'utilisateur', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
     }
 }

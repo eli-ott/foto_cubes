@@ -5,8 +5,8 @@
             <div class="flex center column">
                 <h2 class="title_accueil">Foto, le meilleur site de partage de photo entre amateur</h2>
                 <div class="buttons flex start">
-                    <a href="gallerie" class="cta">Voir la galerie</a>
-                    <a href="ajouter">Ajouter des photos</a>
+                    <a href="<?= URL ?>galerie/1" class="cta">Voir la galerie</a>
+                    <a href="<?= URL ?>ajouter">Ajouter des photos</a>
                 </div>
             </div>
         </div>
@@ -20,16 +20,23 @@
             </p>
         </div>
         <!-- Dernière photos poster -->
-        <div class="preview flex center column">
-            <div class="pictures flex center">
-                <div class="pic"></div>
-                <div class="pic"></div>
-                <div class="pic"></div>
-                <div class="pic"></div>
-                <div class="pic"></div>
+        <?php if (!empty($photos)) : ?>
+            <div class="preview flex center column">
+                <div class="pictures flex center">
+                    <?php foreach ($photos as $preview) : ?>
+                        <div class="pic" style="--bg-image: url('<?= URL ?>Public/photos/<?= $preview["source"] ?>"></div>
+                    <?php endforeach; ?>
+                </div>
+                <a href="<?= URL ?>galerie/1" class="more">Voir plus</a>
             </div>
-            <a href="gallerie" class="more">Voir plus</a>
-        </div>
+        <?php else : ?>
+            <div class="preview-default flex center column">
+                <div class="pictures-default flex center">
+                    <p>Pas de photos disponible pour le moment</p>
+                </div>
+                <a href="<?= URL ?>ajouter" class="more">Ajouter des photos</a>
+            </div>
+        <?php endif; ?>
         <!-- CCM -->
         <div class="flex center content">
             <p class="description">

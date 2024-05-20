@@ -5,6 +5,8 @@ define("URL", str_replace("index.php", "", (isset($_SERVER['HTTPS']) ? "https" :
 
 require_once('Services/types/Photographe.php');
 require_once('Services/Securite.php');
+require_once("Services/types/Photo.php");
+require_once("./controller/MainController.php");
 
 require_once('Model/Render.php');
 require_once("Model/CompteManager.php");
@@ -55,7 +57,9 @@ try {
         case 'connexion':
             if (Utils::userConnected()) {
                 Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
-                Utils::redirect(URL . 'profil');
+                Utils::redirect(URL . 'profil/1');
+            } else {
+                $mainController->connexion();
             }
 
             $mainController->connexion();
@@ -63,7 +67,9 @@ try {
         case 'inscription':
             if (Utils::userConnected()) {
                 Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
-                Utils::redirect(URL . 'profil');
+                Utils::redirect(URL . 'profil/1');
+            } else {
+                $mainController->inscription();
             }
 
             $mainController->inscription();
@@ -87,7 +93,7 @@ try {
         case 'mdp-oublie':
             if (Utils::userConnected()) {
                 Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
-                Utils::redirect(URL . 'profil');
+                Utils::redirect(URL . 'profil/1');
             }
 
             $mainController->resetMdp();
@@ -121,7 +127,7 @@ try {
                         Utils::redirect(URL . 'valider');
                     } catch (Exception $e) {
                         Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
-                        Utils::redirect(URL . 'profil');
+                        Utils::redirect(URL . 'profil/1');
                     }
                     break;
                 case 'reset-mdp':

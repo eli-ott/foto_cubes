@@ -1,21 +1,13 @@
-<figure class="image-container vertical flex column start">
-    <div class="image"></div>
-    <p class="description flex">
-        <span class="title">Titre</span>
-        <span class="author">Auteur</span>
-    </p>
-</figure>
-<figure class="image-container vertical flex column start">
-    <div class="image"></div>
-    <p class="description flex">
-        <span class="title">Titre</span>
-        <span class="author">Auteur</span>
-    </p>
-</figure>
-<figure class="image-container flex column start">
-    <div class="image"></div>
-    <p class="description flex">
-        <span class="title">Titre</span>
-        <span class="author">Auteur</span>
-    </p>
-</figure>
+<?php foreach ($photos["photos"] as $photo) : ?>
+    <figure class="image-container flex column start">
+        <div class="image" style="--bg-image: url('<?= URL ?>Public/photos/<?= $photo->getSource() ?>"></div>
+        <p class="description flex">
+            <span class="title">
+                <?= $photo->getTitre(); ?>
+            </span>
+            <span class="author">
+                <?= $photo->getPhotographe()->getPseudo() ?>
+            </span>
+        </p>
+    </figure>
+<?php endforeach; ?>

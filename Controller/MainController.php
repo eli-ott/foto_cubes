@@ -1,5 +1,8 @@
 <?php
 
+
+require_once("Model/Render.php");
+
 class MainController extends Render
 {
     /** 
@@ -7,9 +10,17 @@ class MainController extends Render
      */
     private $photoManager;
     /** 
-     * @var CompteManager Le manager pour le compte 
+     * @var CompteController Le controler pour le compte 
      */
-    private $compteManager;
+    private $compteController;
+    /** 
+     * @var PhotoController Le controler pour les photos 
+     */
+    private $photoController;
+    /**
+     * @var CompteManager Le managee pour les comptes
+     */
+    private CompteManager $compteManager;
 
     /**
      * Constructeur
@@ -17,6 +28,8 @@ class MainController extends Render
     public function __construct()
     {
         $this->photoManager = new PhotoManager;
+        $this->photoController = new PhotoController;
+        $this->compteController = new CompteController;
         $this->compteManager = new CompteManager;
     }
 
@@ -48,7 +61,7 @@ class MainController extends Render
             "showFooter" => true,
             "showHeader" => true,
             "pageCss" => ['galerie', 'filtres', 'paginator', 'photoGalerie', 'nav', 'footer'],
-            "photos" => $this->photoManager->getPhotos(1),
+            "photos" => $this->photoController->getPhotos(),
             "view" => "View/layouts/galerie.php",
             "template" => 'View/base.php'
         ]);
@@ -74,6 +87,7 @@ class MainController extends Render
             "infos" => $this->compteManager->getUserInfo($_COOKIE['id']),
             "compteActif" => $this->compteManager->compteActif($_COOKIE["id"]),
             "mailUser" => $this->compteManager->getUserEmail($_COOKIE['id']),
+            "photos" => $this->photoController->getPhotosByUser(),
             'view' => 'View/layouts/profil.php',
             'template' => 'View/base.php'
         ]);
@@ -105,10 +119,10 @@ class MainController extends Render
      */
     public function connexion(): void
     {
-        if (Utils::userConnected()) {
-            Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
-        };
+        if (!empty($_COOKIE['token'])) {
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
+        }
 
         $this->render([
             'title' => 'Connexion',

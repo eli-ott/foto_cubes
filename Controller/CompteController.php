@@ -70,7 +70,7 @@ class CompteController
 
         if (Utils::userConnected()) {
             Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
 
         if ($password !== $passwordValidation) {
@@ -130,7 +130,7 @@ class CompteController
             Utils::redirect(URL . 'accueil');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         }
     }
 
@@ -151,10 +151,30 @@ class CompteController
             // $this->compteManager->updateUser($field, $value); //TODO: Créer une fonction pour modifier les infos du user
 
             Utils::newAlert($field . ' modifié avec succès', Constants::TYPES_MESSAGES['success']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil');
+            Utils::redirect(URL . 'profil/1');
+        }
+    }
+
+    /**
+     * Permet de récupérer les infos de l'utilisateur'
+     * 
+     * @return Photographe Le photographe
+     */
+    public function getUserInfo(): ?Photographe
+    {
+        if (empty($_COOKIE['token'])) {
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
+        }
+
+        try {
+            return $this->compteManager->getUserInfo($_COOKIE['id']);
+        } catch (Exception $e) {
+            Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'profil/1');
         }
     }
 
@@ -175,7 +195,7 @@ class CompteController
                 $this->compteManager->validateAccount($_COOKIE['id']);
 
                 Utils::newAlert('Compte validé avec succès', Constants::TYPES_MESSAGES['success']);
-                Utils::redirect(URL . 'profil');
+                Utils::redirect(URL . 'profil/1');
             } else {
                 Utils::newAlert('Mauvais code', Constants::TYPES_MESSAGES['error']);
                 Utils::redirect(URL . 'valider');
@@ -267,4 +287,4 @@ class CompteController
             Utils::redirect(URL . 'erreur');
         }
     }
-} 
+}
