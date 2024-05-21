@@ -14,7 +14,7 @@ class MotDePasse implements JsonSerializable
      */
     private $nbEssais;
     /**
-     * @var DateTime $dateReinitialisation La dernière date de réinitialisation
+     * @var ?string $dateReinitialisation La dernière date de réinitialisation
      */
     private $dateReinitialisation;
 
@@ -24,13 +24,13 @@ class MotDePasse implements JsonSerializable
      * @param int $id L'id du mot de passe
      * @param string $hash Le hash du mot de passe
      * @param int $nbEssais Le nombre d'essais de connexion
-     * @param DateTime $dateReinitialisation La dernière date de réinitialisation
+     * @param ?string $dateReinitialisation La dernière date de réinitialisation
      */
     public function __construct(
         int $id = null,
         string $hash,
         int $nbEssais,
-        string $dateReinitialisation
+        ?string $dateReinitialisation = null
     ) {
         $this->id = $id;
         $this->hash = $hash;
@@ -71,9 +71,9 @@ class MotDePasse implements JsonSerializable
     /**
      * Récupère la dernière date de réinitialisation du mot de passe
      * 
-     * @return DateTime La date de réinitialisation
+     * @return string La date de réinitialisation
      */
-    public function getDateReinitialisation(): DateTime
+    public function getDateReinitialisation(): string
     {
         return $this->dateReinitialisation;
     }

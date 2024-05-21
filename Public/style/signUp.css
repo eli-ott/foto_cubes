@@ -5,7 +5,7 @@
 	background: center / cover url('../assets/image/form-background.jpg') no-repeat;
 }
 .sign-up .form-container {
-    height: 75%;
+	height: 75%;
 	width: 65%;
 
 	gap: var(--margin-m);
@@ -54,18 +54,40 @@
 	cursor: pointer;
 	align-self: end;
 
-    margin-left: auto;
+	margin-left: auto;
 	transition: 0.15s;
 	width: 45%;
 	padding: var(--margin-xs);
 
 	font-size: var(--desktop-font-size-s);
 
-	color: var(--dark);
+	background: none;
+	color: var(--light);
 	border: solid 2px var(--light);
 	border-radius: var(--radius-m);
 }
 .sign-up .form-container form button:hover {
+	background: var(--light);
+	color: var(--dark);
+}
+.sign-up .form-container form button[type='submit'] {
+	outline: none;
+	cursor: pointer;
+	align-self: end;
+
+	margin-left: auto;
+	transition: 0.15s;
+	width: 45%;
+	padding: var(--margin-xs);
+
+	font-size: var(--desktop-font-size-s);
+
+	background: var(--light);
+	color: var(--dark);
+	border: solid 2px var(--light);
+	border-radius: var(--radius-m);
+}
+.sign-up .form-container form button[type='submit']:hover {
 	background: var(--blue);
 	color: var(--light);
 }

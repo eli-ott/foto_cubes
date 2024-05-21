@@ -11,77 +11,66 @@ class CompteManager extends Model
      * @var int L'id du mot de passe 
      * @return Photographe Le dernier compte ajouté
      */
-    public function addUser(Photographe $photographe): array
+    public function addUser(Photographe $photographe): Photographe
     {
-        if (!empty($_COOKIE['token'])) {
-            throw new Exception('Un utilisateur est déjà connecté', 400);
-        }
-
-        $addUserSql = "INSERT INTO user (id_mot_de_passe, pseudo, nom, prenom, email, age, type_photo_pref) 
+        $addUserSql = "INSERT INTO utilisateur (id_mot_de_passe, pseudo, nom, prenom, email, age, type_photo_pref) 
             VALUES (:idMdp, :pseudo, :nom, :prenom, :email, :age, :typePhotoPref)";
 
-        $addUserReq = $this->getBDD()->prepare($addUserSql, [
-            "idMdp" => $photographe->getIdMdp(),
-            "pseudo" => $photographe->getPseudo(),
-            "nom" => $photographe->getNom(),
-            "prenom" => $photographe->getPrenom(),
-            "email" => $photographe->getEmail(),
-            "age" => $photographe->getAge(),
-            "typePhotoPref" => $photographe->getTypePhotoPref()
-        ]);
+        $addUserReq = $this->getBDD()->prepare($addUserSql);
+
+        $addUserReq->bindValue("idMdp", $photographe->getIdMdp(), PDO::PARAM_INT);
+        $addUserReq->bindValue("pseudo", $photographe->getPseudo(), PDO::PARAM_STR);
+        $addUserReq->bindValue("nom", $photographe->getNom(), PDO::PARAM_STR);
+        $addUserReq->bindValue("prenom", $photographe->getPrenom(), PDO::PARAM_STR);
+        $addUserReq->bindValue("email", $photographe->getEmail(), PDO::PARAM_STR);
+        $addUserReq->bindValue("age", $photographe->getAge(), PDO::PARAM_INT);
+        $addUserReq->bindValue("typePhotoPref", $photographe->getTypePhotoPref(), PDO::PARAM_STR);
+
         $addUserReq->execute();
 
         if ($addUserReq) {
-            $lastInsertedRowSql = "SELECT * FROM user ORDER BY id_user DESC LIMIT 1";
+            $lastInsertedRowSql = "SELECT * FROM utilisateur ORDER BY id_user DESC LIMIT 1";
 
             $lastInsertedRowReq = $this->getBDD()->prepare($lastInsertedRowSql);
             $lastInsertedRowReq->execute();
             if ($lastInsertedRowReq) {
-                $data = [];
+                $data = null;
                 while ($row = $lastInsertedRowReq->fetch(PDO::FETCH_ASSOC)) {
-                    $data[] = new Photographe(
-                        intval($row->id_user),
-                        intval($row->id_mot_de_passe),
-                        $row->nom,
-                        $row->prenom,
-                        $row->pseudo,
-                        $row->email,
-                        intval($row->age),
-                        $row->type_photo_pref,
-                        $row->date_creation,
-                        boolval($row->warn),
+                    $data = new Photographe(
+                        (int)$row['id_user'],
+                        (int)$row['id_mot_de_passe'],
+                        $row['nom'],
+                        $row['prenom'],
+                        $row['pseudo'],
+                        $row['email'],
+                        (int)$row['age'],
+                        $row['type_photo_pref'],
+                        $row['date_creation'],
+                        (bool)$row['warn'],
                     );
                 }
+
+                return $data;
             } else {
                 throw new Exception('Erreur lors de la récupération du dernier compte ajouté', 500);
             }
         } else {
             throw new Exception('Erreur lors de la création du compte', 500);
         }
-
-        return $data;
     }
 
     /**
      * Mets à jour un compte d'un photographe
      * 
-     * @param string $field Le nom de la colonne à mettre à jour
-     * @param string $newValue La valeur à mettre à jour
+     * @param int $idUser L'identifiant de l'utilisateur
      * @return int Le code statut 
      */
-    public function updateUser(string $field, string $newValue): int
+    public function validateAccount(int $idUser): int
     {
-        if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 400);
-        }
+        $sql = "UPDATE utilisateur SET compte_valide = 1 WHERE id_user = :idUser";
 
-        $sql = "UPDATE user SET :field = :newValue WHERE id_user = :idUser";
-
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $_COOKIE['id'],
-            "field" => $field,
-            "newValue" => $newValue,
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue("idUser", $idUser, PDO::PARAM_INT);
         $req->execute();
 
         if ($req) {
@@ -101,15 +90,10 @@ class CompteManager extends Model
      */
     public function deleteUser(int $idUser): int
     {
-        if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 400);
-        }
+        $sql = "DELETE FROM utilisateur WHERE id_user = :idUser";
 
-        $sql = "DELETE FROM user WHERE id_user = :idUser";
-
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $idUser
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
         $req->execute();
 
         if ($req) {
@@ -130,26 +114,26 @@ class CompteManager extends Model
     public function getUserInfo(int $idUser): Photographe
     {
         $sql = "SELECT id_user, id_mot_de_passe, nom, prenom, email, pseudo, date_creation, type_photo_pref, age, warn, compte_valide 
-            FROM user WHERE id_user = :idUser";
+            FROM utilisateur WHERE id_user = :idUser";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $idUser
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
         $req->execute();
 
+        $data = null;
         while ($row = $req->fetch(PDO::FETCH_ASSOC)) {
             $data = new Photographe(
-                intval($row->id),
-                intval($row->id_mot_de_passe),
-                $row->nom,
-                $row->prenom,
-                $row->pseudo,
-                $row->email,
-                intval($row->age),
-                $row->type_photo_pref,
-                $row->date_creation,
-                boolval($row->warn),
-                boolval($row->compte_valide),
+                (int)$row['id_user'],
+                (int)$row['id_mot_de_passe'],
+                $row['nom'],
+                $row['prenom'],
+                $row['pseudo'],
+                $row['email'],
+                (int)$row['age'],
+                $row['type_photo_pref'],
+                $row['date_creation'],
+                (bool)$row['warn'],
+                (bool)$row['compte_valide'],
             );
         }
 
@@ -166,12 +150,17 @@ class CompteManager extends Model
     {
         $sql = "SELECT id_user, pseudo FROM utilisateur WHERE pseudo = :pseudo";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "pseudo" => $pseudo
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('pseudo', $pseudo, PDO::PARAM_STR);
         $req->execute();
 
-        return $req->fetch(PDO::FETCH_ASSOC)->id_user;
+        $idSelected = $req->fetch(PDO::FETCH_ASSOC)['id_user'];
+
+        if (is_int($idSelected)) {
+            return $idSelected;
+        } else {
+            throw new Exception('Aucun utilisateur associé au pseudo', 400);
+        }
     }
 
     /**
@@ -184,12 +173,11 @@ class CompteManager extends Model
     {
         $sql = "SELECT compte_valide, id_user FROM utilisateur WHERE id_user = :idUser";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $idUser
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
         $req->execute();
 
-        return $req->fetch(PDO::FETCH_ASSOC)->compte_valide;
+        return $req->fetch(PDO::FETCH_ASSOC)['compte_valide'];
     }
 
     /**
@@ -201,14 +189,13 @@ class CompteManager extends Model
      */
     public function nbPseudo(string $pseudo): int
     {
-        $sql = 'SELECT COUNT(id_user) as nombre FROM utilisateur WHERE pseudo = :pseudo';
+        $sql = 'SELECT COUNT(id_user) as nombre FROM utilisateur WHERE `pseudo` = :pseudo';
 
-        $req = $this->getBDD()->prepare($sql, [
-            'pseudo' => $pseudo
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('pseudo', $pseudo, PDO::PARAM_STR);
         $req->execute();
 
-        return $req->fetch(PDO::FETCH_ASSOC)->nombre;
+        return $req->fetch(PDO::FETCH_ASSOC)['nombre'];
     }
 
     /**
@@ -221,11 +208,118 @@ class CompteManager extends Model
     {
         $sql = 'SELECT is_admin FROM utilisateur WHERE id_user = :idUser';
 
-        $req = $this->getBdd()->prepare($sql, [
-            'idUser' => $idUser
-        ]);
+        $req = $this->getBdd()->prepare($sql);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
         $req->execute();
 
-        return $req->fetch(PDO::FETCH_ASSOC)->id_admin;
+        return $req->fetch(PDO::FETCH_ASSOC)['is_admin'];
+    }
+
+    /**
+     * Permet de récupérer l'email de l'utilisateur en fonction de son id_mot_de_passe
+     * 
+     * @param int $idUser L'identifiant de l'utilisateur
+     * @return string Son email
+     */
+    public function getUserEmail(int $idUser): string
+    {
+        $sql = 'SELECT email FROM utilisateur WHERE id_user = :idUser';
+
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
+        $req->execute();
+
+        return $req->fetch(PDO::FETCH_ASSOC)['email'];
+    }
+
+    /**
+     * Permet d'ajouter un flag à un utilisateur
+     * 
+     * @param int $idUSer L'identifiant de l'utilisateur à Flag
+     * @return ?int Le code status
+     */
+    public function flagUser(int $idUSer): ?int
+    {
+        $sql = 'UPDATE utilisateur SET warn = 1 WHERE id_user = :idUser';
+
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUSer, PDO::PARAM_INT);
+        $req->execute();
+
+        if ($req) {
+            return 200;
+        } else {
+            throw new Exception('Erreur lors de l\'ajout du warn');
+        }
+    }
+
+    /**
+     * Permet de passer un utilisateur administrateur
+     * 
+     * @param int $idUser L'identifiant de l'utilisateur
+     * @return ?int Le code status
+     */
+    public function makeUserAdmin(int $idUser): ?int
+    {
+        $sql = 'UPDATE utilisateur SET id_admin = 1 WHERE id_user = :idUser';
+
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
+        $req->execute();
+
+        if ($req) {
+            return 200;
+        } else {
+            throw new Exception('Erreur lors de l\'ajout de l\'utilisateur comme administrateur');
+        }
+    }
+
+    /**
+     * Permet de mettre à jour les infos de l'utilisateur
+     * 
+     * @param int $idUSer L'identifiant de l'utilisateur
+     * @param string $field Le champs à mettre à jour
+     * @param string $value La nouvelle valeur
+     * @return ?int Le code status
+     */
+    public function updateUser(string $field, string $value, int $idUser,): ?int
+    {
+        $column = '';
+
+        switch ($field) {
+            case 'nom':
+                $column = 'nom';
+                break;
+            case 'prenom':
+                $column = 'prenom';
+                break;
+            case 'pseudo':
+                $column = 'pseudo';
+                break;
+            case 'email':
+                $column = 'email';
+                break;
+            case 'mail':
+                $column = 'email';
+                break;
+            case 'age':
+                $column = 'age';
+                break;
+            default:
+                throw new Exception('La colonne choisit n\'existe pas', 400);
+        }
+
+        $sql = 'UPDATE utilisateur SET (' . $column . ') VALUES (:newVal) WHERE id_user = :idUser';
+
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('newVal', $value);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
+        $req->execute();
+
+        if ($req) {
+            return 200;
+        } else {
+            throw new Exception('Erreur lors de la mise à jour de la colonne ' . $field, 500);
+        }
     }
 }

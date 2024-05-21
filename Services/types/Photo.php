@@ -3,53 +3,59 @@
 class Photo implements JsonSerializable
 {
     /**
-     * @var int $id L'identifiant de la photo
+     * @var ?int $id L'identifiant de la photo
      */
-    private $id;
+    private ?int $id;
     /** 
      * @var string $titre Le titre de la photo  
      */
-    private $titre;
+    private string $titre;
     /**
      * @var string $tag Le tag de la photo
      */
-    private $tag;
+    private string $tag;
     /**
      * @var string $source La source de la photo sous forme de blob
      */
-    private $source;
+    private ?string $source;
     /** 
-     * @var DateTime $datePriseVue La date de prise de vue
+     * @var string $datePriseVue La date de prise de vue
      */
-    private $datePriseVue;
+    private ?string $datePriseVue;
     /**
-     * @var DateTime $datePublication La date de publication de la photo
+     * @var string $datePublication La date de publication de la photo
      */
-    private $datePublication;
+    private ?string $datePublication;
     /**
      * @var Photographe Le photographe
      */
-    private $photographe;
+    private ?Photographe $photographe;
+    /**
+     * @var string $orientation L'orientation de l'image
+     */
+    private ?string $orientation;
 
     /**
      * Le constructeur
      * 
-     * @param int $id L'id de la photo
+     * @param ?int $id L'id de la photo
      * @param string $titre Le titre de la photo
      * @param string $tag Le tag de la photo
      * @param mixed $source La source de la photo
-     * @param DateTime $datePriseVue La date de la prise de vue
-     * @param DateTime $datePublication La date de publication de la photo sur le site
-     * @param Photographe Le photographe
+     * @param string $datePriseVue La date de la prise de vue
+     * @param string $datePublication La date de publication de la photo sur le site
+     * @param Photographe $photographe Le photographe
+     * @param string $orientation
      */
     public function __construct(
-        int $id = null,
+        ?int $id = null,
         string $titre,
         string $tag,
-        mixed $source,
-        DateTime $datePriseVue,
-        DateTime $datePublication = null,
-        Photographe $photographe
+        mixed $source = null,
+        string $datePriseVue = null,
+        ?string $datePublication = null,
+        ?Photographe $photographe = null,
+        ?string $orientation = null
     ) {
         $this->id = $id;
         $this->titre = $titre;
@@ -58,6 +64,7 @@ class Photo implements JsonSerializable
         $this->datePriseVue = $datePriseVue;
         $this->datePublication = $datePublication;
         $this->photographe = $photographe;
+        $this->orientation = $orientation;
     }
 
     /**
@@ -83,7 +90,8 @@ class Photo implements JsonSerializable
      * 
      * @return string Le tag
      */
-    public function getTag(): string {
+    public function getTag(): string
+    {
         return $this->tag;
     }
 
@@ -100,9 +108,9 @@ class Photo implements JsonSerializable
     /**
      * Récupère la date de prise de vue de la photo
      * 
-     * @return DateTime La date de prise de vue
+     * @return string La date de prise de vue
      */
-    public function getDatePriseVue(): DateTime
+    public function getDatePriseVue(): string
     {
         return $this->datePriseVue;
     }
@@ -110,9 +118,9 @@ class Photo implements JsonSerializable
     /**
      * Récupère la date de publication de la photo
      * 
-     * @return DateTime La date de publication de la photo
+     * @return string La date de publication de la photo
      */
-    public function getDatePublication(): DateTime
+    public function getDatePublication(): string
     {
         return $this->datePublication;
     }
@@ -125,6 +133,16 @@ class Photo implements JsonSerializable
     public function getPhotographe(): Photographe
     {
         return $this->photographe;
+    }
+
+    /**
+     * Permet de récupérer l'orientation de la photo
+     * 
+     * @return string L'orientation de la photo
+     */
+    public function getOrientation(): string
+    {
+        return $this->orientation;
     }
 
     /**
