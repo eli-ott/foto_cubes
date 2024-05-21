@@ -10,6 +10,8 @@ require_once("./controller/MainController.php");
 
 require_once('Model/Render.php');
 require_once("Model/CompteManager.php");
+require_once('Model/PasswordManager.php');
+require_once('Model/PhotoManager.php');
 require_once('Services/types/Photo.php');
 require_once("./controller/MainController.php");
 require_once("./controller/CompteController.php");

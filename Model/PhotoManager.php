@@ -179,7 +179,7 @@ class PhotoManager extends Model
     /**
      * Permet de supprimer une photo
      * 
-     * @var Photo $photo La photo à supprimer
+     * @param Photo $photo La photo à supprimer
      * @return int Le code statut de la requête
      */
     public function deletePhoto(Photo $photo): int
@@ -204,7 +204,7 @@ class PhotoManager extends Model
     /**
      * Permet de mettre à jour le titre et le tag d'une photo 
      * 
-     * @var Photo $photo La photo avec les informations à mettre à jour
+     * @param Photo $photo La photo avec les informations à mettre à jour
      * @return int Le code statut de la requête
      */
     public function updatePhoto(Photo $photo): int
@@ -225,5 +225,26 @@ class PhotoManager extends Model
         }
 
         return $status;
+    }
+
+    /**
+     * Supprimer toutes les photos d'un utilisateur
+     * 
+     * @param int $idUser L'identifiant de l'utilisateur
+     * @return ?int Le code status
+     */
+    public function deleteUserPhotos(int $idUser): ?int
+    {
+        $sql = "DELETE FROM photo WHERE id_user = :idUser";
+
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue("idUser", $idUser);
+        $req->execute();
+
+        if ($req) {
+            return 200;
+        } else {
+            throw new Exception('Erreur lors de la suppression des photos de l\'utilisateur', 500);
+        }
     }
 }

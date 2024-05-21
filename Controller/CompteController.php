@@ -1,7 +1,6 @@
 <?php
 
-require_once('Model/PasswordManager.php');
-require_once('Model/CompteManager.php');
+
 
 
 class CompteController
@@ -9,16 +8,20 @@ class CompteController
     /**
      * @var CompteManager $compteManager Le manager pour le compte
      */
-    private $compteManager;
+    private CompteManager $compteManager;
 
     /**
      * @var PasswordManager $passwordManager Le controller pour les mots de passes
      */
-    private $passwordManager;
+    private PasswordManager $passwordManager;
     /**
      * @var ConnexionController $connexionController Le controller pour les connexions
      */
-    private $connexionController;
+    private ConnexionController $connexionController;
+    /**
+     * @var PhotoManager Le manager pour les photos
+     */
+    private PhotoMAnager $photoManager;
 
     /**
      * Constructeur
@@ -28,6 +31,7 @@ class CompteController
         $this->compteManager = new CompteManager;
         $this->passwordManager = new PasswordManager;
         $this->connexionController = new ConnexionController;
+        $this->photoManager = new PhotoManager;
     }
 
     /**
@@ -115,9 +119,11 @@ class CompteController
         }
 
         try {
-            $this->compteManager->deleteUser($_COOKIE['id']);
+            $passwordToDelete = $this->passwordManager->getPassword($_COOKIE['id'])->getId();
 
-            $this->passwordManager->deletePassword($_COOKIE['id']);
+            $this->photoManager->deleteUserPhotos($_COOKIE['id']);
+            $this->compteManager->deleteUser($_COOKIE['id']);
+            $this->passwordManager->deletePassword($passwordToDelete);
 
             unset($_COOKIE['token']);
             unset($_COOKIE['id']);
@@ -126,7 +132,7 @@ class CompteController
             setcookie('id', '', 1, '/');
             setcookie('isAdmin', '', 1, '/');
 
-            // Utils::newAlert('Votre compte a été supprimé avec succès', Constants::TYPES_MESSAGES['success']);
+            Utils::newAlert('Votre compte a été supprimé avec succès', Constants::TYPES_MESSAGES['success']);
             Utils::redirect(URL . 'accueil');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
@@ -226,10 +232,10 @@ class CompteController
 
             if ($this->connexionController->validateConnection($idUser, $password)) {
                 $this->passwordManager->updatePassword(Utils::hashPassword($newPass), $idUser);
-
-                Utils::newAlert('Mot de passe modifié avec succès', Constants::TYPES_MESSAGES['success']);
-                Utils::redirect(URL . 'connexion');
             }
+
+            Utils::newAlert('Mot de passe modifié avec succès', Constants::TYPES_MESSAGES['success']);
+            Utils::redirect(URL . 'connexion');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'mdp-oublie');
