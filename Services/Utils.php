@@ -130,7 +130,7 @@ class Utils
      */
     public static function verifMail(string $mail)
     {
-        $objet = 'votre code de verification';
+        $objet = 'Votre code de vérification';
         $_SESSION['codeVerif'] = $message = rand(1000, 9999);
         SendMail::sendMail($mail, $objet, $message);
     }

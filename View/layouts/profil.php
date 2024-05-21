@@ -1,9 +1,10 @@
 <?php var_dump($_SESSION['alert']); ?>
 
 <?php if (!$compteActif) : ?>
-    <form action="form/revalidate-email" method="post">
+    <form id="revalidate-email" action="<?= URL ?>form/revalidate-email" method="post" class="flex column center">
+        <h3>Votre compte n'est pas validé, veuillez le faire avant de pouvoir ajouter des photos</h3>
         <input type="email" name="mail" value="<?= $mailUser ?>">
-        <button type="submit">Envoyer un mail</button>
+        <button type="submit">Envoyer un mail de confirmation</button>
     </form>
 <?php else : ?>
     <section class="info-container flex column start">
