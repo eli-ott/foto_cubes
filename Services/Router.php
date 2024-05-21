@@ -117,6 +117,9 @@ try {
                 case 'delete-photo':
                     $photoController->deletePhoto();
                     break;
+                case 'modify-photo':
+                    $photoController->updatePhoto();
+                    break;
                 case 'validate-email':
                     $compteController->validateEmail();
                     break;

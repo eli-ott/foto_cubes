@@ -17,3 +17,34 @@
 	justify-content: space-between;
 	width: 100%;
 }
+#modify-form {
+	width: 100%;
+
+	gap: var(--margin-xxs);
+}
+#modify-form .inputs,
+#modify-form .actions {
+	justify-content: space-between;
+}
+#modify-form button {
+	cursor: pointer;
+	background: none;
+
+	transition: 0.15s;
+	width: 40%;
+	padding: var(--margin-xxs) var(--margin-xs);
+
+	border: solid 1px var(--dark);
+}
+#modify-form button:hover {
+	background: var(--dark);
+	color: var(--light);
+}
+#modify-form button[type='submit'] {
+	background: var(--dark);
+	color: var(--light);
+}
+#modify-form button[type='submit']:hover {
+	background: var(--light);
+	color: var(--dark);
+}

@@ -17,11 +17,11 @@ class Photo implements JsonSerializable
     /**
      * @var string $source La source de la photo sous forme de blob
      */
-    private string $source;
+    private ?string $source;
     /** 
      * @var string $datePriseVue La date de prise de vue
      */
-    private string $datePriseVue;
+    private ?string $datePriseVue;
     /**
      * @var string $datePublication La date de publication de la photo
      */
@@ -51,10 +51,10 @@ class Photo implements JsonSerializable
         ?int $id = null,
         string $titre,
         string $tag,
-        mixed $source,
+        mixed $source = null,
         string $datePriseVue = null,
         ?string $datePublication = null,
-        ?Photographe $photographe,
+        ?Photographe $photographe = null,
         ?string $orientation = null
     ) {
         $this->id = $id;

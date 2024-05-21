@@ -212,11 +212,10 @@ class PhotoManager extends Model
 
         $sql = "UPDATE photo SET titre = :titre, tag = :tag WHERE id_photo = :idPhoto";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "titre" => $photo->getTitre(),
-            "tag" => $photo->getTag(),
-            "idPhoto" => $photo->getId()
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue("titre", $photo->getTitre());
+        $req->bindValue("tag", $photo->getTag());
+        $req->bindValue("idPhoto", $photo->getId());
         $req->execute();
 
         if ($req) {
