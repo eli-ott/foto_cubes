@@ -1,7 +1,6 @@
 <?php
 
-require_once('Model/PasswordManager.php');
-require_once('Model/CompteManager.php');
+
 
 
 class CompteController
@@ -9,12 +8,20 @@ class CompteController
     /**
      * @var CompteManager $compteManager Le manager pour le compte
      */
-    private $compteManager;
+    private CompteManager $compteManager;
 
     /**
      * @var PasswordManager $passwordManager Le controller pour les mots de passes
      */
-    private $passwordManager;
+    private PasswordManager $passwordManager;
+    /**
+     * @var ConnexionController $connexionController Le controller pour les connexions
+     */
+    private ConnexionController $connexionController;
+    /**
+     * @var PhotoManager Le manager pour les photos
+     */
+    private PhotoMAnager $photoManager;
 
     /**
      * Constructeur
@@ -23,6 +30,8 @@ class CompteController
     {
         $this->compteManager = new CompteManager;
         $this->passwordManager = new PasswordManager;
+        $this->connexionController = new ConnexionController;
+        $this->photoManager = new PhotoManager;
     }
 
     /**
@@ -63,7 +72,7 @@ class CompteController
         $password = Securite::secureHTML($_POST['password']);
         $passwordValidation = Securite::secureHTML($_POST['passwordValidation']);
 
-        if (!empty($_COOKIE['token'])) {
+        if (Utils::userConnected()) {
             Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil/1');
         }
@@ -89,8 +98,10 @@ class CompteController
             setcookie('id', $newPhotographe->getId(), time() + Utils::hoursToSeconds(24), '/');
             setcookie('isAdmin', $this->compteManager->isAdmin($newPhotographe->getId()), time() + Utils::hoursToSeconds(24), '/');
 
+            Utils::verifMail($photographe->getEmail());
+
             Utils::newAlert('Compte créée avec succès', Constants::TYPES_MESSAGES['success']);
-            Utils::redirect(URL . 'profil/1');
+            Utils::redirect(URL . 'valider');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'inscription');
@@ -102,15 +113,17 @@ class CompteController
      */
     public function deleteCompte(): void
     {
-        if (empty($_COOKIE['token'])) {
+        if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
         }
 
         try {
-            $this->compteManager->deleteUser($_COOKIE['id']);
+            $passwordToDelete = $this->passwordManager->getPassword($_COOKIE['id'])->getId();
 
-            $this->passwordManager->deletePassword($_COOKIE['id']);
+            $this->photoManager->deleteUserPhotos($_COOKIE['id']);
+            $this->compteManager->deleteUser($_COOKIE['id']);
+            $this->passwordManager->deletePassword($passwordToDelete);
 
             unset($_COOKIE['token']);
             unset($_COOKIE['id']);
@@ -118,8 +131,6 @@ class CompteController
             setcookie('token', '', 1, '/');
             setcookie('id', '', 1, '/');
             setcookie('isAdmin', '', 1, '/');
-
-            //TODO: Test if the account deletion remove the token
 
             Utils::newAlert('Votre compte a été supprimé avec succès', Constants::TYPES_MESSAGES['success']);
             Utils::redirect(URL . 'accueil');
@@ -137,13 +148,13 @@ class CompteController
         $field = Securite::secureHTML($_POST['info']);
         $value = Securite::secureHTML($_POST['value']);
 
-        if (empty($_COOKIE['token'])) {
+        if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
         }
 
         try {
-            $this->compteManager->updateUser($field, $value);
+            $this->compteManager->updateUser($field, $value, $_COOKIE['id']);
 
             Utils::newAlert($field . ' modifié avec succès', Constants::TYPES_MESSAGES['success']);
             Utils::redirect(URL . 'profil/1');
@@ -152,8 +163,9 @@ class CompteController
             Utils::redirect(URL . 'profil/1');
         }
     }
+
     /**
-     * Permet de recuperer les infos de l'utilisateur'
+     * Permet de récupérer les infos de l'utilisateur'
      * 
      * @return Photographe Le photographe
      */
@@ -169,6 +181,116 @@ class CompteController
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil/1');
+        }
+    }
+
+    /**
+     * Permet de vérifier si le code entrée est le bon
+     */
+    public function validateEmail(): void
+    {
+        $code = Securite::secureHTML($_POST['code']);
+
+        if (!Utils::userConnected()) {
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
+        }
+
+        try {
+            if (Utils::verifCode($code)) {
+                $this->compteManager->validateAccount($_COOKIE['id']);
+
+                Utils::newAlert('Compte validé avec succès', Constants::TYPES_MESSAGES['success']);
+                Utils::redirect(URL . 'profil/1');
+            } else {
+                Utils::newAlert('Mauvais code', Constants::TYPES_MESSAGES['error']);
+                Utils::redirect(URL . 'valider');
+            }
+        } catch (Exception $e) {
+            Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'valider');
+        }
+    }
+
+    /**
+     * Permet de reset le mot de passe de l'utilisateur
+     */
+    public function resetMdp(): void
+    {
+        $pseudo = Securite::secureHTML($_POST['pseudo']);
+        $password = Securite::secureHTML($_POST['password']);
+        $newPass = Securite::secureHTML($_POST['newPass']);
+        $newPassValidation = Securite::secureHTML($_POST['newPassValidation']);
+
+        if ($newPass !== $newPassValidation) {
+            Utils::newAlert('Les nouveaux mots de passes ne correspondent pas', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'mdp-oublie');
+        }
+
+        try {
+            $idUser = $this->compteManager->getUserId($pseudo);
+
+            if ($this->connexionController->validateConnection($idUser, $password)) {
+                $this->passwordManager->updatePassword(Utils::hashPassword($newPass), $idUser);
+            }
+
+            Utils::newAlert('Mot de passe modifié avec succès', Constants::TYPES_MESSAGES['success']);
+            Utils::redirect(URL . 'connexion');
+        } catch (Exception $e) {
+            Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'mdp-oublie');
+        }
+    }
+
+    /**
+     * Permet d'ajouter un flag sur un Compte
+     */
+    public function flagUser(): void
+    {
+        $pseudo = Securite::secureHTML($_POST['pseudo']);
+
+        if (!Utils::userConnected()) {
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
+        }
+
+        try {
+            if ($this->compteManager->isAdmin($_COOKIE['id'])) {
+                $this->compteManager->flagUser($this->compteManager->getUserId($pseudo));
+
+                Utils::newAlert('Flag ajouté avec succès', Constants::TYPES_MESSAGES['success']);
+            } else {
+                Utils::newAlert('Vous n\'êtes pas administrateur', Constants::TYPES_MESSAGES['error']);
+            }
+        } catch (Exception $e) {
+            Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'erreur');
+        }
+    }
+
+    /**
+     * Permet de passer un autre utilisateur comme étant admin
+     */
+    public function makeUserAdmin(): void
+    {
+        $pseudo = Securite::secureHTML($_POST['pseudo']);
+
+        if (!Utils::userConnected()) {
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
+        }
+
+        try {
+            if ($this->compteManager->isAdmin($_COOKIE['id'])) {
+                $this->compteManager->makeUserAdmin($this->compteManager->getUserId($pseudo));
+
+                Utils::newAlert('L\'utilisateur est maintenant admin', Constants::TYPES_MESSAGES['success']);
+            } else {
+                Utils::newAlert('Erreur lors de l\'ajout de l\'utilisateur comme étant admin', Constants::TYPES_MESSAGES['error']);
+            }
+        } catch (Exception $e) {
+            Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'erreur');
         }
     }
 }

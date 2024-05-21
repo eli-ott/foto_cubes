@@ -6,7 +6,7 @@
 }
 
 .connect .form-container {
-	height: 50%;
+	height: fit-content;
 	width: 50%;
 	padding: var(--margin-s);
 

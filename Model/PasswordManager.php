@@ -13,13 +13,14 @@ class PasswordManager extends Model
      */
     public function updatePassword(string $hash, int $id_user): int
     {
-        $sql = "UPDATE mot_de_passe mdp JOIN utilisateur user ON mdp.id_mot_de_passe = user.id_mot_de_passe 
-            SET `hash` = :mdp, date_reinitialisation = NOW() WHERE user.id_user = :id_user";
+        $sql = "UPDATE mot_de_passe 
+            JOIN utilisateur user ON mot_de_passe.id_mot_de_passe = user.id_mot_de_passe 
+            SET `hash` = :mdp, date_reinitialisation = NOW() 
+            WHERE user.id_user = :id_user";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "mdp" => $hash,
-            "id_user" => $id_user
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue("mdp", $hash);
+        $req->bindValue("id_user", $id_user);
         $req->execute();
 
         if ($req) {
@@ -32,15 +33,15 @@ class PasswordManager extends Model
     /**
      * Supprime le compte de l'utilisateur
      * 
-     * @param int $idUser Récupère l'id de l'utilisateur qui souhaite supprimer son compte
+     * @param int $idPassword L'identifiant du mot de passe à supprimer
      * @return int Le code status de la requête
      */
-    public function deletePassword(int $idUser): int
+    public function deletePassword(int $idPassword): int
     {
-        $sql = "DELETE mot_de_passe FROM mot_de_passe INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe WHERE utilisateur.id_user = :idUser";
+        $sql = "DELETE FROM mot_de_passe WHERE id_mot_de_passe = :idPassword";
 
         $req = $this->getBDD()->prepare($sql);
-        $req->bindValue('idUser', $idUser);
+        $req->bindValue('idPassword', $idPassword);
         $req->execute();
 
         if ($req) {

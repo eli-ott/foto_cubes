@@ -1,31 +1,32 @@
-.reset {
+.sign-up {
 	height: 100vh;
 	width: 100vw;
 
 	background: center / cover url('../assets/image/form-background.jpg') no-repeat;
 }
-.reset .form-container {
+.sign-up .form-container {
+	height: 45%;
 	width: 65%;
-	height: 65%;
 
 	gap: var(--margin-m);
 	background: var(--dark-25);
 	border-radius: var(--radius-l);
 	padding: var(--margin-m);
 }
-.reset .form-container * {
+.sign-up .form-container * {
 	color: var(--light);
 }
 
-.reset .form-container h2 {
+.sign-up .form-container h2 {
 	font-size: var(--desktop-font-size-xl);
 	font-weight: var(--font-weigh-content);
 }
-.reset .form-container form {
+.sign-up .form-container form {
 	justify-content: space-between;
 	gap: var(--margin-s);
+	width: 100%;
 }
-.reset .form-container form input {
+.sign-up .form-container form input {
 	background: none;
 	outline: none;
 
@@ -37,29 +38,29 @@
 	border: solid 2px var(--light);
 	border-radius: var(--radius-m);
 }
-.reset .form-container form input::placeholder {
+.sign-up .form-container form input::placeholder {
 	color: var(--light-50);
 	opacity: 1;
 }
-.reset .form-container form input::-ms-input-placeholder {
+.sign-up .form-container form input::-ms-input-placeholder {
 	color: var(--light-50);
 }
-.reset .form-container form button {
+.sign-up .form-container form button {
 	outline: none;
 	cursor: pointer;
 
-	margin-left: auto;
 	transition: 0.15s;
 	width: 45%;
 	padding: var(--margin-xs);
 
 	font-size: var(--desktop-font-size-s);
 
-	color: var(--dark);
+	background: none;
+	color: var(--light);
 	border: solid 2px var(--light);
 	border-radius: var(--radius-m);
 }
-.reset .form-container form button:hover {
-	background: var(--blue);
-	color: var(--light);
+.sign-up .form-container form button:hover {
+	background: var(--light);
+	color: var(--dark);
 }

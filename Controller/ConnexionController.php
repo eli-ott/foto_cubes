@@ -55,8 +55,8 @@ class ConnexionController
      */
     public function disconnect(): void
     {
-        if (empty($_COOKIE['token'])) {
-            Utils::newAlert('Aucun utilisateur connecté', 405);
+        if (!Utils::userConnected()) {
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
         }
 

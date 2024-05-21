@@ -12,7 +12,7 @@
                     <option value="<?= $typePhoto ?>"><?= $typePhoto ?></option>
                 <?php endforeach; ?>
             </select>
-            <input type="email" name="email" placeholder="Email" required>
+            <input type="email" name="email" placeholder="Email" required id="email">
             <input type="password" name="password" placeholder="Mot de passe" required>
             <input type="password" name="passwordValidation" placeholder="Confirmer le mot de passe" required>
             <button type="submit">M'inscrire</button>

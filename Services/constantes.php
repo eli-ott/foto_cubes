@@ -39,4 +39,19 @@ class Constants
      * @var int IMAGES_PAR_PAGE Le nombre d'images visible par page
      */
     const IMAGES_PAR_PAGE = 10;
+
+    /**
+     * @var string URL_DOCUMENT L'url om sont situés les documents
+     */
+    const URL_DOCUMENT = 'Public/assets/uploads/';
+
+    /**
+     * @var array EXTENSIONS_ACCEPTEES Les extensions acceptées
+     */
+    const EXTENSIONS_ACCEPTEES = [
+        'jpeg',
+        'jpg',
+        'png',
+        'webp'
+    ];
 }

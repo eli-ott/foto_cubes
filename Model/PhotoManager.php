@@ -44,6 +44,8 @@ class PhotoManager extends Model
 
         $photos = [];
         while ($row = $req->fetch((PDO::FETCH_ASSOC))) {
+            list($width, $height) = getimagesize($row["source"]);
+
             $photos[] = new Photo(
                 intval($row['id_photo']),
                 $row['titre'],
@@ -58,7 +60,8 @@ class PhotoManager extends Model
                     $row['prenom'],
                     $row['pseudo'],
                     $row['email']
-                )
+                ),
+                $width / $height > 1 ? 'horizontal' : 'vertical'
             );
         }
 
@@ -105,6 +108,8 @@ class PhotoManager extends Model
 
         $photos = [];
         while ($row = $req->fetch((PDO::FETCH_ASSOC))) {
+            list($width, $height) = getimagesize($row["source"]);
+
             $photos[] = new Photo(
                 intval($row['id_photo']),
                 $row['titre'],
@@ -119,7 +124,8 @@ class PhotoManager extends Model
                     $row['prenom'],
                     $row['pseudo'],
                     $row['email']
-                )
+                ),
+                $width / $height > 1 ? 'horizontal' : 'vertical'
             );
         }
 
@@ -128,7 +134,7 @@ class PhotoManager extends Model
         $getPages = "SELECT COUNT(id_user) as pages FROM photo WHERE id_user = :idUser";
 
         $reqPages = $this->getBDD()->prepare($getPages);
-        $reqPages->bindValue("idUSer", $idUser, PDO::PARAM_INT);
+        $reqPages->bindValue("idUser", $idUser, PDO::PARAM_INT);
         $reqPages->execute();
 
         if (!$req) {
@@ -149,18 +155,16 @@ class PhotoManager extends Model
      */
     public function addPhoto(Photo $photo): int
     {
-        if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 400);
-        }
+        $sql = "INSERT INTO photo (id_user, titre, date_prise_vue, source, tag) VALUES (:idUser, :titre, :datePriseVue, :source, :tag)";
 
-        $sql = "INSERT INTO photo (id_user, titre, date_prise_vue, source) VALUES (:idUser, :titre, :datePriseVue, :source)";
+        $req = $this->getBDD()->prepare($sql);
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $photo->getPhotographe()->getId(),
-            "titre" => $photo->getTitre(),
-            "datePriseVue" => $photo->getDatePriseVue(),
-            "source" => $photo->getSource()
-        ]);
+        $req->bindValue("idUser", $photo->getPhotographe()->getId(), PDO::PARAM_INT);
+        $req->bindValue("titre", $photo->getTitre(), PDO::PARAM_STR);
+        $req->bindValue("datePriseVue", $photo->getDatePriseVue(), PDO::PARAM_STR);
+        $req->bindValue("source", $photo->getSource(), PDO::PARAM_STR);
+        $req->bindValue("tag", $photo->getTag(), PDO::PARAM_STR);
+
         $req->execute();
 
         if ($req) {
@@ -175,20 +179,17 @@ class PhotoManager extends Model
     /**
      * Permet de supprimer une photo
      * 
-     * @var Photo $photo La photo à supprimer
+     * @param Photo $photo La photo à supprimer
      * @return int Le code statut de la requête
      */
     public function deletePhoto(Photo $photo): int
     {
-        if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 400);
-        }
+        Utils::deleteFile($photo->getSource());
 
         $sql = "DELETE FROM photo WHERE id_photo = :idPhoto";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $photo->getPhotographe()->getId()
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue("idPhoto", $photo->getId());
         $req->execute();
 
         if ($req) {
@@ -203,22 +204,18 @@ class PhotoManager extends Model
     /**
      * Permet de mettre à jour le titre et le tag d'une photo 
      * 
-     * @var Photo $photo La photo avec les informations à mettre à jour
+     * @param Photo $photo La photo avec les informations à mettre à jour
      * @return int Le code statut de la requête
      */
     public function updatePhoto(Photo $photo): int
     {
-        if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 400);
-        }
 
         $sql = "UPDATE photo SET titre = :titre, tag = :tag WHERE id_photo = :idPhoto";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "titre" => $photo->getTitre(),
-            "tag" => $photo->getTag(),
-            "idPhoto" => $photo->getId()
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue("titre", $photo->getTitre());
+        $req->bindValue("tag", $photo->getTag());
+        $req->bindValue("idPhoto", $photo->getId());
         $req->execute();
 
         if ($req) {
@@ -228,5 +225,26 @@ class PhotoManager extends Model
         }
 
         return $status;
+    }
+
+    /**
+     * Supprimer toutes les photos d'un utilisateur
+     * 
+     * @param int $idUser L'identifiant de l'utilisateur
+     * @return ?int Le code status
+     */
+    public function deleteUserPhotos(int $idUser): ?int
+    {
+        $sql = "DELETE FROM photo WHERE id_user = :idUser";
+
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue("idUser", $idUser);
+        $req->execute();
+
+        if ($req) {
+            return 200;
+        } else {
+            throw new Exception('Erreur lors de la suppression des photos de l\'utilisateur', 500);
+        }
     }
 }

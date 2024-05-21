@@ -34,7 +34,7 @@ class PasswordController
      */
     public function validateConnection(): void
     {
-        if (!empty($_COOKIE['token'])) {
+        if (Utils::userConnected()) {
             Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil/1');
         }
@@ -67,10 +67,10 @@ class PasswordController
         $newPassword = Securite::secureHTML($_POST['newPass']);
         $newPasswordValidation = Securite::secureHTML($_POST['newPassValidation']);
 
-        if (empty($_COOKIE['token'])) {
+        if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
-        }
+        };
 
         if ($newPassword !== $newPasswordValidation) {
             Utils::newAlert('Les deux mots de passes ne sont pas identiques', Constants::TYPES_MESSAGES['error']);
