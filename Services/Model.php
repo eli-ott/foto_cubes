@@ -3,7 +3,7 @@
 abstract class Model
 {
     /**
-     * @var PDO $pdo le PDO de la base
+     * @var ?PDO $pdo le PDO de la base
      */
     private static ?PDO $pdo = null;
 

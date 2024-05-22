@@ -5,16 +5,16 @@ require_once("Model/Render.php");
 
 class MainController extends Render
 {
-    /** 
-     * @var PhotoManager Le manager pour les photos 
+    /**
+     * @var PhotoManager Le manager pour les photos
      */
     private $photoManager;
-    /** 
-     * @var CompteController Le controler pour le compte 
+    /**
+     * @var CompteController Le controler pour le compte
      */
     private $compteController;
-    /** 
-     * @var PhotoController Le controler pour les photos 
+    /**
+     * @var PhotoController Le controler pour les photos
      */
     private $photoController;
     /**
@@ -27,6 +27,8 @@ class MainController extends Render
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->photoManager = new PhotoManager;
         $this->photoController = new PhotoController;
         $this->compteController = new CompteController;
@@ -76,6 +78,10 @@ class MainController extends Render
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
         };
+        if (Utils::userAdmin()) {
+            $stats = $this->compteController->getStatsAdmin();
+            $comptesWarn = $this->compteController->getComptesWarn();
+        }
 
         $this->render([
             "title" => 'Profil',
@@ -83,12 +89,37 @@ class MainController extends Render
             "showFooter" => true,
             "showHeader" => true,
             "pageScripts" => ['profil', 'photoGalerie'],
-            "pageCss" => ['profil', 'galerie', 'filtres', 'paginator', 'photoGalerie', 'nav', 'footer'],
+            "pageCss" => ['profil', 'infos', 'galerie', 'filtres', 'paginator', 'photoGalerie', 'nav', 'footer'],
             "infos" => $this->compteManager->getUserInfo($_COOKIE['id']),
             "compteActif" => $this->compteManager->compteActif($_COOKIE["id"]),
             "mailUser" => $this->compteManager->getUserEmail($_COOKIE['id']),
             "photos" => $this->photoController->getPhotosByUser(),
             'view' => 'View/layouts/profil.php',
+            'template' => 'View/base.php'
+        ]);
+    }
+
+    /**
+     * Permet d'afficher la page admin
+     */
+    public function admin(): void
+    {
+        if (!Utils::userConnected()) {
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
+        };
+
+        $this->render([
+            "title" => 'Profil Admin',
+            "description" => 'Profil administrateur d\'un utilisateur de Foto',
+            "showFooter" => true,
+            "showHeader" => true,
+            "pageScripts" => ['profil'],
+            "pageCss" => ['admin', 'infos', 'nav', 'footer'],
+            "infos" => $this->compteManager->getUserInfo($_COOKIE['id']),
+            "stats" => $this->compteController->getStatsAdmin(),
+            "comptesWarn" => $this->compteController->getComptesWarn(),
+            'view' => 'View/layouts/admin.php',
             'template' => 'View/base.php'
         ]);
     }
@@ -137,7 +168,7 @@ class MainController extends Render
 
     /**
      * Permet d'afficher la page d'erreur
-     * 
+     *
      * @param int $code Le code d'erreur
      * @param string $message Le message d'erreur
      */

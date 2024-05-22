@@ -1,11 +1,14 @@
 <?php
 
+use JetBrains\PhpStorm\NoReturn;
+
 class Utils
 {
     /**
      * Permet de générer un token aléatoire
-     * 
+     *
      * @return string Le token
+     * @throws Exception
      */
     public static function generateToken(): string
     {
@@ -14,7 +17,7 @@ class Utils
 
     /**
      * Converti des heures en secondes
-     * 
+     *
      * @param int $hours Les heures à convertir
      * @return int Les secondes
      */
@@ -25,7 +28,7 @@ class Utils
 
     /**
      * Permet de redirigé de manière efficiente
-     * 
+     *
      * @param string $url L'url pour la redirection
      */
     public static function redirect(string $url): void
@@ -36,7 +39,7 @@ class Utils
 
     /**
      * Permet d'ajouter un message pour l'utilisateur
-     * 
+     *
      * @param string $message Le message à afficher
      * @param string $type Le type de message
      */
@@ -48,7 +51,7 @@ class Utils
 
     /**
      * Permet de hash un mot de passe
-     * 
+     *
      * @param string $password Le mot de passe
      * @return string Le mot de passe hash
      */
@@ -58,8 +61,7 @@ class Utils
     }
 
     /**
-     * Permet de vérifier si un utilisateur est connecté 
-     * Et de le redirigé vers la page choisi
+     * Permet de vérifier si un utilisateur est connecté
      */
     public static function userConnected(): bool
     {
@@ -67,14 +69,23 @@ class Utils
     }
 
     /**
+     * Vérifie si l'utilisateur est admin ou non
+     */
+    public static function userAdmin(): bool
+    {
+        return (bool)$_COOKIE['isAdmin'];
+    }
+
+    /**
      * Permet d'ajouter un fichier
-     * 
+     *
      * @param mixed $file Le fichier à ajouter
      * @return ?string Le nom du fichier upload
+     * @throws Exception
      */
     public static function uploadFile(mixed $file): ?string
     {
-        if (!isset($file['name']) || empty($file['name'])) {
+        if (empty($file['name'])) {
             throw new Exception('Vous devez choisir une image' . $file, 400);
         }
         if (!file_exists(Constants::URL_DOCUMENT)) {
@@ -109,10 +120,12 @@ class Utils
 
     /**
      * Permet de supprimer un fichier du serveur
-     * 
+     *
      * @param string $fileName Le nom du fichier à supprimer
+     * @return int Le code status
+     * @throws Exception
      */
-    public static function deleteFile(string $fileName): ?int
+    public static function deleteFile(string $fileName): int
     {
         if (unlink($fileName)) {
             return 200;
@@ -122,11 +135,12 @@ class Utils
     }
 
     /**
-     * permet d'envoyer un mail de verification
-     * 
+     * Permet d'envoyer un mail de verification
+     *
      * @param string $mail le mail du receveur
+     * @throws Exception
      */
-    public static function verifMail(string $mail)
+    public static function verifMail(string $mail): void
     {
         $objet = 'Votre code de vérification';
         $_SESSION['codeVerif'] = $message = rand(1000, 9999);
@@ -134,10 +148,11 @@ class Utils
     }
 
     /**
-     * Vérifie si le code envoyer par mail est le bon
-     * 
+     * Vérifie si le code envoyé par mail est le bon
+     *
      * @param int $code code de verification
      * @return int le code status de la fonction
+     * @throws Exception
      */
     public static function verifCode(int $code): int
     {
@@ -146,6 +161,6 @@ class Utils
             return 200;
         } else {
             throw new Exception('Ce n\'est pas le bon code', 500);
-        };
+        }
     }
 }
