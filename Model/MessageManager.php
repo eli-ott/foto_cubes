@@ -1,5 +1,5 @@
 <?php
-require_once('./Model/Model.php');
+require_once('Services/Model.php');
 
 class MessageManager extends Model
 {
@@ -7,8 +7,8 @@ class MessageManager extends Model
      * Ajoute le message a la base de donnée
      * 
      * @param string $message Le message envoyer
-     * @param int $id_receveur recupère l'id_receveur
-     * @param int $id_envoyeur recupère l'id_envoyeur
+     * @param int $id_receveur récupère l'id_receveur
+     * @param int $id_envoyeur récupère l'id_envoyeur
      * @return int Le code statut de la requête
      */
     public function saveMail(string $message, int $id_receveur, int $id_envoyeur): int
@@ -22,12 +22,10 @@ class MessageManager extends Model
         ]);
         $req->execute();
 
-        if (!$req) {
-            $status = 500;
+        if ($req) {
+            return 200;
         } else {
-            $status = 200;
+            throw new Exception('Erreur lors de la sauvegarde du message', 500);
         }
-
-        return $status;
     }
 };

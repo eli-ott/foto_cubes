@@ -1,104 +1,150 @@
 <?php
 
-require_once('./Model/Model.php');
+require_once('Services/Model.php');
 
 class PhotoManager extends Model
 {
+
+    /**
+     * Permet de récupérer les previews pour la page d'accueil
+     * 
+     * @return array Les 5 dernières photos ajoutées
+     */
+    public function getPreviews(): array
+    {
+        $sql = "SELECT * FROM photo ORDER BY date_publication DESC LIMIT 5";
+
+        $request = $this->getBDD()->prepare($sql);
+        $request->execute();
+        $data = $request->fetchAll(PDO::FETCH_ASSOC);
+
+        return $data;
+    }
+
     /**
      * Récupère les photos en fonction de la page. Retourne 10 photos au maximum
-     * 
+     *
      * @param int $page La page actuelle pour calculer les photos à récupérer
-     * @return Photo Le tableau d'images
+     * @return array Le tableau d'images
      */
     public function getPhotos(int $page): array
     {
-        $offset = ($page * 10) + $page;
-        $limit = 10 + $page;
+        $offset = (($page - 1) * 10);
+        $limit = 10;
 
-        $sql = "SELECT photo.id_user, photo.id_photo, photo.titre, photo.tag, photo.source, photo.date_prise_vue, photo.date_publication, photographe.nom, photographe.prenom, photographe.pseudo, photographe.email FROM photo 
-        LEFT JOIN user as photographe ON photo.id_user = photographe.id_user 
+        $sql = "SELECT photo.id_user, photo.id_photo, photo.titre, photo.tag, photo.source, photo.date_prise_vue, photo.date_publication, photographe.nom, photographe.prenom, photographe.pseudo, photographe.email 
+        FROM photo 
+        LEFT JOIN utilisateur as photographe ON photo.id_user = photographe.id_user 
         LIMIT :limit_photo OFFSET :from_offset;";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "limit_photo" => $limit,
-            "from_offset" => $offset
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('limit_photo', $limit, PDO::PARAM_INT);
+        $req->bindValue('from_offset', $offset, PDO::PARAM_INT);
         $req->execute();
+
+        $photos = [];
+        while ($row = $req->fetch((PDO::FETCH_ASSOC))) {
+            list($width, $height) = getimagesize($row["source"]);
+
+            $photos[] = new Photo(
+                intval($row['id_photo']),
+                $row['titre'],
+                $row['tag'],
+                $row['source'],
+                $row['date_prise_vue'],
+                $row['date_publication'],
+                new Photographe(
+                    intval($row['id_user']),
+                    null,
+                    $row['nom'],
+                    $row['prenom'],
+                    $row['pseudo'],
+                    $row['email']
+                ),
+                $width / $height > 1 ? 'horizontal' : 'vertical'
+            );
+        }
+
+        $req->closeCursor();
+
+        $getPages = "SELECT COUNT(id_user) as pages FROM photo";
+
+        $reqPages = $this->getBDD()->prepare($getPages);
+        $reqPages->execute();
 
         if (!$req) {
             throw new Exception('Erreur lors de la récupération des photos', 500);
         }
 
-        $photos = [];
-        while ($row = $req->fetch((PDO::FETCH_ASSOC))) {
-            $photos[] = new Photo(
-                intval($row->id_photo),
-                $row->titre,
-                $row->tag,
-                $row->source,
-                $row->date_prise_vue,
-                $row->date_publication,
-                new Photographe(
-                    intval($row->idUser),
-                    $row->nom,
-                    $row->prenom,
-                    $row->pseudo,
-                    $row->email
-                )
-            );
-        }
-
-        return $photos;
+        return [
+            'pages' => ceil((int)$reqPages->fetch(PDO::FETCH_ASSOC)['pages'] / Constants::IMAGES_PAR_PAGE),
+            'photos' => $photos
+        ];
     }
 
     /**
      * Récupère les photos de l'utilisateur en fonction de la page
      * 
-     * @param int $page La page actuel du paginateur
+     * @param int $page La page actuel du paginator
      * @param int $idUser L'id du user
      * @return array Les photos du user
      */
     public function getPhotosByUser(int $page, int $idUser): array
     {
-        $offset = ($page * 10) + $page;
-        $limit = 10 + $page;
+        $offset = (($page - 1) * 10);
+        $limit = 10;
 
-        $sql = "SELECT photo.id_user, photo.id_photo, photo.titre, photo.tag, photo.source, photo.date_prise_vue, photo.date_publication, photographe.nom, photographe.prenom, photographe.pseudo, photographe.email FROM photo 
-        LEFT JOIN user as photographe ON photo.id_user = photographe.id_user
+        $sql = "SELECT photo.id_user, photo.id_photo, photo.titre, photo.tag, photo.source, photo.date_prise_vue, photo.date_publication, photographe.nom, photographe.prenom, photographe.pseudo, photographe.email 
+        FROM photo 
+        LEFT JOIN utilisateur as photographe ON photo.id_user = photographe.id_user
         WHERE photo.id_user = :idUser 
         LIMIT :limitPhoto OFFSET :fromOffset;";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "limitPhoto" => $limit,
-            "fromOffset" => $offset,
-            "idUser" => $idUser
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue('idUser', $idUser, PDO::PARAM_INT);
+        $req->bindValue('limitPhoto', $limit, PDO::PARAM_INT);
+        $req->bindValue('fromOffset', $offset, PDO::PARAM_INT);
         $req->execute();
+
+        $photos = [];
+        while ($row = $req->fetch((PDO::FETCH_ASSOC))) {
+            list($width, $height) = getimagesize($row["source"]);
+
+            $photos[] = new Photo(
+                intval($row['id_photo']),
+                $row['titre'],
+                $row['tag'],
+                $row['source'],
+                $row['date_prise_vue'],
+                $row['date_publication'],
+                new Photographe(
+                    intval($row['id_user']),
+                    null,
+                    $row['nom'],
+                    $row['prenom'],
+                    $row['pseudo'],
+                    $row['email']
+                ),
+                $width / $height > 1 ? 'horizontal' : 'vertical'
+            );
+        }
+
+        $req->closeCursor();
+
+        $getPages = "SELECT COUNT(id_user) as pages FROM photo WHERE id_user = :idUser";
+
+        $reqPages = $this->getBDD()->prepare($getPages);
+        $reqPages->bindValue("idUser", $idUser, PDO::PARAM_INT);
+        $reqPages->execute();
 
         if (!$req) {
             throw new Exception("Erreur lors de la récupération des photos de l'utilisateur id " . $idUser, 500);
         }
 
-        $photos = [];
-        while ($row = $req->fetch((PDO::FETCH_ASSOC))) {
-            $photos[] = new Photo(
-                intval($row->id_photo),
-                $row->titre,
-                $row->tag,
-                $row->source,
-                $row->date_prise_vue,
-                $row->date_publication,
-                new Photographe(
-                    intval($row->idUser),
-                    $row->nom,
-                    $row->prenom,
-                    $row->pseudo,
-                    $row->email
-                )
-            );
-        }
-
-        return $photos;
+        return [
+            'pages' => ceil($reqPages->fetch(PDO::FETCH_ASSOC)['pages'] / Constants::IMAGES_PAR_PAGE),
+            'photos' => $photos
+        ];
     }
 
     /**
@@ -109,18 +155,16 @@ class PhotoManager extends Model
      */
     public function addPhoto(Photo $photo): int
     {
-        if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 400);
-        }
+        $sql = "INSERT INTO photo (id_user, titre, date_prise_vue, source, tag) VALUES (:idUser, :titre, :datePriseVue, :source, :tag)";
 
-        $sql = "INSERT INTO photo (id_user, titre, date_prise_vue, source) VALUES (:idUser, :titre, :datePriseVue, :source)";
+        $req = $this->getBDD()->prepare($sql);
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $photo->getPhotographe()->getId(),
-            "titre" => $photo->getTitre(),
-            "datePriseVue" => $photo->getDatePriseVue(),
-            "source" => $photo->getSource()
-        ]);
+        $req->bindValue("idUser", $photo->getPhotographe()->getId(), PDO::PARAM_INT);
+        $req->bindValue("titre", $photo->getTitre(), PDO::PARAM_STR);
+        $req->bindValue("datePriseVue", $photo->getDatePriseVue(), PDO::PARAM_STR);
+        $req->bindValue("source", $photo->getSource(), PDO::PARAM_STR);
+        $req->bindValue("tag", $photo->getTag(), PDO::PARAM_STR);
+
         $req->execute();
 
         if ($req) {
@@ -135,20 +179,17 @@ class PhotoManager extends Model
     /**
      * Permet de supprimer une photo
      * 
-     * @var Photo $photo La photo à supprimer
+     * @param Photo $photo La photo à supprimer
      * @return int Le code statut de la requête
      */
     public function deletePhoto(Photo $photo): int
     {
-        if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 400);
-        }
+        Utils::deleteFile($photo->getSource());
 
         $sql = "DELETE FROM photo WHERE id_photo = :idPhoto";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "idUser" => $photo->getPhotographe()->getId()
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue("idPhoto", $photo->getId());
         $req->execute();
 
         if ($req) {
@@ -163,22 +204,18 @@ class PhotoManager extends Model
     /**
      * Permet de mettre à jour le titre et le tag d'une photo 
      * 
-     * @var Photo $photo La photo avec les informations à mettre à jour
+     * @param Photo $photo La photo avec les informations à mettre à jour
      * @return int Le code statut de la requête
      */
     public function updatePhoto(Photo $photo): int
     {
-        if (empty($_COOKIE['token'])) {
-            throw new Exception('Aucun utilisateur connecté', 400);
-        }
 
         $sql = "UPDATE photo SET titre = :titre, tag = :tag WHERE id_photo = :idPhoto";
 
-        $req = $this->getBDD()->prepare($sql, [
-            "titre" => $photo->getTitre(),
-            "tag" => $photo->getTag(),
-            "idPhoto" => $photo->getId()
-        ]);
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue("titre", $photo->getTitre());
+        $req->bindValue("tag", $photo->getTag());
+        $req->bindValue("idPhoto", $photo->getId());
         $req->execute();
 
         if ($req) {
@@ -188,5 +225,26 @@ class PhotoManager extends Model
         }
 
         return $status;
+    }
+
+    /**
+     * Supprimer toutes les photos d'un utilisateur
+     * 
+     * @param int $idUser L'identifiant de l'utilisateur
+     * @return ?int Le code status
+     */
+    public function deleteUserPhotos(int $idUser): ?int
+    {
+        $sql = "DELETE FROM photo WHERE id_user = :idUser";
+
+        $req = $this->getBDD()->prepare($sql);
+        $req->bindValue("idUser", $idUser);
+        $req->execute();
+
+        if ($req) {
+            return 200;
+        } else {
+            throw new Exception('Erreur lors de la suppression des photos de l\'utilisateur', 500);
+        }
     }
 }

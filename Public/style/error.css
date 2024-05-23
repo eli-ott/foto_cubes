@@ -1,0 +1,42 @@
+.error {
+	height: 100vh;
+	width: 100vw;
+
+	background: center / cover url('../assets/image/form-background.jpg') no-repeat;
+}
+.error div {
+	height: 50%;
+	width: 50%;
+
+	gap: var(--margin-m);
+
+	background: var(--dark-50);
+	border-radius: var(--radius-l);
+	padding: var(--margin-m);
+}
+.error div * {
+	color: var(--light);
+}
+.error div h2 {
+	font-size: var(--desktop-font-size-xl);
+	align-self: center;
+}
+.error div a {
+	outline: none;
+	cursor: pointer;
+	text-decoration: none;
+
+	transition: 0.15s;
+	width: 35%;
+	padding: var(--margin-xs);
+
+	font-size: var(--desktop-font-size-s);
+
+	color: var(--light);
+	border: solid 2px var(--light);
+	border-radius: var(--radius-m);
+}
+.error div a:hover {
+	background: var(--blue);
+	color: var(--light);
+}
