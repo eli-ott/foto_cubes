@@ -260,6 +260,8 @@ class CompteController
             } else {
                 Utils::newAlert('Vous n\'êtes pas administrateur', Constants::TYPES_MESSAGES['error']);
             }
+
+            Utils::redirect(URL . 'galerie/1');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'erreur');
@@ -322,7 +324,8 @@ class CompteController
      *
      * @return Photographe[] Les comptes warns
      */
-    public function getComptesWarn(): array {
+    public function getComptesWarn(): array
+    {
         if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');

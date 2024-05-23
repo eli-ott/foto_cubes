@@ -106,6 +106,9 @@ try {
 
             $mainController->resetMdp();
             break;
+        case 'erreur':
+            $mainController->error(404, $_SESSION['alert']['message']);
+            break;
         case 'form':
             switch ($param) {
                 case 'connexion':
@@ -143,6 +146,24 @@ try {
                     break;
                 case 'reset-mdp':
                     $compteController->resetMdp();
+                    break;
+                case 'contact-photographe':
+                    $receiver = Securite::secureHTML($_POST['mail-receveur']);
+                    $objet = Securite::secureHTML($_POST['objet']);
+                    $content = Securite::secureHTML($_POST['content']);
+
+                    try {
+                        SendMail::sendMail($receiver, $objet, $content);
+
+                        Utils::newAlert('Mail envoyé avec succès', Constants::TYPES_MESSAGES['success']);
+                        Utils::redirect(URL . 'galerie/1');
+                    } catch (Exception $e) {
+                        Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+                        Utils::redirect(URL . 'galerie/1');
+                    }
+                    break;
+                case 'warn-user':
+                    $compteController->flagUser();
                     break;
             }
             break;
