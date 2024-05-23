@@ -1,8 +1,6 @@
 <?php
 
 
-
-
 class CompteController
 {
     /**
@@ -36,7 +34,7 @@ class CompteController
 
     /**
      * Permet de vérifier si un pseudo a déjà été utilisé ou non
-     * 
+     *
      * @param string $pseudo Le pseudo
      * @return bool Si le pseudo a déjà été utilisé ou non
      */
@@ -96,7 +94,7 @@ class CompteController
 
             setcookie('token', Utils::generateToken(), time() + Utils::hoursToSeconds(24), '/');
             setcookie('id', $newPhotographe->getId(), time() + Utils::hoursToSeconds(24), '/');
-            setcookie('isAdmin', $this->compteManager->isAdmin($newPhotographe->getId()), time() + Utils::hoursToSeconds(24), '/');
+            setcookie('isAdmin', (int)$this->compteManager->isAdmin($newPhotographe->getId()), time() + Utils::hoursToSeconds(24), '/');
 
             Utils::verifMail($photographe->getEmail());
 
@@ -166,8 +164,8 @@ class CompteController
 
     /**
      * Permet de récupérer les infos de l'utilisateur'
-     * 
-     * @return Photographe Le photographe
+     *
+     * @return ?Photographe Le photographe
      */
     public function getUserInfo(): ?Photographe
     {
@@ -185,7 +183,7 @@ class CompteController
     }
 
     /**
-     * Permet de vérifier si le code entrée est le bon
+     * Permet de vérifier si le code entré est le bon
      */
     public function validateEmail(): void
     {
@@ -255,13 +253,15 @@ class CompteController
         }
 
         try {
-            if ($this->compteManager->isAdmin($_COOKIE['id'])) {
+            if (Utils::userAdmin()) {
                 $this->compteManager->flagUser($this->compteManager->getUserId($pseudo));
 
                 Utils::newAlert('Flag ajouté avec succès', Constants::TYPES_MESSAGES['success']);
             } else {
                 Utils::newAlert('Vous n\'êtes pas administrateur', Constants::TYPES_MESSAGES['error']);
             }
+
+            Utils::redirect(URL . 'galerie/1');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'erreur');
@@ -281,7 +281,7 @@ class CompteController
         }
 
         try {
-            if ($this->compteManager->isAdmin($_COOKIE['id'])) {
+            if (Utils::userAdmin()) {
                 $this->compteManager->makeUserAdmin($this->compteManager->getUserId($pseudo));
 
                 Utils::newAlert('L\'utilisateur est maintenant admin', Constants::TYPES_MESSAGES['success']);
@@ -291,6 +291,56 @@ class CompteController
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'erreur');
+        }
+    }
+
+    /**
+     * Permet de récupérer les stats de la page admin
+     *
+     * @return StatsAdmin Les stats
+     */
+    public function getStatsAdmin(): StatsAdmin
+    {
+        if (!Utils::userConnected()) {
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
+        }
+
+        if (!Utils::userAdmin()) {
+            Utils::newAlert('Vous n\'êtes pas administrateur', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'profil');
+        }
+
+        try {
+            return $this->compteManager->getStatsAdmin($_COOKIE['id']);
+        } catch (Exception $e) {
+            Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'profil');
+        }
+    }
+
+    /**
+     * Permet de récupérer les comptes warns
+     *
+     * @return Photographe[] Les comptes warns
+     */
+    public function getComptesWarn(): array
+    {
+        if (!Utils::userConnected()) {
+            Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'connexion');
+        }
+
+        if (!Utils::userAdmin()) {
+            Utils::newAlert('Vous n\'êtes pas administrateur', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'profil');
+        }
+
+        try {
+            return $this->compteManager->getComptesWarn();
+        } catch (Exception $e) {
+            Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'profil');
         }
     }
 }

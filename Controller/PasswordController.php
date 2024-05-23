@@ -49,7 +49,7 @@ class PasswordController
 
             setcookie('token', Utils::generateToken(), time() + Utils::hoursToSeconds(24), '/');
             setcookie('id', $idUser, time() + Utils::hoursToSeconds(24), '/');
-            setcookie('isAdmin', $this->compteManager->isAdmin($idUser), time() + Utils::hoursToSeconds(24), '/');
+            setcookie('isAdmin', (int)$this->compteManager->isAdmin($idUser), time() + Utils::hoursToSeconds(24), '/');
 
             Utils::redirect(URL . 'profil/1');
         } catch (Exception $e) {

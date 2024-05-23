@@ -6,12 +6,14 @@ define("URL", str_replace("index.php", "", (isset($_SERVER['HTTPS']) ? "https" :
 require_once('Services/types/Photographe.php');
 require_once('Services/Securite.php');
 require_once("Services/types/Photo.php");
+require_once('Services/types/StatsAdmin.php');
 require_once("./controller/MainController.php");
 
 require_once('Model/Render.php');
 require_once("Model/CompteManager.php");
 require_once('Model/PasswordManager.php');
 require_once('Model/PhotoManager.php');
+
 require_once('Services/types/Photo.php');
 require_once("./controller/MainController.php");
 require_once("./controller/CompteController.php");
@@ -54,7 +56,11 @@ try {
                 Utils::redirect(URL . 'connexion');
             }
 
-            $mainController->profil();
+            if (Utils::userAdmin()) {
+                $mainController->admin();
+            } else {
+                $mainController->profil();
+            }
             break;
         case 'connexion':
             if (Utils::userConnected()) {
@@ -100,6 +106,9 @@ try {
 
             $mainController->resetMdp();
             break;
+        case 'erreur':
+            $mainController->error(404, $_SESSION['alert']['message']);
+            break;
         case 'form':
             switch ($param) {
                 case 'connexion':
@@ -137,6 +146,24 @@ try {
                     break;
                 case 'reset-mdp':
                     $compteController->resetMdp();
+                    break;
+                case 'contact-photographe':
+                    $receiver = Securite::secureHTML($_POST['mail-receveur']);
+                    $objet = Securite::secureHTML($_POST['objet']);
+                    $content = Securite::secureHTML($_POST['content']);
+
+                    try {
+                        SendMail::sendMail($receiver, $objet, $content);
+
+                        Utils::newAlert('Mail envoyé avec succès', Constants::TYPES_MESSAGES['success']);
+                        Utils::redirect(URL . 'galerie/1');
+                    } catch (Exception $e) {
+                        Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
+                        Utils::redirect(URL . 'galerie/1');
+                    }
+                    break;
+                case 'warn-user':
+                    $compteController->flagUser();
                     break;
             }
             break;

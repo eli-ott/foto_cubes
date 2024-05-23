@@ -6,10 +6,10 @@ class CompteManager extends Model
 {
     /**
      * Permet de créer un nouveau compte
-     * 
-     * @var Photographe $photographe
-     * @var int L'id du mot de passe 
+     *
      * @return Photographe Le dernier compte ajouté
+     * @var int L'id du mot de passe
+     * @var Photographe $photographe
      */
     public function addUser(Photographe $photographe): Photographe
     {
@@ -61,9 +61,9 @@ class CompteManager extends Model
 
     /**
      * Mets à jour un compte d'un photographe
-     * 
+     *
      * @param int $idUser L'identifiant de l'utilisateur
-     * @return int Le code statut 
+     * @return int Le code statut
      */
     public function validateAccount(int $idUser): int
     {
@@ -84,9 +84,9 @@ class CompteManager extends Model
 
     /**
      * Permet de supprimer un compte
-     * 
+     *
      * @param int $idUser L'identifiant de l'utilisateur à supprimer
-     * @return int Le code statut 
+     * @return int Le code statut
      */
     public function deleteUser(int $idUser): int
     {
@@ -107,7 +107,7 @@ class CompteManager extends Model
 
     /**
      * Permet de récupérer les informations de l'utilisateur
-     * 
+     *
      * @param int $idUser L'identifiant de l'utilisateur
      * @return Photographe Les informations de l'utilisateur
      */
@@ -142,7 +142,7 @@ class CompteManager extends Model
 
     /**
      * Permet de récupérer l'identifiant d'un utilisateur à partir de son pseudo
-     * 
+     *
      * @param string $pseudo Le pseudo
      * @return int L'identifiant de l'utilisateur
      */
@@ -165,7 +165,7 @@ class CompteManager extends Model
 
     /**
      * Permet de récupérer si un compte est actif ou non
-     * 
+     *
      * @param int $idUser L'identifiant de l'utilisateur
      * @return bool Si le compte est actif ou non
      */
@@ -181,9 +181,9 @@ class CompteManager extends Model
     }
 
     /**
-     * Récupère le nombre d'utilisateur utilisant le pseudo 
+     * Récupère le nombre d'utilisateur utilisant le pseudo
      * Ce nombre est toujours censé être 0 ou 1
-     * 
+     *
      * @param string $pseudo
      * @return int Le nombre d'user utilisant le $pseudo
      */
@@ -200,7 +200,7 @@ class CompteManager extends Model
 
     /**
      * Permet de savoir si un utilisateur est admin ou non
-     * 
+     *
      * @param int $idUser L'identifiant de l'utilisateur
      * @param bool Si l'utilisateur est admin ou non
      */
@@ -217,7 +217,7 @@ class CompteManager extends Model
 
     /**
      * Permet de récupérer l'email de l'utilisateur en fonction de son id_mot_de_passe
-     * 
+     *
      * @param int $idUser L'identifiant de l'utilisateur
      * @return string Son email
      */
@@ -234,7 +234,7 @@ class CompteManager extends Model
 
     /**
      * Permet d'ajouter un flag à un utilisateur
-     * 
+     *
      * @param int $idUSer L'identifiant de l'utilisateur à Flag
      * @return ?int Le code status
      */
@@ -255,7 +255,7 @@ class CompteManager extends Model
 
     /**
      * Permet de passer un utilisateur administrateur
-     * 
+     *
      * @param int $idUser L'identifiant de l'utilisateur
      * @return ?int Le code status
      */
@@ -276,7 +276,7 @@ class CompteManager extends Model
 
     /**
      * Permet de mettre à jour les infos de l'utilisateur
-     * 
+     *
      * @param int $idUSer L'identifiant de l'utilisateur
      * @param string $field Le champs à mettre à jour
      * @param string $value La nouvelle valeur
@@ -321,5 +321,73 @@ class CompteManager extends Model
         } else {
             throw new Exception('Erreur lors de la mise à jour de la colonne ' . $field, 500);
         }
+    }
+
+    /**
+     * Permet de récupérer les stats de la page admin
+     *
+     * @param int $idUser L'identifiant de l'utilisateur
+     * @return StatsAdmin Les stats admin
+     * @throws Exception
+     */
+    public function getStatsAdmin(int $idUser): StatsAdmin
+    {
+        $nbComptesSql = "SELECT COUNT(id_user) as nbComptes FROM utilisateur";
+        $nbComptesValidesSql = "SELECT COUNT(id_user) as nbComptesValides FROM utilisateur WHERE compte_valide = 1";
+        $nbComptesWarn = "SELECT COUNT(id_user) as nbComptesWarn FROM utilisateur WHERE warn = 1";
+
+        $reqTotalComptes = $this->getBDD()->prepare($nbComptesSql);
+        $reqTotalComptes->execute();
+        $nbComptes = $reqTotalComptes->fetch(PDO::FETCH_ASSOC)['nbComptes'];
+        $reqTotalComptes->closeCursor();
+
+        $reqComptesValides = $this->getBDD()->prepare($nbComptesValidesSql);
+        $reqComptesValides->execute();
+        $nbComptesValides = $reqComptesValides->fetch(PDO::FETCH_ASSOC)['nbComptesValides'];
+        $reqComptesValides->closeCursor();
+
+        $reqComptesWarn = $this->getBDD()->prepare($nbComptesWarn);
+        $reqComptesWarn->execute();
+        $nbComptesWarn = $reqComptesWarn->fetch(PDO::FETCH_ASSOC)['nbComptesWarn'];
+        $reqComptesWarn->closeCursor();
+
+        $photosSql = "SELECT COUNT(id_photo) as nbPhotos FROM photo";
+
+        $reqPhotos = $this->getBDD()->prepare($photosSql);
+        $reqPhotos->execute();
+        $valPhotos = $reqPhotos->fetch(PDO::FETCH_ASSOC);
+
+        return new StatsAdmin(
+            $valPhotos['nbPhotos'],
+            $nbComptes,
+            $nbComptesValides,
+            $nbComptesWarn
+        );
+    }
+
+    /**
+     * Permet de récupérer les comptes warns
+     *
+     * @return Photographe[] Les comptes Warn
+     * @throws Exception
+     */
+    public function getComptesWarn(): array
+    {
+        $sql = "SELECT nom, prenom, pseudo, email FROM utilisateur WHERE warn = 1";
+
+        $req = $this->getBDD()->prepare($sql);
+        $req->execute();
+
+        $data = [];
+        while ($row = $req->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = new Photographe(
+                nom: $row['nom'],
+                prenom: $row['prenom'],
+                pseudo: $row['pseudo'],
+                email: $row['email']
+            );
+        }
+
+        return $data;
     }
 }

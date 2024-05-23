@@ -15,23 +15,23 @@ class Photo implements JsonSerializable
      */
     private string $tag;
     /**
-     * @var string $source La source de la photo sous forme de blob
+     * @var ?string $source La source de la photo sous forme de blob
      */
     private ?string $source;
     /** 
-     * @var string $datePriseVue La date de prise de vue
+     * @var ?string $datePriseVue La date de prise de vue
      */
     private ?string $datePriseVue;
     /**
-     * @var string $datePublication La date de publication de la photo
+     * @var ?string $datePublication La date de publication de la photo
      */
     private ?string $datePublication;
     /**
-     * @var Photographe Le photographe
+     * @var ?Photographe Le photographe
      */
     private ?Photographe $photographe;
     /**
-     * @var string $orientation L'orientation de l'image
+     * @var ?string $orientation L'orientation de l'image
      */
     private ?string $orientation;
 
@@ -42,10 +42,10 @@ class Photo implements JsonSerializable
      * @param string $titre Le titre de la photo
      * @param string $tag Le tag de la photo
      * @param mixed $source La source de la photo
-     * @param string $datePriseVue La date de la prise de vue
-     * @param string $datePublication La date de publication de la photo sur le site
-     * @param Photographe $photographe Le photographe
-     * @param string $orientation
+     * @param ?string $datePriseVue La date de la prise de vue
+     * @param ?string $datePublication La date de publication de la photo sur le site
+     * @param ?Photographe $photographe Le photographe
+     * @param ?string $orientation
      */
     public function __construct(
         ?int $id = null,
@@ -148,9 +148,9 @@ class Photo implements JsonSerializable
     /**
      * Sérialize le tableau associatif
      * 
-     * @return mixed Le tableau associatif content les valeurs de la classe
+     * @return array Le tableau associatif content les valeurs de la classe
      */
-    public function jsonSerialize(): mixed
+    public function jsonSerialize(): array
     {
         return [
             "titre" => $this->titre,
