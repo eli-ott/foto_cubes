@@ -3,12 +3,19 @@
 require_once('Services/SendMail.php');
 require_once('Model/MessageManager.php');
 
+/**
+ * Le controller pour les messages
+ */
 class MessageController
 {
     /**
      * @var MessageManager $messageManager Le manager pour les messages
      */
-    private $messageManager;
+    private MessageManager $messageManager;
+    /**
+     * @var CompteManager $compteManager Le manager pour les comptes
+     */
+    private CompteManager $compteManager;
 
     /**
      * Constructeur
@@ -16,6 +23,7 @@ class MessageController
     public function __construct()
     {
         $this->messageManager = new MessageManager;
+        $this->compteManager = new CompteManager();
     }
 
     /**
@@ -25,11 +33,12 @@ class MessageController
     {
         $objet = Securite::secureHTML($_POST['subject']);
         $message = Securite::secureHTML($_POST['message']);
-        $sender = Securite::secureHTML($_POST['sender']);
         $receiver = Securite::secureHTML($_POST['receiver']);
 
         try {
-            SendMail::sendMail($sender, $objet, $message);
+            SendMail::sendMail($receiver, $objet, $message);
+
+            $sender = $this->compteManager->getUserEmail($_COOKIE['id']);
             $this->messageManager->saveMail($message, $receiver, $sender);
 
             Utils::newAlert('Mail envoyé avec succès', Constants::TYPES_MESSAGES['success']);

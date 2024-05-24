@@ -2,14 +2,17 @@
 
 require_once("Services/Model.php");
 
+/**
+ * Le manager pour les comptes exécutant toutes les requêtes SQL
+ */
 class CompteManager extends Model
 {
     /**
      * Permet de créer un nouveau compte
      *
+     * @param Photographe $photographe Le photographe
      * @return Photographe Le dernier compte ajouté
-     * @var int L'id du mot de passe
-     * @var Photographe $photographe
+     * @throws Exception
      */
     public function addUser(Photographe $photographe): Photographe
     {
@@ -19,12 +22,12 @@ class CompteManager extends Model
         $addUserReq = $this->getBDD()->prepare($addUserSql);
 
         $addUserReq->bindValue("idMdp", $photographe->getIdMdp(), PDO::PARAM_INT);
-        $addUserReq->bindValue("pseudo", $photographe->getPseudo(), PDO::PARAM_STR);
-        $addUserReq->bindValue("nom", $photographe->getNom(), PDO::PARAM_STR);
-        $addUserReq->bindValue("prenom", $photographe->getPrenom(), PDO::PARAM_STR);
-        $addUserReq->bindValue("email", $photographe->getEmail(), PDO::PARAM_STR);
+        $addUserReq->bindValue("pseudo", $photographe->getPseudo());
+        $addUserReq->bindValue("nom", $photographe->getNom());
+        $addUserReq->bindValue("prenom", $photographe->getPrenom());
+        $addUserReq->bindValue("email", $photographe->getEmail());
         $addUserReq->bindValue("age", $photographe->getAge(), PDO::PARAM_INT);
-        $addUserReq->bindValue("typePhotoPref", $photographe->getTypePhotoPref(), PDO::PARAM_STR);
+        $addUserReq->bindValue("typePhotoPref", $photographe->getTypePhotoPref());
 
         $addUserReq->execute();
 
@@ -64,6 +67,7 @@ class CompteManager extends Model
      *
      * @param int $idUser L'identifiant de l'utilisateur
      * @return int Le code statut
+     * @throws Exception
      */
     public function validateAccount(int $idUser): int
     {
@@ -87,6 +91,7 @@ class CompteManager extends Model
      *
      * @param int $idUser L'identifiant de l'utilisateur à supprimer
      * @return int Le code statut
+     * @throws Exception
      */
     public function deleteUser(int $idUser): int
     {
@@ -123,12 +128,12 @@ class CompteManager extends Model
         $data = null;
         while ($row = $req->fetch(PDO::FETCH_ASSOC)) {
             $data = new Photographe(
-                (int)$row['id_user'],
-                (int)$row['id_mot_de_passe'],
                 $row['nom'],
                 $row['prenom'],
                 $row['pseudo'],
                 $row['email'],
+                (int)$row['id_user'],
+                (int)$row['id_mot_de_passe'],
                 (int)$row['age'],
                 $row['type_photo_pref'],
                 $row['date_creation'],
@@ -145,6 +150,7 @@ class CompteManager extends Model
      *
      * @param string $pseudo Le pseudo
      * @return int L'identifiant de l'utilisateur
+     * @throws Exception
      */
     public function getUserId(string $pseudo): int
     {
@@ -181,8 +187,8 @@ class CompteManager extends Model
     }
 
     /**
-     * Récupère le nombre d'utilisateur utilisant le pseudo
-     * Ce nombre est toujours censé être 0 ou 1
+     * Récupère le nombre d'utilisateurs utilisant le pseudo
+     * Ce nombre est toujours censé être 0 ou 1.
      *
      * @param string $pseudo
      * @return int Le nombre d'user utilisant le $pseudo
@@ -192,7 +198,7 @@ class CompteManager extends Model
         $sql = 'SELECT COUNT(id_user) as nombre FROM utilisateur WHERE `pseudo` = :pseudo';
 
         $req = $this->getBDD()->prepare($sql);
-        $req->bindValue('pseudo', $pseudo, PDO::PARAM_STR);
+        $req->bindValue('pseudo', $pseudo);
         $req->execute();
 
         return $req->fetch(PDO::FETCH_ASSOC)['nombre'];
@@ -202,7 +208,7 @@ class CompteManager extends Model
      * Permet de savoir si un utilisateur est admin ou non
      *
      * @param int $idUser L'identifiant de l'utilisateur
-     * @param bool Si l'utilisateur est admin ou non
+     * @return bool Si l'utilisateur est admin ou non
      */
     public function isAdmin(int $idUser): bool
     {
@@ -237,6 +243,7 @@ class CompteManager extends Model
      *
      * @param int $idUSer L'identifiant de l'utilisateur à Flag
      * @return ?int Le code status
+     * @throws Exception
      */
     public function flagUser(int $idUSer): ?int
     {
@@ -257,9 +264,10 @@ class CompteManager extends Model
      * Permet de passer un utilisateur administrateur
      *
      * @param int $idUser L'identifiant de l'utilisateur
-     * @return ?int Le code status
+     * @return int Le code status
+     * @throws Exception
      */
-    public function makeUserAdmin(int $idUser): ?int
+    public function makeUserAdmin(int $idUser): int
     {
         $sql = 'UPDATE utilisateur SET id_admin = 1 WHERE id_user = :idUser';
 
@@ -277,37 +285,22 @@ class CompteManager extends Model
     /**
      * Permet de mettre à jour les infos de l'utilisateur
      *
-     * @param int $idUSer L'identifiant de l'utilisateur
-     * @param string $field Le champs à mettre à jour
+     * @param string $field Le champ à mettre à jour
      * @param string $value La nouvelle valeur
-     * @return ?int Le code status
+     * @return int Le code status
+     * @throws Exception
      */
-    public function updateUser(string $field, string $value, int $idUser,): ?int
+    public function updateUser(string $field, string $value, int $idUser,): int
     {
-        $column = '';
 
-        switch ($field) {
-            case 'nom':
-                $column = 'nom';
-                break;
-            case 'prenom':
-                $column = 'prenom';
-                break;
-            case 'pseudo':
-                $column = 'pseudo';
-                break;
-            case 'email':
-                $column = 'email';
-                break;
-            case 'mail':
-                $column = 'email';
-                break;
-            case 'age':
-                $column = 'age';
-                break;
-            default:
-                throw new Exception('La colonne choisit n\'existe pas', 400);
-        }
+        $column = match ($field) {
+            'nom' => 'nom',
+            'prenom' => 'prenom',
+            'pseudo' => 'pseudo',
+            'mail', 'email' => 'email',
+            'age' => 'age',
+            default => throw new Exception('La colonne choisit n\'existe pas', 400),
+        };
 
         $sql = 'UPDATE utilisateur SET (' . $column . ') VALUES (:newVal) WHERE id_user = :idUser';
 
@@ -326,11 +319,10 @@ class CompteManager extends Model
     /**
      * Permet de récupérer les stats de la page admin
      *
-     * @param int $idUser L'identifiant de l'utilisateur
      * @return StatsAdmin Les stats admin
      * @throws Exception
      */
-    public function getStatsAdmin(int $idUser): StatsAdmin
+    public function getStatsAdmin(): StatsAdmin
     {
         $nbComptesSql = "SELECT COUNT(id_user) as nbComptes FROM utilisateur";
         $nbComptesValidesSql = "SELECT COUNT(id_user) as nbComptesValides FROM utilisateur WHERE compte_valide = 1";
@@ -381,10 +373,10 @@ class CompteManager extends Model
         $data = [];
         while ($row = $req->fetch(PDO::FETCH_ASSOC)) {
             $data[] = new Photographe(
-                nom: $row['nom'],
-                prenom: $row['prenom'],
-                pseudo: $row['pseudo'],
-                email: $row['email']
+                $row['nom'],
+                $row['prenom'],
+                $row['pseudo'],
+                $row['email'],
             );
         }
 
