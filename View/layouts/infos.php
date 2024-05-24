@@ -21,6 +21,11 @@
             <i>Age:</i> <b><?= $infos->getAge() ?></b>
             <button><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
         </p>
+        <?php if ($infos->getWarn()): ?>
+            <p class="flex start">
+                <b style="color: orange">Vous avez été warn. Attention aux prochaines photos que vous publiez</b>
+            </p>
+        <?php endif; ?>
     </div>
     <div class="buttons flex start">
         <form action="<?= URL ?>form/disconnect" method="post">

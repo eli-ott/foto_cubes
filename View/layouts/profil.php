@@ -8,10 +8,10 @@
     </form>
 <?php else : ?>
     <?php require_once("View/layouts/infos.php"); ?>
-    <? var_dump($_SESSION['alert']); ?>
+    <?php var_dump($_SESSION['alert']); ?>
     <div class="photos-container flex">
         <h2 class="photos">Mes photos :</h2> <a href="<?= URL ?>ajouter" class="flex center">
-            <img src="<?= URL ?>Public/assets/image/add-photo.svg" alt="">
+            <img src="<?= URL ?>Public/assets/image/add-photo.svg" alt="" />
             Ajouter une photo
         </a>
     </div>

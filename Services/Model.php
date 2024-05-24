@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * La class model pour récupérer la connexion à la BDD
+ */
 abstract class Model
 {
     /**
@@ -10,7 +13,7 @@ abstract class Model
     /**
      * Set la connexion à la base de donnée
      */
-    private static function setBDD()
+    private static function setBDD(): void
     {
         self::$pdo = new PDO("mysql:host=localhost;dbname=foto;charset=utf8", "root", "");
         self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);

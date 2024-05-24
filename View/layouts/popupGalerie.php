@@ -11,10 +11,10 @@
             </div>
             <form action="<?= URL ?>form/contact-photographe" method="post" class="flex column center">
                 <h5>Contacter le photographe</h5>
-                <input type="email" name="mail-receveur" style="visibility: hidden; position: absolute"
+                <input type="email" name="receiver" style="visibility: hidden; position: absolute"
                        class="mail-receveur"/>
-                <input type="text" name="objet" placeholder="Object">
-                <input type="text" name="content" placeholder="Contenu du mail">
+                <input type="text" name="subject" placeholder="Object">
+                <input type="text" name="message" placeholder="Contenu du mail">
                 <button type="submit">Envoyer le mail</button>
             </form>
         </div>

@@ -1,7 +1,7 @@
 <?php foreach ($photos["photos"] as $photo) : ?>
-    <figure class="image-container flex column start"
-            onclick="showModal('<?= URL . $photo->getSource(); ?>', '<?= $photo->getTitre(); ?>', '<?= $photo->getPhotographe()->getPseudo(); ?>', '<?= $photo->getTag(); ?>', '<?= $photo->getPhotographe()->getEmail(); ?>')">
-        <div class="image" style="--bg-image: url('<?= URL ?><?= $photo->getSource() ?>"></div>
+    <figure class="image-container flex column start">
+        <div onclick="showModal('<?= URL . $photo->getSource(); ?>', '<?= $photo->getTitre(); ?>', '<?= $photo->getPhotographe()->getPseudo(); ?>', '<?= $photo->getTag(); ?>', '<?= $photo->getPhotographe()->getEmail(); ?>')"
+             class="image" style="--bg-image: url('<?= URL ?><?= $photo->getSource() ?>"></div>
         <!-- PHOTO FOR PROFIL PAGE -->
         <?php if (isset($compteActif) && $compteActif) : ?>
             <form action="<?= URL ?>form/delete-photo" method="post" style="visibility: hidden; position: absolute"
