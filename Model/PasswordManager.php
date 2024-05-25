@@ -1,103 +1,107 @@
 <?php
-require_once('./Services/Model.php');
-require_once('./Services/types/MotDePasse.php');
+require_once('./Model/Model.php');
 
 class PasswordManager extends Model
 {
     /**
-     * Update le mot de passe de l’utilisateur
+     * Update le mot de passe de l'utiliateur
      * 
      * @param string $hash Le mot de passe
-     * @param int $id_user Récupère l'id de l'utilisateur qui souhaite changer son password
-     * @return int Le code status de la requête
+     * @param int $nb_essais Référence le nombre de fois que le mot de passe a été changé
+     * @param int $id_user Récupère l'id de l'utiliateur qui souhaite changer son password
+     * @return int Le code status de la requete
      */
-    public function updatePassword(string $hash, int $id_user): int
+    public function updatePassword(string $hash, int $nb_essais, int $id_user): int
     {
-        $sql = "UPDATE mot_de_passe 
-            JOIN utilisateur user ON mot_de_passe.id_mot_de_passe = user.id_mot_de_passe 
-            SET `hash` = :mdp, date_reinitialisation = NOW() 
-            WHERE user.id_user = :id_user";
+        $sql = "UPDATE mot_de_passe mdp JOIN utilisateur user ON mdp.id_mot_de_passe = user.id_mot_de_passe SET `hash` = :mdp, nb_essais = :nb_essais WHERE user.id_user = :id_user";
 
-        $req = $this->getBDD()->prepare($sql);
-        $req->bindValue("mdp", $hash);
-        $req->bindValue("id_user", $id_user);
+        $req = $this->getBDD()->prepare($sql, [
+            "mdp" => $hash,
+            "nb_essais" => $nb_essais,
+            "id_user" => $id_user
+        ]);
         $req->execute();
 
-        if ($req) {
-            return 200;
+        if (!$req) {
+            $status = 500;
         } else {
-            throw new Exception('Erreur lors de la mise à jour du mot de passe', 500);
+            $status = 200;
         }
+
+        return $status;
     }
 
     /**
-     * Supprime le compte de l'utilisateur
+     * Supprime le compte de l'utiliateur
      * 
-     * @param int $idPassword L'identifiant du mot de passe à supprimer
-     * @return int Le code status de la requête
+     * @param int $id_user Récupère l'id de l'utiliateur qui souhaite supprimer son compte
+     * @return int Le code status de la requete
      */
-    public function deletePassword(int $idPassword): int
+    public function deletePassword(int $id_user): int
     {
-        $sql = "DELETE FROM mot_de_passe WHERE id_mot_de_passe = :idPassword";
+        $sql = "DELETE mot_de_passe FROM mot_de_passe INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe WHERE utilisateur.id_user = :id_user";
 
-        $req = $this->getBDD()->prepare($sql);
-        $req->bindValue('idPassword', $idPassword);
+        $req = $this->getBDD()->prepare($sql, [
+            "id_user" => $id_user
+        ]);
         $req->execute();
 
-        if ($req) {
-            return 200;
+        if (!$req) {
+            $status = 500;
         } else {
-            throw new Exception('Erreur lors de la suppression du mot de passe', 500);
+            $status = 200;
         }
+
+        return $status;
     }
 
     /**
-     * Récupérer le password de l'utilisateur en fonction de son pseudo
+     * Récuperer le password de l'utiliateur
      * 
-     * @param int $idUser L'identifiant du user
-     * @return MotDePasse Les données du mot de passe
+     * @param int $id_mot_de_passe Récupère le mdp de l'utilisateur
+     * @return int Le code status dela requete
      */
-    public function getPassword(int $idUser): MotDePasse
+    public function getPassword(int $id_mot_de_passe): int
     {
-        $sql = "SELECT mot_de_passe.id_mot_de_passe, `hash`, nb_essais, date_reinitialisation, utilisateur.id_user, utilisateur.pseudo 
-            FROM mot_de_passe 
-            INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe 
-            WHERE utilisateur.id_user = :idUser";
+        $sql = "SELECT mot_de_passe.id_mot_de_passe, `hash`, date_reinitialisation, utilisateur.id_user, utilisateur.pseudo FROM mot_de_passe INNER JOIN utilisateur ON mot_de_passe.id_mot_de_passe = utilisateur.id_mot_de_passe WHERE mot_de_passe.id_mot_de_passe = :id_mot_de_passe";
 
-        $req = $this->getBDD()->prepare($sql);
-        $req->bindValue('idUser', $idUser);
+        $req = $this->getBDD()->prepare($sql, [
+            "id_mot_de_passe" => $id_mot_de_passe
+        ]);
         $req->execute();
 
-        while ($row = $req->fetch(PDO::FETCH_ASSOC)) {
-            $data = new MotDePasse(
-                $row['id_mot_de_passe'],
-                $row['hash'],
-                $row['nb_essais'],
-                $row['date_reinitialisation']
-            );
+        if (!$req) {
+            $status = 500;
+        } else {
+            $status = 200;
         }
 
-        return $data;
+        return $status;
     }
 
     /**
      * Crée un password pour un nouvelle utilisateur
      * 
-     * @param string $hash Stock le mdp hashée
-     * @return int Le code status de la requête
+     * @param int $id_mot_de_passe Crée un id pour le mdp
+     * @param string $hash Stock le mdp hasher
+     * @return int Le code status de la requete
      */
-    public function createPassword(string $hash): int
+    public function createPassword(int $id_mot_de_passe, string $hash): int
     {
-        $sql = "INSERT INTO mot_de_passe (`hash`) VALUE (:mdp)";
+        $sql = "INSERT INTO mot_de_passe ( id_mot_de_passe, `hash`) VALUE (:id_mdp, :mdp)";
 
-        $req = $this->getBDD()->prepare($sql);
-        $req->bindValue('mdp', $hash, PDO::PARAM_STR);
+        $req = $this->getBDD()->prepare($sql, [
+            "id_mdp" => $id_mot_de_passe,
+            "mdp" => $hash
+        ]);
         $req->execute();
 
-        if ($req) {
-            return $this->getBDD()->lastInsertId();
+        if (!$req) {
+            $status = 500;
         } else {
-            throw new Exception('Erreur lors de la création du mot de passe', 500);
+            $status = 200;
         }
+
+        return $status;
     }
 }
