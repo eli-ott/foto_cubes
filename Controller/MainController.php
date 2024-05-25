@@ -88,7 +88,7 @@ class MainController extends Render
             "description" => 'Profil d\'un utilisateur de Foto',
             "showFooter" => true,
             "showHeader" => true,
-            "pageScripts" => ['profil', 'photoGalerie'],
+            "pageScripts" => ['profil', 'photoGalerie', 'filter'],
             "pageCss" => ['profil', 'popupGalerie', 'infos', 'galerie', 'filtres', 'paginator', 'photoGalerie', 'nav', 'footer'],
             "infos" => $this->compteManager->getUserInfo($_COOKIE['id']),
             "compteActif" => $this->compteManager->compteActif($_COOKIE["id"]),

@@ -84,9 +84,10 @@ class PhotoManager extends Model
     /**
      * Récupère les photos de l'utilisateur en fonction de la page
      *
-     * @param int $page La page actuel du paginator
-     * @param int $idUser L'id du user
-     * @return array Les photos du user
+     * @param int $page La page actuelle du paginator
+     * @param int $idUser L'id de l'user
+     * @return array Les photos de l'user
+     * @throws Exception
      */
     public function getPhotosByUser(int $page, int $idUser): array
     {
@@ -110,19 +111,18 @@ class PhotoManager extends Model
             list($width, $height) = getimagesize($row["source"]);
 
             $photos[] = new Photo(
-                intval($row['id_photo']),
                 $row['titre'],
                 $row['tag'],
+                $row['id_photo'],
                 $row['source'],
                 $row['date_prise_vue'],
                 $row['date_publication'],
                 new Photographe(
-                    intval($row['id_user']),
-                    null,
                     $row['nom'],
                     $row['prenom'],
                     $row['pseudo'],
-                    $row['email']
+                    $row['email'],
+                    $row['id_user'],
                 ),
                 $width / $height > 1 ? 'horizontal' : 'vertical'
             );

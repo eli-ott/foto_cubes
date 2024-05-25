@@ -220,6 +220,7 @@ class Photographe implements JsonSerializable
     public function jsonSerialize(): mixed
     {
         return [
+            "id" => $this->id,
             "nom" => $this->nom,
             "prenom" => $this->prenom,
             "pseudo" => $this->pseudo,
