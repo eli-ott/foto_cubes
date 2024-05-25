@@ -1,6 +1,8 @@
 <?php
 
-
+/**
+ * Le controller pour les comptes
+ */
 class CompteController
 {
     /**
@@ -59,39 +61,34 @@ class CompteController
             Utils::redirect(URL . 'erreur');
         }
 
-        $photographe = new Photographe(
-            null,
-            null,
-            Securite::secureHTML($_POST['nom']),
-            Securite::secureHTML($_POST['prenom']),
-            Securite::secureHTML($_POST['pseudo']),
-            Securite::secureHTML($_POST['email']),
-            Securite::secureHTML($_POST['age']),
-            Securite::secureHTML($_POST['typePhotoPref']),
-            null,
-            null,
-            null
-        );
-        $password = Securite::secureHTML($_POST['password']);
-        $passwordValidation = Securite::secureHTML($_POST['passwordValidation']);
-
         if (Utils::userConnected()) {
             Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil/1');
         }
 
-        if ($password !== $passwordValidation) {
-            Utils::newAlert('Les mots de passes ne sont pas identiques', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'inscription');
-        }
-
         try {
+            $data = Utils::verifFields(['nom', 'prenom', 'pseudo', 'email', 'age', 'typePhotoPref']);
+
+            $photographe = new Photographe(
+                $data['nom'],
+                $data['prenom'],
+                $data['pseudo'],
+                $data['email'],
+                age: $data['age'],
+                typePhotoPref: $data['typePhotoPref'],
+            );
+
+            if ($data['password'] !== $data['passwordValidation']) {
+                Utils::newAlert('Les mots de passes ne sont pas identiques', Constants::TYPES_MESSAGES['error']);
+                Utils::redirect(URL . 'inscription');
+            }
+
             //vérifie que le pseudo est unique
             if ($this->pseudoUtilise($photographe->getPseudo())) {
                 throw new Exception('Le pseudo est déjà utilisé, veuillez en choisir un autre ou vous connecter', 405);
             }
 
-            $passwordId = $this->passwordManager->createPassword(Utils::hashPassword($password));
+            $passwordId = $this->passwordManager->createPassword(Utils::hashPassword($data['password']));
 
             $photographe->setIdMdp($passwordId);
 
@@ -148,18 +145,17 @@ class CompteController
      */
     public function updateInfosUser(): void
     {
-        $field = Securite::secureHTML($_POST['info']);
-        $value = Securite::secureHTML($_POST['value']);
-
         if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
         }
 
         try {
-            $this->compteManager->updateUser($field, $value, $_COOKIE['id']);
+            $data = Utils::verifFields(['info', 'value']);
 
-            Utils::newAlert($field . ' modifié avec succès', Constants::TYPES_MESSAGES['success']);
+            $this->compteManager->updateUser($data['field'], $data['value'], $_COOKIE['id']);
+
+            Utils::newAlert($data['field'] . ' modifié avec succès', Constants::TYPES_MESSAGES['success']);
             Utils::redirect(URL . 'profil/1');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
@@ -170,9 +166,9 @@ class CompteController
     /**
      * Permet de récupérer les infos de l'utilisateur'
      *
-     * @return ?Photographe Le photographe
+     * @return Photographe Le photographe
      */
-    public function getUserInfo(): ?Photographe
+    public function getUserInfo(): Photographe
     {
         if (empty($_COOKIE['token'])) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
@@ -192,7 +188,6 @@ class CompteController
      */
     public function validateEmail(): void
     {
-        $code = Securite::secureHTML($_POST['code']);
 
         if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
@@ -200,7 +195,9 @@ class CompteController
         }
 
         try {
-            if (Utils::verifCode($code)) {
+            $data = Utils::verifFields(['code']);
+
+            if (Utils::verifCode($data['code'])) {
                 $this->compteManager->validateAccount($_COOKIE['id']);
 
                 Utils::newAlert('Compte validé avec succès', Constants::TYPES_MESSAGES['success']);
@@ -225,21 +222,19 @@ class CompteController
             Utils::redirect(URL . 'erreur');
         }
 
-        $pseudo = Securite::secureHTML($_POST['pseudo']);
-        $password = Securite::secureHTML($_POST['password']);
-        $newPass = Securite::secureHTML($_POST['newPass']);
-        $newPassValidation = Securite::secureHTML($_POST['newPassValidation']);
-
-        if ($newPass !== $newPassValidation) {
-            Utils::newAlert('Les nouveaux mots de passes ne correspondent pas', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'mdp-oublie');
-        }
 
         try {
-            $idUser = $this->compteManager->getUserId($pseudo);
+            $data = Utils::verifFields(['pseudo', 'password', 'newPass', 'newPassValidation']);
 
-            if ($this->connexionController->validateConnection($idUser, $password)) {
-                $this->passwordManager->updatePassword(Utils::hashPassword($newPass), $idUser);
+            if ($data['newPass'] !== $data['newPassValidation']) {
+                Utils::newAlert('Les nouveaux mots de passes ne correspondent pas', Constants::TYPES_MESSAGES['error']);
+                Utils::redirect(URL . 'mdp-oublie');
+            }
+
+            $idUser = $this->compteManager->getUserId($data['pseudo']);
+
+            if ($this->connexionController->validateConnection($idUser, $data['password'])) {
+                $this->passwordManager->updatePassword(Utils::hashPassword($data['newPass']), $idUser);
             }
 
             Utils::newAlert('Mot de passe modifié avec succès', Constants::TYPES_MESSAGES['success']);
@@ -255,7 +250,6 @@ class CompteController
      */
     public function flagUser(): void
     {
-        $pseudo = Securite::secureHTML($_POST['pseudo']);
 
         if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
@@ -263,8 +257,10 @@ class CompteController
         }
 
         try {
+            $data = Utils::verifFields(['pseudo']);
+
             if (Utils::userAdmin()) {
-                $this->compteManager->flagUser($this->compteManager->getUserId($pseudo));
+                $this->compteManager->flagUser($this->compteManager->getUserId($data['pseudo']));
 
                 Utils::newAlert('Flag ajouté avec succès', Constants::TYPES_MESSAGES['success']);
             } else {
@@ -283,7 +279,6 @@ class CompteController
      */
     public function makeUserAdmin(): void
     {
-        $pseudo = Securite::secureHTML($_POST['pseudo']);
 
         if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
@@ -291,8 +286,10 @@ class CompteController
         }
 
         try {
+            $data = Utils::verifFields(['pseudo']);
+
             if (Utils::userAdmin()) {
-                $this->compteManager->makeUserAdmin($this->compteManager->getUserId($pseudo));
+                $this->compteManager->makeUserAdmin($this->compteManager->getUserId($data['pseudo']));
 
                 Utils::newAlert('L\'utilisateur est maintenant admin', Constants::TYPES_MESSAGES['success']);
             } else {
@@ -322,7 +319,7 @@ class CompteController
         }
 
         try {
-            return $this->compteManager->getStatsAdmin($_COOKIE['id']);
+            return $this->compteManager->getStatsAdmin();
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil');

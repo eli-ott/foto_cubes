@@ -113,6 +113,7 @@ try {
             switch ($param) {
                 case 'connexion':
                     $passwordController->validateConnection();
+                    break;
                 case 'signUp':
                     $compteController->addCompte();
                     break;

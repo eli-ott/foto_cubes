@@ -1,13 +1,12 @@
 <?php
 
+/**
+ * Le type pour les photos
+ */
 class Photo implements JsonSerializable
 {
     /**
-     * @var ?int $id L'identifiant de la photo
-     */
-    private ?int $id;
-    /** 
-     * @var string $titre Le titre de la photo  
+     * @var string $titre Le titre de la photo
      */
     private string $titre;
     /**
@@ -15,10 +14,14 @@ class Photo implements JsonSerializable
      */
     private string $tag;
     /**
+     * @var ?int $id L'identifiant de la photo
+     */
+    private ?int $id;
+    /**
      * @var ?string $source La source de la photo sous forme de blob
      */
     private ?string $source;
-    /** 
+    /**
      * @var ?string $datePriseVue La date de prise de vue
      */
     private ?string $datePriseVue;
@@ -37,10 +40,10 @@ class Photo implements JsonSerializable
 
     /**
      * Le constructeur
-     * 
-     * @param ?int $id L'id de la photo
+     *
      * @param string $titre Le titre de la photo
      * @param string $tag Le tag de la photo
+     * @param ?int $id L'id de la photo
      * @param mixed $source La source de la photo
      * @param ?string $datePriseVue La date de la prise de vue
      * @param ?string $datePublication La date de publication de la photo sur le site
@@ -48,18 +51,19 @@ class Photo implements JsonSerializable
      * @param ?string $orientation
      */
     public function __construct(
-        ?int $id = null,
-        string $titre,
-        string $tag,
-        mixed $source = null,
-        string $datePriseVue = null,
-        ?string $datePublication = null,
+        string       $titre,
+        string       $tag,
+        ?int         $id = null,
+        mixed        $source = null,
+        string       $datePriseVue = null,
+        ?string      $datePublication = null,
         ?Photographe $photographe = null,
-        ?string $orientation = null
-    ) {
-        $this->id = $id;
+        ?string      $orientation = null
+    )
+    {
         $this->titre = $titre;
         $this->tag = $tag;
+        $this->id = $id;
         $this->source = $source;
         $this->datePriseVue = $datePriseVue;
         $this->datePublication = $datePublication;
@@ -77,7 +81,7 @@ class Photo implements JsonSerializable
 
     /**
      * Récupère le titre de la photo
-     * 
+     *
      * @return string Le titre
      */
     public function getTitre(): string
@@ -87,7 +91,7 @@ class Photo implements JsonSerializable
 
     /**
      * Récupère le tag de la photo
-     * 
+     *
      * @return string Le tag
      */
     public function getTag(): string
@@ -96,8 +100,8 @@ class Photo implements JsonSerializable
     }
 
     /**
-     * récupère la source de la photo en blob
-     * 
+     * Récupère la source de la photo en blob
+     *
      * @return mixed Le blob de l'image
      */
     public function getSource(): mixed
@@ -107,7 +111,7 @@ class Photo implements JsonSerializable
 
     /**
      * Récupère la date de prise de vue de la photo
-     * 
+     *
      * @return string La date de prise de vue
      */
     public function getDatePriseVue(): string
@@ -117,7 +121,7 @@ class Photo implements JsonSerializable
 
     /**
      * Récupère la date de publication de la photo
-     * 
+     *
      * @return string La date de publication de la photo
      */
     public function getDatePublication(): string
@@ -127,7 +131,7 @@ class Photo implements JsonSerializable
 
     /**
      * Récupère le photographe
-     * 
+     *
      * @return Photographe Le photographe
      */
     public function getPhotographe(): Photographe
@@ -137,7 +141,7 @@ class Photo implements JsonSerializable
 
     /**
      * Permet de récupérer l'orientation de la photo
-     * 
+     *
      * @return string L'orientation de la photo
      */
     public function getOrientation(): string
@@ -147,7 +151,7 @@ class Photo implements JsonSerializable
 
     /**
      * Sérialize le tableau associatif
-     * 
+     *
      * @return array Le tableau associatif content les valeurs de la classe
      */
     public function jsonSerialize(): array
@@ -157,7 +161,8 @@ class Photo implements JsonSerializable
             "source" => $this->source,
             "datePriseVue" => $this->datePriseVue,
             "datePublication" => $this->datePublication,
-            "photographe" => $this->photographe
+            "photographe" => $this->photographe,
+            "orientation" => $this->orientation
         ];
     }
 }
