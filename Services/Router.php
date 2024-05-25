@@ -153,6 +153,9 @@ try {
                 case 'warn-user':
                     $compteController->flagUser();
                     break;
+                case 'remove-alert':
+                    unset($_SESSION['alert']);
+                    break;
             }
             break;
         default:
