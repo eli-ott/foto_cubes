@@ -1,7 +1,8 @@
 <?php
 
-use JetBrains\PhpStorm\NoReturn;
-
+/**
+ * Toutes les fonctions utilitaires
+ */
 class Utils
 {
     /**
@@ -27,7 +28,7 @@ class Utils
     }
 
     /**
-     * Permet de redirigé de manière efficiente
+     * Permet de rediriger de manière efficiente
      *
      * @param string $url L'url pour la redirection
      */
@@ -166,5 +167,29 @@ class Utils
         } else {
             throw new Exception('Ce n\'est pas le bon code', 500);
         }
+    }
+
+    /**
+     * Permets de vérifier que les champs d'un formulaire sont remplis
+     *
+     * @param array $champs Les champs à vérifier
+     * @returns array Retourne les champs sécurisés
+     * @throws Exception
+     */
+    public static function verifFields(array $champs): array
+    {
+        $champsSecurises = [];
+
+        foreach ($champs as $champ) {
+            if (!empty($_POST[$champ])) {
+                $champsSecurises[] = [
+                    $champ => Securite::secureHTML($_POST[$champ])
+                ];
+            } else {
+                throw new Exception('Le champs ' . $champ . ' n\'est pas rempli', 405);
+            }
+        }
+
+        return $champsSecurises;
     }
 }

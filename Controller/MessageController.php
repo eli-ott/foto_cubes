@@ -36,15 +36,13 @@ class MessageController
             Utils::redirect(URL . 'erreur');
         }
 
-        $objet = Securite::secureHTML($_POST['subject']);
-        $message = Securite::secureHTML($_POST['message']);
-        $receiver = Securite::secureHTML($_POST['receiver']);
-
         try {
-            SendMail::sendMail($receiver, $objet, $message);
+            $data = Utils::verifFields(['subject', 'message', 'receiver']);
+
+            SendMail::sendMail($data['receiver'], $data['subject'], $data['message']);
 
             $sender = $this->compteManager->getUserEmail($_COOKIE['id']);
-            $this->messageManager->saveMail($message, $receiver, $sender);
+            $this->messageManager->saveMail($data['message'], $data['receiver'], $sender);
 
             Utils::newAlert('Mail envoyé avec succès', Constants::TYPES_MESSAGES['success']);
             Utils::redirect(URL . 'galerie');

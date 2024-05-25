@@ -44,13 +44,13 @@ class PasswordController
             Utils::redirect(URL . 'profil/1');
         }
 
-        $pseudo = Securite::secureHTML($_POST['pseudo']);
-        $password = Securite::secureHTML($_POST['password']);
 
         try {
-            $idUser = $this->compteManager->getUserId($pseudo);
+            $data = Utils::verifFields(['pseudo', 'password']);
 
-            $this->connexionController->validateConnection($idUser, $password);
+            $idUser = $this->compteManager->getUserId($data['pseudo']);
+
+            $this->connexionController->validateConnection($idUser, $data['password']);
 
             setcookie('token', Utils::generateToken(), time() + Utils::hoursToSeconds(24), '/');
             setcookie('id', $idUser, time() + Utils::hoursToSeconds(24), '/');
@@ -68,24 +68,24 @@ class PasswordController
      */
     public function updatePassword(): void
     {
-        $password = Securite::secureHTML($_POST['password']);
-        $newPassword = Securite::secureHTML($_POST['newPass']);
-        $newPasswordValidation = Securite::secureHTML($_POST['newPassValidation']);
 
         if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
-        };
-
-        if ($newPassword !== $newPasswordValidation) {
-            Utils::newAlert('Les deux mots de passes ne sont pas identiques', Constants::TYPES_MESSAGES['error']);
-            Utils::redirect(URL . 'profil/1');
         }
 
-        try {
-            $this->connexionController->validateConnection($_COOKIE['id'], $password);
 
-            $this->passwordManager->updatePassword(Utils::hashPassword($newPassword), $_COOKIE['id']);
+        try {
+            $data = Utils::verifFields(['password', 'newPass', 'newPassValidation']);
+
+            if ($data['newPass'] !== $data['newPassValidation']) {
+                Utils::newAlert('Les deux mots de passes ne sont pas identiques', Constants::TYPES_MESSAGES['error']);
+                Utils::redirect(URL . 'profil/1');
+            }
+
+            $this->connexionController->validateConnection($_COOKIE['id'], $data['password']);
+
+            $this->passwordManager->updatePassword(Utils::hashPassword($data['newPass']), $_COOKIE['id']);
 
             Utils::newAlert('Mot de passe changé avec succès', Constants::TYPES_MESSAGES['success']);
             Utils::redirect(URL . 'profil/1');

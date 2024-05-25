@@ -1,18 +1,18 @@
 <?php
 
-require_once("Model/PhotoManager.php");
-require_once("Model/CompteManager.php");
-
+/**
+ * Le controller pour toutes les photos
+ */
 class PhotoController
 {
     /**
      * @var PhotoManager $photoManager Le manager pour les photos
      */
-    private $photoManager;
+    private PhotoManager $photoManager;
     /**
      * @var CompteManager $compteManager Le manager pour les comptes
      */
-    private $compteManager;
+    private CompteManager $compteManager;
 
     /**
      * Constructeur
@@ -34,14 +34,14 @@ class PhotoController
         }
 
         try {
+            $data = Utils::verifFields(['titre', 'tag', 'datePriseVue']);
+
             $photo = new Photo(
-                id: null,
-                titre: Securite::secureHTML($_POST['titre']),
-                tag: Securite::secureHTML($_POST['tag']),
+                $data['titre'],
+                $data['tag'],
                 source: Utils::uploadFile($_FILES['source']),
-                datePriseVue: Securite::secureHTML($_POST['datePriseVue']),
+                datePriseVue: $data['datePriseVue'],
                 photographe: $this->compteManager->getUserInfo($_COOKIE['id']),
-                datePublication: null
             );
 
             $this->photoManager->addPhoto($photo);
@@ -64,18 +64,19 @@ class PhotoController
             Utils::redirect(URL . 'connexion');
         }
 
-        $photo = new Photo(
-            id: Securite::secureHTML($_POST['idPhoto']),
-            titre: Securite::secureHTML($_POST['titre']),
-            tag: Securite::secureHTML($_POST['tag']),
-            source: Securite::secureHTML($_POST['source']),
-            datePriseVue: Securite::secureHTML($_POST['datePriseVue']),
-            datePublication: null,
-            photographe: $this->compteManager->getUserInfo(Securite::secureHTML($_POST['idUser'])),
-            orientation: null
-        );
 
         try {
+            $data = Utils::verifFields(['idPhoto', 'titre', 'tag', 'source', 'datePriseVue']);
+
+            $photo = new Photo(
+                $data['titre'],
+                $data['tag'],
+                $data['idPhoto'],
+                $data['source'],
+                $data['datePriseVue'],
+                photographe: $this->compteManager->getUserInfo($data['idUser']),
+            );
+
             $this->photoManager->deletePhoto($photo);
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
@@ -93,18 +94,16 @@ class PhotoController
             Utils::redirect(URL . 'connexion');
         }
 
-        $photo = new Photo(
-            id: Securite::secureHTML($_POST['idPhoto']),
-            titre: Securite::secureHTML($_POST['titre']),
-            tag: Securite::secureHTML($_POST['tag']),
-            source: null,
-            datePriseVue: null,
-            datePublication: null,
-            photographe: null,
-            orientation: null
-        );
 
         try {
+            $data = Utils::verifFields(['idPhoto', 'titre', 'tag']);
+
+            $photo = new Photo(
+                $data['titre'],
+                $data['tag'],
+                $data['idPhoto'],
+            );
+
             $this->photoManager->updatePhoto($photo);
 
             Utils::newAlert('Photo modifié avec succès', Constants::TYPES_MESSAGES['success']);
@@ -117,10 +116,10 @@ class PhotoController
 
     /**
      * Permet de récupérer les photos
-     * 
-     * @return ?array Les photos
+     *
+     * @return array Les photos
      */
-    public function getPhotos(): ?array
+    public function getPhotos(): array
     {
         try {
             $url = explode('/', $_GET['page']);
@@ -133,10 +132,10 @@ class PhotoController
 
     /**
      * Permet de récupérer les photos d'un utilisateur
-     * 
-     * @return ?array Les photos de l'utilisateur
+     *
+     * @return array Les photos de l'utilisateur
      */
-    public function getPhotosByUser(): ?array
+    public function getPhotosByUser(): array
     {
         if (empty($_COOKIE['id'])) {
             Utils::newAlert('L\'utilisateur n\'a pas été trouvé', Constants::TYPES_MESSAGES['error']);
@@ -145,7 +144,8 @@ class PhotoController
 
         try {
             $url = explode('/', $_GET['page']);
-            return $this->photoManager->getPhotosByUser(Securite::secureHTML(end($url)) ?? 1, Securite::secureHTML($_COOKIE['id']));
+
+            return $this->photoManager->getPhotosByUser(Securite::secureHTML(end($url)) ?? 1, $_COOKIE['id']);
         } catch (Exception $e) {
             Utils::newAlert('Erreur lors de la récupération des photos de l\'utilisateur', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil/1');
