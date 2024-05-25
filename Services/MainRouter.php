@@ -3,6 +3,8 @@ session_start();
 define("URL", str_replace("index.php", "", (isset($_SERVER['HTTPS']) ? "https" : "http") .
     "://" . $_SERVER['HTTP_HOST'] . $_SERVER["PHP_SELF"]));
 
+require_once('Services/Constantes.php');
+require_once('Services/Utils.php');
 require_once('Services/types/Photographe.php');
 require_once('Services/Securite.php');
 require_once("Services/types/Photo.php");
@@ -110,57 +112,10 @@ try {
             $mainController->error(404, 'Il semblerait qu\'il y ai eu une erreur, veuillez réessayer s\'il vous plaît');
             break;
         case 'form':
-            switch ($param) {
-                case 'connexion':
-                    $passwordController->validateConnection();
-                    break;
-                case 'signUp':
-                    $compteController->addCompte();
-                    break;
-                case 'disconnect':
-                    $connexionController->disconnect();
-                    break;
-                case 'delete-account':
-                    $compteController->deleteCompte();
-                    break;
-                case 'ajouter-photo':
-                    $photoController->addPhoto();
-                    break;
-                case 'delete-photo':
-                    $photoController->deletePhoto();
-                    break;
-                case 'modify-photo':
-                    $photoController->updatePhoto();
-                    break;
-                case 'validate-email':
-                    $compteController->validateEmail();
-                    break;
-                case 'revalidate-email':
-                    try {
-                        Utils::verifMail($_POST['mail']);
-
-                        Utils::redirect(URL . 'valider');
-                    } catch (Exception $e) {
-                        Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
-                        Utils::redirect(URL . 'profil/1');
-                    }
-                    break;
-                case 'reset-mdp':
-                    $compteController->resetMdp();
-                    break;
-                case 'contact-photographe':
-                    $messageController->sendMail();
-                    break;
-                case 'warn-user':
-                    $compteController->flagUser();
-                    break;
-                case 'remove-alert':
-                    unset($_SESSION['alert']);
-                    break;
-            }
+            require_once('FormRouter.php');
             break;
         default:
-            // throw new Exception('Aucune page trouvé', 404);
+             throw new Exception('Aucune page trouvé', 404);
     }
 } catch (Exception $e) {
     Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
