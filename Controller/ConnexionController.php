@@ -1,20 +1,14 @@
 <?php
 
-require_once('Model/CompteManager.php');
-require_once('Model/MessageManager.php');
-require_once('Services/constantes.php');
-require_once('Services/Utils.php');
-
+/**
+ * Le controller pour les comptes
+ */
 class ConnexionController
 {
     /**
      * @var PasswordManager $passwordManager Le manager pour les mots de passes
      */
-    private $passwordManager;
-    /**
-     * @var CompteManager $compteManager Le manager pour les comptes
-     */
-    private $compteManager;
+    private PasswordManager $passwordManager;
 
     /**
      * Constructeur
@@ -22,17 +16,17 @@ class ConnexionController
     public function __construct()
     {
         $this->passwordManager = new PasswordManager;
-        $this->compteManager = new CompteManager;
     }
 
     /**
      * Permet de valider la connection
-     * 
+     *
      * @param int $idUser L'identifiant de l'utilisateur
      * @param string $password Le mot de passe
-     * @return ?int Le code status si aucune erreur
+     * @return int Le code status si aucune erreur
+     * @throws Exception
      */
-    public function validateConnection(int $idUser, string $password): ?int
+    public function validateConnection(int $idUser, string $password): int
     {
         $idUser = Securite::secureHTML($idUser);
         $password = Securite::secureHTML($password);
@@ -40,11 +34,7 @@ class ConnexionController
         $hash = $this->passwordManager->getPassword($idUser)->getHash();
 
         if (password_verify($password, $hash)) {
-            if ($this->compteManager->compteActif($idUser)) {
-                return 200;
-            } else {
-                throw new Exception('Le compte n\'est pas validé', 405);
-            }
+            return 200;
         } else {
             throw new Exception('Pseudo ou mot de passe incorrect', 405);
         }

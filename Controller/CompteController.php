@@ -67,7 +67,7 @@ class CompteController
         }
 
         try {
-            $data = Utils::verifFields(['nom', 'prenom', 'pseudo', 'email', 'age', 'typePhotoPref']);
+            $data = Utils::verifFields(['nom', 'prenom', 'pseudo', 'email', 'age', 'typePhotoPref', 'password', 'passwordValidation']);
 
             $photographe = new Photographe(
                 $data['nom'],

@@ -182,9 +182,7 @@ class Utils
 
         foreach ($champs as $champ) {
             if (!empty($_POST[$champ])) {
-                $champsSecurises[] = [
-                    $champ => Securite::secureHTML($_POST[$champ])
-                ];
+                $champsSecurises[$champ] = Securite::secureHTML($_POST[$champ]);
             } else {
                 throw new Exception('Le champs ' . $champ . ' n\'est pas rempli', 405);
             }
