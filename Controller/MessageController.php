@@ -31,6 +31,11 @@ class MessageController
      */
     public function sendMail(): void
     {
+        if (!empty($_POST['honeypot'])) {
+            Utils::newAlert('Robot détecté, le formulaire ne sera pas envoyé', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'erreur');
+        }
+
         $objet = Securite::secureHTML($_POST['subject']);
         $message = Securite::secureHTML($_POST['message']);
         $receiver = Securite::secureHTML($_POST['receiver']);

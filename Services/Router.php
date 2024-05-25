@@ -107,7 +107,7 @@ try {
             $mainController->resetMdp();
             break;
         case 'erreur':
-            $mainController->error(404, $_SESSION['alert']['message']);
+            $mainController->error(404, 'Il semblerait qu\'il y ai eu une erreur, veuillez réessayer s\'il vous plaît');
             break;
         case 'form':
             switch ($param) {

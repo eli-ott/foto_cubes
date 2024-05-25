@@ -7,7 +7,7 @@ class PhotoManager extends Model
 
     /**
      * Permet de récupérer les previews pour la page d'accueil
-     * 
+     *
      * @return array Les 5 dernières photos ajoutées
      */
     public function getPreviews(): array
@@ -54,12 +54,11 @@ class PhotoManager extends Model
                 $row['date_prise_vue'],
                 $row['date_publication'],
                 new Photographe(
-                    intval($row['id_user']),
-                    null,
                     $row['nom'],
                     $row['prenom'],
                     $row['pseudo'],
-                    $row['email']
+                    $row['email'],
+                    (int)$row['id_user']
                 ),
                 $width / $height > 1 ? 'horizontal' : 'vertical'
             );
@@ -84,7 +83,7 @@ class PhotoManager extends Model
 
     /**
      * Récupère les photos de l'utilisateur en fonction de la page
-     * 
+     *
      * @param int $page La page actuel du paginator
      * @param int $idUser L'id du user
      * @return array Les photos du user
@@ -149,7 +148,7 @@ class PhotoManager extends Model
 
     /**
      * Permet d'ajouter une photo
-     * 
+     *
      * @param Photo $photo La photo à ajouter
      * @return int Le code statut de la requête
      */
@@ -178,7 +177,7 @@ class PhotoManager extends Model
 
     /**
      * Permet de supprimer une photo
-     * 
+     *
      * @param Photo $photo La photo à supprimer
      * @return int Le code statut de la requête
      */
@@ -202,8 +201,8 @@ class PhotoManager extends Model
     }
 
     /**
-     * Permet de mettre à jour le titre et le tag d'une photo 
-     * 
+     * Permet de mettre à jour le titre et le tag d'une photo
+     *
      * @param Photo $photo La photo avec les informations à mettre à jour
      * @return int Le code statut de la requête
      */
@@ -229,7 +228,7 @@ class PhotoManager extends Model
 
     /**
      * Supprimer toutes les photos d'un utilisateur
-     * 
+     *
      * @param int $idUser L'identifiant de l'utilisateur
      * @return ?int Le code status
      */

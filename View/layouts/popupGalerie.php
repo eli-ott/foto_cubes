@@ -11,16 +11,17 @@
             </div>
             <form action="<?= URL ?>form/contact-photographe" method="post" class="flex column center">
                 <h5>Contacter le photographe</h5>
-                <input type="email" name="receiver" style="visibility: hidden; position: absolute"
+                <input type="text" name="honeypot" class="hide"/>
+                <input required type="email" name="receiver" class="hide"
                        class="mail-receveur"/>
-                <input type="text" name="subject" placeholder="Object">
-                <input type="text" name="message" placeholder="Contenu du mail">
+                <input required type="text" name="subject" placeholder="Object">
+                <input required type="text" name="message" placeholder="Contenu du mail">
                 <button type="submit">Envoyer le mail</button>
             </form>
         </div>
         <?php if (Utils::userAdmin()): ?>
             <form action="<?= URL ?>form/warn-user" method="post">
-                <input type="text" name="pseudo" class="pseudo-warn" style="visibility: hidden; position: absolute">
+                <input type="text" name="pseudo" class="pseudo-warn hide">
                 <button type="submit" class="warn">Warn l'utilisateur</button>
             </form>
         <?php endif; ?>

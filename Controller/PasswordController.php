@@ -34,6 +34,11 @@ class PasswordController
      */
     public function validateConnection(): void
     {
+        if (!empty($_POST['honeypot'])) {
+            Utils::newAlert('Robot détecté, le formulaire ne sera pas envoyé', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'erreur');
+        }
+
         if (Utils::userConnected()) {
             Utils::newAlert('Un utilisateur est déjà connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil/1');
