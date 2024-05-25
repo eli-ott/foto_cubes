@@ -54,6 +54,11 @@ class CompteController
      */
     public function addCompte(): void
     {
+        if (!empty($_POST['honeypot'])) {
+            Utils::newAlert('Robot détecté, le formulaire ne sera pas envoyé', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'erreur');
+        }
+
         $photographe = new Photographe(
             null,
             null,
@@ -215,6 +220,11 @@ class CompteController
      */
     public function resetMdp(): void
     {
+        if (!empty($_POST['honeypot'])) {
+            Utils::newAlert('Robot détecté, le formulaire ne sera pas envoyé', Constants::TYPES_MESSAGES['error']);
+            Utils::redirect(URL . 'erreur');
+        }
+
         $pseudo = Securite::secureHTML($_POST['pseudo']);
         $password = Securite::secureHTML($_POST['password']);
         $newPass = Securite::secureHTML($_POST['newPass']);

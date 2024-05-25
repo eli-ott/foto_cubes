@@ -1,5 +1,4 @@
     <section class="accueil flex start column">
-        <?= var_dump($_SESSION['alert']); ?>
         <!-- BANNER -->
         <div class="banner flex start">
             <div class="flex center column">

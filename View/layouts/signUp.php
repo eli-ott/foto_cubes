@@ -2,6 +2,7 @@
     <div class="form-container flex start column">
         <h2>M'inscrire</h2>
         <form action="form/signUp" method="post" class="flex row wrap">
+            <input type="text" class="hide" name="honeypot"/>
             <input type="text" name="pseudo" placeholder="Pseudo" required>
             <input type="text" name="nom" placeholder="Nom" required>
             <input type="text" name="prenom" placeholder="Prénom" required>
@@ -15,6 +16,7 @@
             <input type="email" name="email" placeholder="Email" required id="email">
             <input type="password" name="password" placeholder="Mot de passe" required>
             <input type="password" name="passwordValidation" placeholder="Confirmer le mot de passe" required>
+            <a href="<?= URL ?>/accueil" class="flex center">Annuler</a>
             <button type="submit">M'inscrire</button>
         </form>
     </div>

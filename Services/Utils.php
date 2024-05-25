@@ -73,6 +73,10 @@ class Utils
      */
     public static function userAdmin(): bool
     {
+        if (!isset($_COOKIE['isAdmin'])) {
+            return false;
+        }
+
         return (bool)$_COOKIE['isAdmin'];
     }
 

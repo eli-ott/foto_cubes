@@ -20,4 +20,3 @@
         </form>
     </div>
 </section>
-<?= var_dump($_SESSION['alert']) ?>

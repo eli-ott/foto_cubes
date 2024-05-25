@@ -66,6 +66,11 @@ html, body {
     align-items: end;
 }
 
+.hide {
+    visibility: hidden !important;
+    position: absolute !important;
+}
+
 @media screen and (width <= 1024px) {
     .setFont.content.small {
         font-size: var(--desktop-font-size-s);

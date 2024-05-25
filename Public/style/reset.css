@@ -1,65 +1,87 @@
 .reset {
-	height: 100vh;
-	width: 100vw;
+    height: 100vh;
+    width: 100vw;
 
-	background: center / cover url('../assets/image/form-background.jpg') no-repeat;
+    background: center / cover url('../assets/image/form-background.jpg') no-repeat;
 }
+
 .reset .form-container {
-	width: 65%;
-	height: 65%;
+    width: 65%;
+    height: 65%;
 
-	gap: var(--margin-m);
-	background: var(--dark-25);
-	border-radius: var(--radius-l);
-	padding: var(--margin-m);
+    gap: var(--margin-m);
+    background: var(--dark-25);
+    border-radius: var(--radius-l);
+    padding: var(--margin-m);
 }
+
 .reset .form-container * {
-	color: var(--light);
+    color: var(--light);
 }
 
 .reset .form-container h2 {
-	font-size: var(--desktop-font-size-xl);
-	font-weight: var(--font-weigh-content);
+    font-size: var(--desktop-font-size-xl);
+    font-weight: var(--font-weigh-content);
 }
+
 .reset .form-container form {
-	justify-content: space-between;
-	gap: var(--margin-s);
+    justify-content: space-between;
+    gap: var(--margin-s);
 }
+
 .reset .form-container form input {
-	background: none;
-	outline: none;
+    background: none;
+    outline: none;
 
-	font-size: var(--desktop-font-size-s);
+    font-size: var(--desktop-font-size-s);
 
-	width: 45%;
-	padding: var(--margin-xs);
+    width: 45%;
+    padding: var(--margin-xs);
 
-	border: solid 2px var(--light);
-	border-radius: var(--radius-m);
+    border: solid 2px var(--light);
+    border-radius: var(--radius-m);
 }
+
 .reset .form-container form input::placeholder {
-	color: var(--light-50);
-	opacity: 1;
+    color: var(--light-50);
+    opacity: 1;
 }
+
 .reset .form-container form input::-ms-input-placeholder {
-	color: var(--light-50);
+    color: var(--light-50);
 }
-.reset .form-container form button {
-	outline: none;
-	cursor: pointer;
 
-	margin-left: auto;
-	transition: 0.15s;
-	width: 45%;
-	padding: var(--margin-xs);
+.reset .form-container form button,
+.reset .form-container form a {
+    outline: none;
+    cursor: pointer;
 
-	font-size: var(--desktop-font-size-s);
+    margin-left: auto;
+    transition: 0.15s;
+    width: 45%;
+    padding: var(--margin-xs);
 
-	color: var(--dark);
-	border: solid 2px var(--light);
-	border-radius: var(--radius-m);
+    font-size: var(--desktop-font-size-s);
+
+    color: var(--dark);
+    border: solid 2px var(--light);
+    border-radius: var(--radius-m);
 }
+
+.reset .form-container form a {
+    text-decoration: none;
+
+    margin-left: 0;
+
+    color: var(--light);
+}
+
 .reset .form-container form button:hover {
-	background: var(--blue);
-	color: var(--light);
+    background: var(--blue);
+    color: var(--light);
+}
+
+.reset .form-container form a:hover {
+    background: var(--light);
+    color: var(--dark);
 }

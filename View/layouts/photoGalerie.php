@@ -4,7 +4,7 @@
              class="image" style="--bg-image: url('<?= URL ?><?= $photo->getSource() ?>"></div>
         <!-- PHOTO FOR PROFIL PAGE -->
         <?php if (isset($compteActif) && $compteActif) : ?>
-            <form action="<?= URL ?>form/delete-photo" method="post" style="visibility: hidden; position: absolute"
+            <form action="<?= URL ?>form/delete-photo" method="post" class="hide"
                   id="delete-form">
                 <input type="text" name="idPhoto" value="<?= $photo->getId(); ?>">
                 <input type="text" name="titre" value="<?= $photo->getTitre(); ?>">
@@ -17,7 +17,7 @@
                   class="flex column">
                 <div class="inputs flex row">
                     <input type="text" name="idPhoto" value="<?= $photo->getId(); ?>"
-                           style="visibility: hidden; position: absolute">
+                           class="hide">
                     <input type="text" name="titre" value="<?= $photo->getTitre(); ?>">
                     <select name="tag" required>
                         <?php foreach (Constants::TYPE_PHOTOS as $typePhoto) : ?>
