@@ -1,23 +1,27 @@
 <?php
 require_once('Services/Model.php');
 
+/**
+ * Le manager pour gérer les messages envoyé
+ */
 class MessageManager extends Model
 {
     /**
-     * Ajoute le message a la base de donnée
+     * Ajoute le message à la base de donnée
      * 
      * @param string $message Le message envoyer
-     * @param int $id_receveur récupère l'id_receveur
-     * @param int $id_envoyeur récupère l'id_envoyeur
+     * @param int $idReceveur récupère l'id_receveur
+     * @param int $idEnvoyeur récupère l'id_envoyeur
      * @return int Le code statut de la requête
+     * @throws Exception
      */
-    public function saveMail(string $message, int $id_receveur, int $id_envoyeur): int
+    public function saveMail(string $message, int $idReceveur, int $idEnvoyeur): int
     {
         $sql = "INSERT INTO envoyer (id_envoyeur, id_receveur, `message`) VALUES (:id_envoyeur, :id_receveur, :msg)";
 
         $req = $this->getBDD()->prepare($sql, [
-            "id_envoyeur" => $id_envoyeur,
-            "id_receveur" => $id_receveur,
+            "id_envoyeur" => $idEnvoyeur,
+            "id_receveur" => $idReceveur,
             "msg" => $message
         ]);
         $req->execute();

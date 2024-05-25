@@ -1,61 +1,64 @@
 <?php
 
+/**
+ * Les données d'un photographe
+ */
 class Photographe implements JsonSerializable
 {
     /**
-     * @var int $id L'identifiant du photographe
+     * @var ?int $id L'identifiant du photographe
      */
-    private $id;
+    private ?int $id;
     /**
-     * @var int $idMdp L'id du mot de passe de l'utilisateur
+     * @var ?int $idMdp L'id du mot de passe de l'utilisateur
      */
-    private $idMdp;
+    private ?int $idMdp;
     /**
      * @var string $nom Le nom du photographe
      */
-    private $nom;
+    private string $nom;
     /**
      * @var string $prenom Le prénom du photographe
      */
-    private $prenom;
+    private string $prenom;
     /**
      * @var string $pseudo Le pseudo
      */
-    private $pseudo;
+    private string $pseudo;
     /**
      * @var string $email L'email
      */
-    private $email;
+    private string $email;
     /**
-     * @var int $age Son age
+     * @var ?int $age Son age
      */
-    private $age;
+    private ?int $age;
     /**
-     * @var string $typePhotoPref Le type de photo préféré du photographe
+     * @var ?string $typePhotoPref Le type de photo préféré du photographe
      */
-    private $typePhotoPref;
+    private ?string $typePhotoPref;
     /**
-     * @var string $dateCreation la date de création de son compte
+     * @var ?string $dateCreation la date de création de son compte
      */
-    private $dateCreation;
+    private ?string $dateCreation;
     /**
-     * @var bool $warn Si le compte est warn
+     * @var ?bool $warn Si le compte est warn
      */
-    private $warn;
+    private ?bool $warn;
     /**
-     * @var bool $compteValide Si le compte a été validé ou non
+     * @var ?bool $compteValide Si le compte a été validé ou non
      */
-    private $compteValide;
+    private ?bool $compteValide;
 
     /**
      * Constructor
-     * 
-     * @param ?int $id L'identifiant
-     * @param ?int $idMdp L'identifiant du mot de passe
+     *
      * @param string $nom Le nom
      * @param string $prenom Le prénom
      * @param string $pseudo Le pseudo
      * @param string $email L'email
+     * @param ?int $id L'identifiant
+     * @param ?int $idMdp L'identifiant du mot de passe
      * @param ?int $age L'age
      * @param ?string $typePhotoPref Le type de photo préféré du photographe
      * @param ?string $dateCreation La date de création du compte
@@ -63,18 +66,19 @@ class Photographe implements JsonSerializable
      * @param ?bool $compteValide Si le compte a été validé ou non
      */
     public function __construct(
-        ?int $id = null,
-        ?int $idMdp = null,
-        string $nom,
-        string $prenom,
-        string $pseudo,
-        string $email,
-        ?int $age = null,
+        string  $nom,
+        string  $prenom,
+        string  $pseudo,
+        string  $email,
+        ?int    $id = null,
+        ?int    $idMdp = null,
+        ?int    $age = null,
         ?string $typePhotoPref = null,
         ?string $dateCreation = null,
-        ?bool $warn = null,
-        ?bool $compteValide = null
-    ) {
+        ?bool   $warn = null,
+        ?bool   $compteValide = null
+    )
+    {
         $this->id = $id;
         $this->idMdp = $idMdp;
         $this->nom = $nom;
@@ -90,7 +94,7 @@ class Photographe implements JsonSerializable
 
     /**
      * Récupère l'id du photographe
-     * 
+     *
      * @return int L'id du photographe
      */
     public function getId(): int
@@ -100,7 +104,7 @@ class Photographe implements JsonSerializable
 
     /**
      * Récupère l'identifiant du mot de passe du photographe
-     * 
+     *
      * @return int L'id du mot de passe du photographe
      */
     public function getIdMdp(): int
@@ -110,7 +114,7 @@ class Photographe implements JsonSerializable
 
     /**
      * Permettre de définir l'id du mot de passe
-     * 
+     *
      * @param int $idMdp L'id du mot de passe
      */
     public function setIdMdp(int $idMdp): void
@@ -120,7 +124,7 @@ class Photographe implements JsonSerializable
 
     /**
      * Récupère le nom du photographe
-     * 
+     *
      * @return string Le nom
      */
     public function getNom(): string
@@ -130,7 +134,7 @@ class Photographe implements JsonSerializable
 
     /**
      * Récupère le prenom du photographe
-     * 
+     *
      * @return string Le prenom
      */
     public function getPrenom(): string
@@ -140,7 +144,7 @@ class Photographe implements JsonSerializable
 
     /**
      * Récupère le pseudo du photographe
-     * 
+     *
      * @return string Le pseudo
      */
     public function getPseudo(): string
@@ -149,9 +153,9 @@ class Photographe implements JsonSerializable
     }
 
     /**
-     * Récupère le email du photographe
-     * 
-     * @return string Le email
+     * Récupère l'email du photographe
+     *
+     * @return string L'email
      */
     public function getEmail(): string
     {
@@ -159,8 +163,8 @@ class Photographe implements JsonSerializable
     }
 
     /**
-     * Récupère le age du photographe
-     * 
+     * Récupère l'âge du photographe
+     *
      * @return int L'age
      */
     public function getAge(): int
@@ -170,7 +174,7 @@ class Photographe implements JsonSerializable
 
     /**
      * Récupère le type de photo préféré du photographe
-     * 
+     *
      * @return string Le type de photo préféré
      */
     public function getTypePhotoPref(): string
@@ -180,7 +184,7 @@ class Photographe implements JsonSerializable
 
     /**
      * Récupère la date de création du compte du photographe
-     * 
+     *
      * @return string La date de création du compte
      */
     public function getDateCreation(): string
@@ -190,8 +194,8 @@ class Photographe implements JsonSerializable
 
     /**
      * Récupère si le compte est warn ou non
-     * 
-     * @return string Si le compte est warn ou non
+     *
+     * @return bool Si le compte est warn ou non
      */
     public function getWarn(): bool
     {
@@ -200,7 +204,7 @@ class Photographe implements JsonSerializable
 
     /**
      * Récupère si le compte a été validé ou non
-     * 
+     *
      * @return bool Si le compte a été validé ou non
      */
     public function getCompteValide(): bool
@@ -210,7 +214,7 @@ class Photographe implements JsonSerializable
 
     /**
      * Serialize le tableau en objet
-     * 
+     *
      * @return mixed Le tableau associatif contenant les valeurs
      */
     public function jsonSerialize(): mixed

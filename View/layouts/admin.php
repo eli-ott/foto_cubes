@@ -16,7 +16,7 @@
             <div class="accounts flex row start wrap">
                 <?php foreach ($comptesWarn as $profil): ?>
                     <div class="account">
-                        <p><?= $profil->getPseudo(); ?>></p>
+                        <p><?= $profil->getPseudo(); ?></p>
                     </div>
                 <?php endforeach; ?>
             </div>
