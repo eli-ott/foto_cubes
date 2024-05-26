@@ -30,3 +30,13 @@
     width: 45%;
     gap: var(--margin-s);
 }
+
+@media screen and (width <= 900px) {
+    .content-container .form-container form {
+        flex-direction: column;
+    }
+
+    .content-container .form-container form > div {
+        width: 100% !important;
+    }
+}

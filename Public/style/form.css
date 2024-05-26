@@ -27,7 +27,7 @@ html, body {
 
 .content-container .form-container h2 {
     font-size: var(--desktop-font-size-xl);
-    font-weight: var(--font-weight-content);
+    font-weight: var(--content-weight);
 }
 
 .content-container .form-container form {
@@ -82,7 +82,7 @@ html, body {
     align-self: end;
 
     transition: 0.15s;
-    width: 35%;
+    min-width: 35%;
     padding: var(--margin-xs);
 
     font-size: var(--desktop-font-size-s);
@@ -118,4 +118,23 @@ html, body {
 .content-container.sign-up .form-container form input,
 .content-container.sign-up .form-container form select {
     width: 45%;
+}
+
+@media screen and (width <= 900px) {
+    .content-container .form-container {
+        width: 100%;
+        height: 100%;
+
+        border-radius: 0;
+    }
+
+    .content-container.sign-up .form-container form input,
+    .content-container.sign-up .form-container form select {
+        width: 100%;
+    }
+
+    .content-container .form-container form button,
+    .content-container .form-container form .back {
+        min-width: 45%;
+    }
 }
