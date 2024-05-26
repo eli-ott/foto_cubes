@@ -5,6 +5,11 @@
     grid-column-end: span 5;
 }
 
+.image-container.vertical {
+    grid-column-end: span 3;
+    grid-row-end: span 5;
+}
+
 .image-container .image {
     cursor: pointer;
     width: 100%;
