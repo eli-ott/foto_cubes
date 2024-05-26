@@ -1,11 +1,17 @@
-.connect {
+html, body {
+    overflow: hidden;
+}
+
+.content-container {
+    overflow: hidden;
+
     height: 100vh;
     width: 100vw;
 
     background: center / cover url('../assets/image/form-background.jpg') no-repeat;
 }
 
-.connect .form-container {
+.content-container .form-container {
     height: fit-content;
     width: 50%;
     padding: var(--margin-s);
@@ -15,22 +21,23 @@
     gap: var(--margin-m);
 }
 
-.connect .form-container * {
+.content-container .form-container * {
     color: var(--light);
 }
 
-.connect .form-container h2 {
+.content-container .form-container h2 {
     font-size: var(--desktop-font-size-xl);
     font-weight: var(--font-weight-content);
 }
 
-.connect .form-container form {
+.content-container .form-container form {
     width: 100%;
 
     gap: var(--margin-s);
 }
 
-.connect .form-container form input {
+.content-container .form-container form input,
+.content-container .form-container form select {
     background: none;
     outline: none;
 
@@ -43,28 +50,33 @@
     border-radius: var(--radius-m);
 }
 
-.connect .form-container form input::placeholder {
+.content-container .form-container form input::placeholder {
     color: var(--light-50);
     opacity: 1;
 }
 
-.connect .form-container form input::-ms-input-placeholder {
+.content-container .form-container form input::-ms-input-placeholder {
     color: var(--light-50);
 }
 
-.connect .form-container form a {
+.content-container .form-container form select option {
+    color: var(--dark);
+    padding: 40px;
+}
+
+.content-container .form-container form a {
     font-size: 14px;
     color: var(--light-50);
 }
 
-.connect .form-container form .actions {
+.content-container .form-container form .actions {
     justify-content: space-between;
 
     width: 100%;
 }
 
-.connect .form-container form button,
-.connect .form-container form .back {
+.content-container .form-container form button,
+.content-container .form-container form .back {
     outline: none;
     cursor: pointer;
     align-self: end;
@@ -81,19 +93,29 @@
 }
 
 
-.connect .form-container form button:hover {
+.content-container .form-container form button:hover {
     background: var(--blue);
     color: var(--light);
 }
 
-.connect .form-container form .back {
+.content-container .form-container form .back {
     text-decoration: none;
 
     color: var(--light);
 }
 
-.connect .form-container form .back:hover {
+.content-container .form-container form .back:hover {
     background: var(--light);
     color: var(--dark);
 }
 
+/* SPECIFIC STYLE FOR SIGN UP PAGE */
+.content-container.sign-up .form-container form {
+    justify-content: space-between;
+    gap: var(--margin-s);
+}
+
+.content-container.sign-up .form-container form input,
+.content-container.sign-up .form-container form select {
+    width: 45%;
+}

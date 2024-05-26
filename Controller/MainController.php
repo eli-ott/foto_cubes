@@ -139,7 +139,7 @@ class MainController extends Render
             'description' => 'Inscription à Foto',
             "showFooter" => false,
             "showHeader" => false,
-            "pageCss" => ['signUp', 'nav', 'footer'],
+            "pageCss" => ['form'],
             'view' => 'View/layouts/signUp.php',
             'template' => 'View/base.php'
         ]);
@@ -160,7 +160,7 @@ class MainController extends Render
             'description' => 'Connexion à Foto',
             "showFooter" => false,
             "showHeader" => false,
-            "pageCss" => ['connect', 'nav', 'footer'],
+            "pageCss" => ['form'],
             'view' => 'View/layouts/connect.php',
             'template' => 'View/base.php'
         ]);
@@ -198,7 +198,7 @@ class MainController extends Render
             "showFooter" => false,
             "showHeader" => false,
             "pageScripts" => ['upload'],
-            "pageCss" => ['upload', 'nav', 'footer'],
+            "pageCss" => ['form', 'upload'],
             'view' => 'View/layouts/upload.php',
             'template' => 'View/base.php'
         ]);
@@ -214,7 +214,7 @@ class MainController extends Render
             'description' => 'Réinitialiser le mot de passe de mon compte Foto',
             'showFooter' => false,
             'showHeader' => false,
-            'pageCss' => ['reset'],
+            'pageCss' => ['form'],
             'view' => 'View/layouts/reset.php',
             'template' => 'View/base.php'
         ]);
@@ -230,7 +230,7 @@ class MainController extends Render
             'description' => 'Valider votre email',
             'showFooter' => false,
             'showHeader' => false,
-            'pageCss' => ['validateEmail'],
+            'pageCss' => ['form'],
             'view' => 'View/layouts/validateEmail.php',
             'template' => 'View/base.php'
         ]);

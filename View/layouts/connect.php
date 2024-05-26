@@ -1,4 +1,4 @@
-<section class="connect flex center">
+<section class="content-container flex center">
     <div class="form-container flex start column">
         <h2>Me connecter</h2>
         <form action="<?= URL ?>form/connexion" method="post" class="flex column center">

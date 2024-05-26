@@ -1,4 +1,4 @@
-<section class="sign-up flex center">
+<section class="content-container sign-up flex center">
     <div class="form-container flex start column">
         <h2>M'inscrire</h2>
         <form action="form/signUp" method="post" class="flex row wrap">
@@ -16,8 +16,10 @@
             <input type="email" name="email" placeholder="Email" required id="email">
             <input type="password" name="password" placeholder="Mot de passe" required>
             <input type="password" name="passwordValidation" placeholder="Confirmer le mot de passe" required>
-            <a href="<?= URL ?>/accueil" class="flex center">Annuler</a>
-            <button type="submit">M'inscrire</button>
+            <div class="flex actions">
+                <a href="<?= URL ?>/accueil" class="back flex center">Annuler</a>
+                <button type="submit">M'inscrire</button>
+            </div>
         </form>
     </div>
 </section>

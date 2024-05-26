@@ -1,4 +1,4 @@
-<section class="reset flex center">
+<section class="content-container flex center">
     <div class="form-container flex start column">
         <h2>Réinitialiser mon mot de passe</h2>
         <form action="<?= URL ?>form/reset-mdp" method="post" class="flex row wrap">
@@ -7,8 +7,10 @@
             <input required type="password" name="password" placeholder="Mot de passe actuel">
             <input required type="password" name="newPass" placeholder="Nouveau mot de passe">
             <input required type="password" name="newPassValidation" placeholder="Confirmer le mot de passe">
-            <a href="<?= URL ?>accueil" class="flex center">Annuler</a>
-            <button type="submit">Réinitialiser</button>
+            <div class="flex actions">
+                <a href="<?= URL ?>accueil" class="back flex center">Annuler</a>
+                <button type="submit">Réinitialiser</button>
+            </div>
         </form>
     </div>
 </section>
