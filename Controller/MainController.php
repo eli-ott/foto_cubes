@@ -81,7 +81,7 @@ class MainController extends Render
         if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
-        };
+        }
 
         $this->render([
             "title" => 'Profil',
@@ -197,6 +197,7 @@ class MainController extends Render
             'description' => 'Ajouter une photo à Foto',
             "showFooter" => false,
             "showHeader" => false,
+            "pageScripts" => ['upload'],
             "pageCss" => ['upload', 'nav', 'footer'],
             'view' => 'View/layouts/upload.php',
             'template' => 'View/base.php'

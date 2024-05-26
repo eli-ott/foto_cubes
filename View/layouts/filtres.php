@@ -1,12 +1,5 @@
 <aside class="flex column start">
     <div class="input-container flex column start">
-        <h4>Trier par :</h4>
-        <select id="sort">
-            <option value="decroissant">Date décroissante</option>
-            <option value="croissant">Date croissante</option>
-        </select>
-    </div>
-    <div class="input-container flex column start">
         <h4>Date de publication :</h4>
         <div class="input-container flex column start">
             <div class="flex center">

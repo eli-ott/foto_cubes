@@ -74,10 +74,13 @@ class PhotoController
                 $data['idPhoto'],
                 $data['source'],
                 $data['datePriseVue'],
-                photographe: $this->compteManager->getUserInfo($data['idUser']),
+                photographe: $this->compteManager->getUserInfo($_COOKIE['id']),
             );
 
             $this->photoManager->deletePhoto($photo);
+
+            Utils::newAlert('Photo supprimé avec succès', Constants::TYPES_MESSAGES['success']);
+            Utils::redirect(URL . 'profil/1');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'profil/1');

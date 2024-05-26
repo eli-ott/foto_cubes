@@ -1,7 +1,8 @@
 <?php
 
-require_once('Services/Model.php');
-
+/**
+ * Le manager pour les photos
+ */
 class PhotoManager extends Model
 {
 
@@ -16,9 +17,8 @@ class PhotoManager extends Model
 
         $request = $this->getBDD()->prepare($sql);
         $request->execute();
-        $data = $request->fetchAll(PDO::FETCH_ASSOC);
 
-        return $data;
+        return $request->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -26,6 +26,7 @@ class PhotoManager extends Model
      *
      * @param int $page La page actuelle pour calculer les photos à récupérer
      * @return array Le tableau d'images
+     * @throws Exception
      */
     public function getPhotos(int $page): array
     {
@@ -35,6 +36,7 @@ class PhotoManager extends Model
         $sql = "SELECT photo.id_user, photo.id_photo, photo.titre, photo.tag, photo.source, photo.date_prise_vue, photo.date_publication, photographe.nom, photographe.prenom, photographe.pseudo, photographe.email 
         FROM photo 
         LEFT JOIN utilisateur as photographe ON photo.id_user = photographe.id_user 
+        ORDER BY photo.date_publication DESC
         LIMIT :limit_photo OFFSET :from_offset;";
 
         $req = $this->getBDD()->prepare($sql);
@@ -98,6 +100,7 @@ class PhotoManager extends Model
         FROM photo 
         LEFT JOIN utilisateur as photographe ON photo.id_user = photographe.id_user
         WHERE photo.id_user = :idUser 
+        ORDER BY photo.date_publication DESC
         LIMIT :limitPhoto OFFSET :fromOffset;";
 
         $req = $this->getBDD()->prepare($sql);
@@ -151,6 +154,7 @@ class PhotoManager extends Model
      *
      * @param Photo $photo La photo à ajouter
      * @return int Le code statut de la requête
+     * @throws Exception
      */
     public function addPhoto(Photo $photo): int
     {
@@ -180,6 +184,7 @@ class PhotoManager extends Model
      *
      * @param Photo $photo La photo à supprimer
      * @return int Le code statut de la requête
+     * @throws Exception
      */
     public function deletePhoto(Photo $photo): int
     {
@@ -205,6 +210,7 @@ class PhotoManager extends Model
      *
      * @param Photo $photo La photo avec les informations à mettre à jour
      * @return int Le code statut de la requête
+     * @throws Exception
      */
     public function updatePhoto(Photo $photo): int
     {
@@ -231,6 +237,7 @@ class PhotoManager extends Model
      *
      * @param int $idUser L'identifiant de l'utilisateur
      * @return ?int Le code status
+     * @throws Exception
      */
     public function deleteUserPhotos(int $idUser): ?int
     {

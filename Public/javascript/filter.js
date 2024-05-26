@@ -16,15 +16,12 @@ const dateOverlap = (date, dateRange) => {
 /**
  * Permet de filtrer les photos
  *
- * @param {Event} event L'événement
+ * @return {boolean} False
  */
-const filterPhotos = (event) => {
-    event.stopPropagation();
-    event.preventDefault();
+const filterPhotos = () => {
 
     const photos = JSON.parse(sessionStorage.getItem('photos'));
 
-    const sort = document.querySelector('#sort').value;
     const startDate = document.querySelector('#startDate').value;
     const endDate = document.querySelector('#endDate').value;
     const category = document.querySelector('#category').value;
@@ -45,8 +42,6 @@ const filterPhotos = (event) => {
             document.querySelector('#photo-' + photo.id).style.display = 'none';
         }
     });
-
-    //TODO: Do the sorting by date (maybe with other function or just another foreach ??);
 
     return false;
 }
