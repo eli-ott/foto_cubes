@@ -1,4 +1,4 @@
-<section class="upload flex center">
+<section class="content-container flex center">
     <div class="form-container flex start column">
         <h2>Ajouter une photo</h2>
         <form action="form/ajouter-photo" method="post" enctype="multipart/form-data" class="flex row space-between">
@@ -15,7 +15,10 @@
                         <option value="<?= $typePhoto ?>"><?= $typePhoto ?></option>
                     <?php endforeach; ?>
                 </select>
-                <button type="submit">Ajouter</button>
+                <div class="flex actions">
+                    <a href="<?= URL ?>/profil/1" class="back flex center">Annuler</a>
+                    <button type="submit">Ajouter</button>
+                </div>
             </div>
         </form>
     </div>
