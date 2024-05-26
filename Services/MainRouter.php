@@ -114,8 +114,6 @@ try {
         case 'form':
             require_once('FormRouter.php');
             break;
-        default:
-             throw new Exception('Aucune page trouvé', 404);
     }
 } catch (Exception $e) {
     Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);

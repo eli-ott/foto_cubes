@@ -49,9 +49,9 @@ class PhotoManager extends Model
             list($width, $height) = getimagesize($row["source"]);
 
             $photos[] = new Photo(
-                intval($row['id_photo']),
                 $row['titre'],
                 $row['tag'],
+                (int)$row['id_photo'],
                 $row['source'],
                 $row['date_prise_vue'],
                 $row['date_publication'],
@@ -62,7 +62,7 @@ class PhotoManager extends Model
                     $row['email'],
                     (int)$row['id_user']
                 ),
-                $width / $height > 1 ? 'horizontal' : 'vertical'
+                $width / $height < 1 ? 'horizontal' : 'vertical'
             );
         }
 
@@ -116,7 +116,7 @@ class PhotoManager extends Model
             $photos[] = new Photo(
                 $row['titre'],
                 $row['tag'],
-                $row['id_photo'],
+                (int)$row['id_photo'],
                 $row['source'],
                 $row['date_prise_vue'],
                 $row['date_publication'],
@@ -127,7 +127,7 @@ class PhotoManager extends Model
                     $row['email'],
                     $row['id_user'],
                 ),
-                $width / $height > 1 ? 'horizontal' : 'vertical'
+                $width / $height < 1 ? 'horizontal' : 'vertical'
             );
         }
 
