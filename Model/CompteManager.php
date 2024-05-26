@@ -40,12 +40,12 @@ class CompteManager extends Model
                 $data = null;
                 while ($row = $lastInsertedRowReq->fetch(PDO::FETCH_ASSOC)) {
                     $data = new Photographe(
-                        (int)$row['id_user'],
-                        (int)$row['id_mot_de_passe'],
                         $row['nom'],
                         $row['prenom'],
                         $row['pseudo'],
                         $row['email'],
+                        (int)$row['id_user'],
+                        (int)$row['id_mot_de_passe'],
                         (int)$row['age'],
                         $row['type_photo_pref'],
                         $row['date_creation'],

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Les fonctions liées à la sécurité
+ */
 class Securite
 {
     /**

@@ -4,7 +4,7 @@
         <form action="form/ajouter-photo" method="post" enctype="multipart/form-data" class="flex row space-between">
             <div class="drop-area flex center">
                 <img src="Public/assets/image/add-photo.svg" alt="">
-                <input type="file" name="source" required>
+                <input type="file" accept=".jpeg,.jpg,.png,.webp" name="source" required onchange="showFile()">
             </div>
             <div class="inputs flex column start">
                 <input required type="text" placeholder="Titre" name="titre">

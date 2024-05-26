@@ -157,8 +157,10 @@ class Photo implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
+            "id" => $this->id,
             "titre" => $this->titre,
             "source" => $this->source,
+            "tag" => $this->tag,
             "datePriseVue" => $this->datePriseVue,
             "datePublication" => $this->datePublication,
             "photographe" => $this->photographe,

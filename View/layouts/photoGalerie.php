@@ -1,5 +1,5 @@
 <?php foreach ($photos["photos"] as $photo) : ?>
-    <figure class="image-container flex column start">
+    <figure id="photo-<?= $photo->getId(); ?>" class="image-container flex column start">
         <div onclick="showModal('<?= URL . $photo->getSource(); ?>', '<?= $photo->getTitre(); ?>', '<?= $photo->getPhotographe()->getPseudo(); ?>', '<?= $photo->getTag(); ?>', '<?= $photo->getPhotographe()->getEmail(); ?>')"
              class="image" style="--bg-image: url('<?= URL ?><?= $photo->getSource() ?>"></div>
         <!-- PHOTO FOR PROFIL PAGE -->
@@ -54,3 +54,7 @@
     </figure>
 <?php endforeach; ?>
 <?php require_once("popupGalerie.php"); ?>
+
+<script lang="text/javascript">
+    sessionStorage.setItem('photos', '<?= json_encode($photos["photos"]); ?>');
+</script>

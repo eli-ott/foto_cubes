@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * La classe pour les constantes
+ */
 class Constants
 {
     /**

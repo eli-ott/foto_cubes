@@ -81,14 +81,14 @@ class MainController extends Render
         if (!Utils::userConnected()) {
             Utils::newAlert('Aucun utilisateur connecté', Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'connexion');
-        };
+        }
 
         $this->render([
             "title" => 'Profil',
             "description" => 'Profil d\'un utilisateur de Foto',
             "showFooter" => true,
             "showHeader" => true,
-            "pageScripts" => ['profil', 'photoGalerie'],
+            "pageScripts" => ['profil', 'photoGalerie', 'filter'],
             "pageCss" => ['profil', 'popupGalerie', 'infos', 'galerie', 'filtres', 'paginator', 'photoGalerie', 'nav', 'footer'],
             "infos" => $this->compteManager->getUserInfo($_COOKIE['id']),
             "compteActif" => $this->compteManager->compteActif($_COOKIE["id"]),
@@ -197,6 +197,7 @@ class MainController extends Render
             'description' => 'Ajouter une photo à Foto',
             "showFooter" => false,
             "showHeader" => false,
+            "pageScripts" => ['upload'],
             "pageCss" => ['upload', 'nav', 'footer'],
             'view' => 'View/layouts/upload.php',
             'template' => 'View/base.php'
