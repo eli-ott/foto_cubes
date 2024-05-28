@@ -13,9 +13,9 @@
                 <input type="text" name="datePriseVue" value="<?= $photo->getDatePriseVue(); ?>">
                 <input type="text" name="idUser" value="<?= $photo->getPhotographe()->getId(); ?>">
             </form>
-            <form action="<?= URL ?>form/modify-photo" method="post" id="modify-form" style="display: none;"
-                  class="flex column">
-                <div class="inputs flex row">
+            <form action="<?= URL ?>form/modify-photo" method="post" id="modify-form-<?= $photo->getId(); ?>" style="display: none;"
+                  class="flex column modify-form">
+                <div class="inputs flex column">
                     <input type="text" name="idPhoto" value="<?= $photo->getId(); ?>"
                            class="hide">
                     <input type="text" name="titre" value="<?= $photo->getTitre(); ?>">
@@ -28,7 +28,7 @@
                     </select>
                 </div>
                 <div class="actions flex row">
-                    <button type="button" onclick="toggleModifyForm(false)">Annuler</button>
+                    <button type="button" onclick="toggleModifyForm(false, <?= $photo->getId(); ?>)">Annuler</button>
                     <button type="submit">Valider</button>
                 </div>
             </form>
@@ -36,7 +36,7 @@
                 <span class="title" style="cursor: pointer; color: red" onclick="deletePhoto()">
                     Supprimer
                 </span>
-                <span class="author" style="cursor: pointer" onclick="toggleModifyForm(true)">
+                <span class="author" style="cursor: pointer" onclick="toggleModifyForm(true, <?= $photo->getId(); ?>)">
                     Modifier
                 </span>
             </p>

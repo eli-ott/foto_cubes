@@ -11,10 +11,12 @@ const deletePhoto = () => {
  * Permet d'afficher/cacher le formulaire pour modifier sa photo
  *
  * @param {boolean} visible If the form is visible or not
+ * @param {string} idForm If the form is visible or not
  */
-const toggleModifyForm = (visible) => {
+const toggleModifyForm = (visible, idForm) => {
+    console.log(idForm);
     const formDisplay = visible ? 'flex' : 'none';
-    document.getElementById('modify-form').style.display = formDisplay;
+    document.querySelector('#modify-form-' + idForm).style.display = formDisplay;
 };
 
 /**

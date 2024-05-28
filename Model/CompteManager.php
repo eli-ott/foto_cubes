@@ -302,7 +302,7 @@ class CompteManager extends Model
             default => throw new Exception('La colonne choisit n\'existe pas', 400),
         };
 
-        $sql = 'UPDATE utilisateur SET (' . $column . ') VALUES (:newVal) WHERE id_user = :idUser';
+        $sql = 'UPDATE utilisateur SET ' . $column . ' = :newVal WHERE id_user = :idUser';
 
         $req = $this->getBDD()->prepare($sql);
         $req->bindValue('newVal', $value);

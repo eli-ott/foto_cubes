@@ -25,18 +25,19 @@
     width: 100%;
 }
 
-#modify-form {
+.modify-form {
     width: 100%;
 
     gap: var(--margin-xxs);
 }
 
-#modify-form .inputs,
-#modify-form .actions {
+.modify-form .inputs,
+.modify-form .actions {
     justify-content: space-between;
+    gap: 5px;
 }
 
-#modify-form button {
+.modify-form button {
     cursor: pointer;
     background: none;
 
@@ -47,17 +48,17 @@
     border: solid 1px var(--dark);
 }
 
-#modify-form button:hover {
+.modify-form button:hover {
     background: var(--dark);
     color: var(--light);
 }
 
-#modify-form button[type='submit'] {
+.modify-form button[type='submit'] {
     background: var(--dark);
     color: var(--light);
 }
 
-#modify-form button[type='submit']:hover {
+.modify-form button[type='submit']:hover {
     background: var(--light);
     color: var(--dark);
 }

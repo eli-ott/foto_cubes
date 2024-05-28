@@ -151,7 +151,7 @@ class CompteController
         }
 
         try {
-            $data = Utils::verifFields(['info', 'value']);
+            $data = Utils::verifFields(['field', 'value']);
 
             $this->compteManager->updateUser($data['field'], $data['value'], $_COOKIE['id']);
 
