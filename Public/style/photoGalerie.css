@@ -62,3 +62,16 @@
     background: var(--light);
     color: var(--dark);
 }
+
+@media screen and (width < 900px) {
+    .image-container,
+    .image-container.vertical {
+        object-fit: contain;
+        height: 45vh;
+        width: 100%;
+    }
+
+    .image-container.vertical {
+        height: 80vh;
+    }
+}

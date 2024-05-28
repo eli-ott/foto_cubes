@@ -1,7 +1,7 @@
 <aside class="flex column start">
     <div class="input-container flex column start">
         <h4>Date de publication :</h4>
-        <div class="input-container flex column start">
+        <div class="input-container dates flex column start">
             <div class="flex center">
                 <label for="startDate" style="height: fit-content;">Du</label>
                 <input type="date" id="startDate" placeholder="10/10/2024">
