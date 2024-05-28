@@ -51,3 +51,9 @@ h2 {
 
     text-decoration: underline 1px;
 }
+
+@media screen and (width < 900px) {
+    .info p {
+        width: 95%;
+    }
+}

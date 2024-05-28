@@ -27,7 +27,7 @@
             </p>
         <?php endif; ?>
     </div>
-    <div class="buttons flex start">
+    <div class="buttons flex row start wrap">
         <form action="<?= URL ?>form/disconnect" method="post">
             <button type="submit">Me déconnecter</button>
         </form>
