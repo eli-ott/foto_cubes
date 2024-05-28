@@ -46,21 +46,21 @@
             <i>Pseudo:</i> <b><?= $infos->getPseudo() ?></b>
             <button onclick="toggleUpdateInfo(true, 'update-pseudo')"><img src=" <?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
         </p>
-        <form action="<?= URL ?>form/update-info" method="post" id="update-mail" style="display: none;" class="flex column">
-            <div class="inputs flex row">
-                <input type="text" name="idUser" value="<?= $infos->getId(); ?>" class="hide">
-                <input type="email" name="value" value="<?= $infos->getEmail(); ?>">
-                <input type="text" name="field" value="email" class="hide">
-            </div>
-            <div class="actions flex row">
-                <button type="button" onclick="toggleUpdateInfo(false, 'update-mail')">Annuler</button>
-                <button type="submit">Valider</button>
-            </div>
-        </form>
-        <p class="flex start">
-            <i>Adresse Mail:</i> <b><?= $infos->getEmail() ?></b>
-            <button onclick="toggleUpdateInfo(true, 'update-mail')"><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
-        </p>
+        <div class="flex start">
+            <i>Adresse Mail:</i> <b id="valeur-mail"><?= $infos->getEmail() ?></b>
+            <form action="<?= URL ?>form/update-info" method="post" id="update-mail" style="display: none;" class="flex column">
+                <div class="inputs flex row">
+                    <input type="text" name="idUser" value="<?= $infos->getId(); ?>" class="hide">
+                    <input type="email" name="value" value="<?= $infos->getEmail(); ?>">
+                    <input type="text" name="field" value="email" class="hide">
+                </div>
+                <div class="actions flex row">
+                    <button type="button" onclick="toggleUpdateInfo(false, 'mail')">Annuler</button>
+                    <button type="submit">Valider</button>
+                </div>
+            </form>
+            <button onclick="toggleUpdateInfo(true, 'mail')"><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
+        </div>
         <form action="<?= URL ?>form/update-info" method="post" id="update-age" style="display: none;" class="flex column">
             <div class="inputs flex row">
                 <input type="text" name="idUser" value="<?= $infos->getId(); ?>" class="hide">

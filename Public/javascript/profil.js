@@ -23,5 +23,7 @@ const validateDeletion = async URL => {
  */
 const toggleUpdateInfo = (visible, element) => {
 	const formDisplay = visible ? 'flex' : 'none';
-	document.getElementById(element).style.display = formDisplay;
+	document.getElementById('update-' + element).style.display = formDisplay;
+	const valeurDisplay = !visible ? 'flex' : 'none';
+	document.getElementById('valeur-' + element).style.display = valeurDisplay;
 };
