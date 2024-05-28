@@ -15,3 +15,13 @@ const validateDeletion = async URL => {
 		}
 	}
 };
+
+/**
+ * Permet d'afficher/cacher le formulaire pour modifier saes infos
+ *
+ * @param {boolean} visible If the form is visible or not
+ */
+const toggleUpdateInfo = (visible, element) => {
+	const formDisplay = visible ? 'flex' : 'none';
+	document.getElementById(element).style.display = formDisplay;
+};
