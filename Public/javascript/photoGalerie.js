@@ -1,9 +1,11 @@
 /**
  * Permet de supprimer une photo
+ * 
+ * @param {number} idPhoto L'id de la photo
  */
-const deletePhoto = () => {
+const deletePhoto = (idPhoto) => {
     if (confirm('Etes vous sur de vouloir supprimer votre photo ?')) {
-        document.getElementById('delete-form').submit();
+        document.getElementById('delete-form-' + idPhoto).submit();
     }
 };
 

@@ -1,5 +1,6 @@
 .photos-container {
     justify-content: space-between;
+	flex-flow: row-reverse wrap !important;
 }
 
 .photos-container a {

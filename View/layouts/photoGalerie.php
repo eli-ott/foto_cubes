@@ -5,7 +5,7 @@
         <!-- PHOTO FOR PROFIL PAGE -->
         <?php if (isset($compteActif) && $compteActif) : ?>
             <form action="<?= URL ?>form/delete-photo" method="post" class="hide"
-                  id="delete-form">
+                  id="delete-form-<?= $photo->getId() ?>">
                 <input type="text" name="idPhoto" value="<?= $photo->getId(); ?>">
                 <input type="text" name="titre" value="<?= $photo->getTitre(); ?>">
                 <input type="text" name="tag" value="<?= $photo->getTag(); ?>">
@@ -33,7 +33,7 @@
                 </div>
             </form>
             <p class="description flex">
-                <span class="title" style="cursor: pointer; color: red" onclick="deletePhoto()">
+                <span class="title" style="cursor: pointer; color: red" onclick="deletePhoto(<?= $photo->getId(); ?>)">
                     Supprimer
                 </span>
                 <span class="author" style="cursor: pointer" onclick="toggleModifyForm(true, <?= $photo->getId(); ?>)">

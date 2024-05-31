@@ -222,9 +222,8 @@ class CompteController
             Utils::redirect(URL . 'erreur');
         }
 
-
         try {
-            $data = Utils::verifFields(['pseudo', 'password', 'newPass', 'newPassValidation']);
+            $data = Utils::verifFields(['pseudo', 'newPass', 'newPassValidation']);
 
             if ($data['newPass'] !== $data['newPassValidation']) {
                 Utils::newAlert('Les nouveaux mots de passes ne correspondent pas', Constants::TYPES_MESSAGES['error']);
@@ -233,9 +232,7 @@ class CompteController
 
             $idUser = $this->compteManager->getUserId($data['pseudo']);
 
-            if ($this->connexionController->validateConnection($idUser, $data['password'])) {
-                $this->passwordManager->updatePassword(Utils::hashPassword($data['newPass']), $idUser);
-            }
+            $this->passwordManager->updatePassword(Utils::hashPassword($data['newPass']), $idUser);
 
             Utils::newAlert('Mot de passe modifié avec succès', Constants::TYPES_MESSAGES['success']);
             Utils::redirect(URL . 'connexion');

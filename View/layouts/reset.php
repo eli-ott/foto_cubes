@@ -4,7 +4,6 @@
         <form action="<?= URL ?>form/reset-mdp" method="post" class="flex row wrap">
             <input type="text" name="honeypot" class="hide"/>
             <input required type="text" name="pseudo" placeholder="Pseudo">
-            <input required type="password" name="password" placeholder="Mot de passe actuel">
             <input required type="password" name="newPass" placeholder="Nouveau mot de passe">
             <input required type="password" name="newPassValidation" placeholder="Confirmer le mot de passe">
             <div class="flex actions">
