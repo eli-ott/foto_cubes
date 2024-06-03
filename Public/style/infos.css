@@ -25,8 +25,8 @@ h2 {
 	outline: none;
 	cursor: pointer;
 
-	width: 20px;
 	height: 20px;
+	width: 20px;
 }
 
 .info div button img {
@@ -37,6 +37,26 @@ h2 {
 .info div form div input {
 	border: none;
 	font-weight: bold;
+	border: solid 1px var(--dark);
+}
+
+.info div form .actions {
+	margin-top: var(--margin-xxs);
+	gap: var(--margin-xxs);
+}
+
+.info div form .actions button {
+	height: auto;
+	width: auto;
+	transition: 0.15s;
+	padding: 5px var(--margin-xxs);
+
+	border: solid 1px var(--dark);
+}
+
+.info div form .actions button:hover {
+	background: var(--dark);
+	color: var(--light);
 }
 
 /* .info div form div button {
@@ -58,11 +78,11 @@ h2 {
 
 	color: var(--dark);
 
-    text-decoration: underline 1px;
+	text-decoration: underline 1px;
 }
 
 @media screen and (width < 900px) {
-    .info p {
-        width: 95%;
-    }
+	.info p {
+		width: 95%;
+	}
 }

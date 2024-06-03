@@ -17,7 +17,7 @@ const validateDeletion = async URL => {
 };
 
 /**
- * Permet d'afficher/cacher le formulaire pour modifier saes infos
+ * Permet d'afficher/cacher le formulaire pour modifier ses infos
  *
  * @param {boolean} visible If the form is visible or not
  */
@@ -26,4 +26,5 @@ const toggleUpdateInfo = (visible, element) => {
 	document.getElementById('update-' + element).style.display = formDisplay;
 	const valeurDisplay = !visible ? 'flex' : 'none';
 	document.getElementById('valeur-' + element).style.display = valeurDisplay;
+	document.getElementById('pen-' + element).style.display = valeurDisplay;
 };

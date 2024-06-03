@@ -10,11 +10,11 @@
                     <input type="text" name="field" value="nom" class="hide">
                 </div>
                 <div class="actions flex row">
-                    <button type="button" onclick="toggleUpdateInfo(false, 'nom')"><b>Annuler</b></button>
-                    <button type="submit"><b>Valider</b></button>
+                    <button type="button" onclick="toggleUpdateInfo(false, 'nom')">Annuler</button>
+                    <button type="submit">Valider</button>
                 </div>
             </form>
-            <button onclick="toggleUpdateInfo(true, 'nom')"><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
+            <button id="pen-nom" onclick="toggleUpdateInfo(true, 'nom')"><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
         </div>
         <div class="flex start">
             <i>Prénom:</i> <b id="valeur-prenom"><?= $infos->getPrenom() ?></b>
@@ -25,11 +25,11 @@
                     <input type="text" name="field" value="prenom" class="hide">
                 </div>
                 <div class="actions flex row">
-                    <button type="button" onclick="toggleUpdateInfo(false, 'prenom')"><b>Annuler</b></button>
-                    <button type="submit"><b>Valider</b></button>
+                    <button type="button" onclick="toggleUpdateInfo(false, 'prenom')">Annuler</button>
+                    <button type="submit">Valider</button>
                 </div>
             </form>
-            <button onclick="toggleUpdateInfo(true, 'prenom')"><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
+            <button id="pen-prenom" onclick="toggleUpdateInfo(true, 'prenom')"><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
         </div>
         <div class="flex start">
             <i>Pseudo:</i> <b id="valeur-pseudo"><?= $infos->getPseudo() ?></b>
@@ -40,11 +40,11 @@
                     <input type="text" name="field" value="pseudo" class="hide">
                 </div>
                 <div class="actions flex row">
-                    <button type="button" onclick="toggleUpdateInfo(false, 'pseudo')"><b>Annuler</b></button>
-                    <button type="submit"><b>Valider</b></button>
+                    <button type="button" onclick="toggleUpdateInfo(false, 'pseudo')">Annuler</button>
+                    <button type="submit">Valider</button>
                 </div>
             </form>
-            <button onclick="toggleUpdateInfo(true, 'pseudo')"><img src=" <?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
+            <button id="pen-pseudo" onclick="toggleUpdateInfo(true, 'pseudo')"><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
         </div>
         <div class="flex start">
             <i>Adresse Mail:</i> <b id="valeur-mail"><?= $infos->getEmail() ?></b>
@@ -55,11 +55,11 @@
                     <input type="text" name="field" value="email" class="hide">
                 </div>
                 <div class="actions flex row">
-                    <button type="button" onclick="toggleUpdateInfo(false, 'mail')"><b>Annuler</b></button>
-                    <button type="submit"><b>Valider</b></button>
+                    <button type="button" onclick="toggleUpdateInfo(false, 'mail')">Annuler</button>
+                    <button type="submit">Valider</button>
                 </div>
             </form>
-            <button onclick="toggleUpdateInfo(true, 'mail')"><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
+            <button id="pen-mail" onclick="toggleUpdateInfo(true, 'mail')"><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
         </div>
         <div class="flex start">
             <i>Age:</i> <b id="valeur-age"><?= $infos->getAge() ?></b>
@@ -70,11 +70,11 @@
                     <input type="text" name="field" value="age" class="hide">
                 </div>
                 <div class="actions flex row">
-                    <button type="button" onclick="toggleUpdateInfo(false, 'age')"><b>Annuler</b></button>
-                    <button type="submit"><b>Valider</b></button>
+                    <button type="button" onclick="toggleUpdateInfo(false, 'age')">Annuler</button>
+                    <button type="submit">Valider</button>
                 </div>
             </form>
-            <button onclick="toggleUpdateInfo(true, 'age')"><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
+            <button id="pen-age" onclick="toggleUpdateInfo(true, 'age')"><img src="<?= URL ?>Public/assets/image/pen.svg" alt="Modifier"></button>
         </div>
         <?php if ($infos->getWarn()) : ?>
             <p class="flex start">
