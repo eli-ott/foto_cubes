@@ -1,20 +1,24 @@
 /**
  * Permet de supprimer une photo
+ * 
+ * @param {number} idPhoto L'id de la photo
  */
-const deletePhoto = () => {
-	if (confirm('Etes vous sur de vouloir supprimer votre photo ?')) {
-		document.getElementById('delete-form').submit();
-	}
+const deletePhoto = (idPhoto) => {
+    if (confirm('Etes vous sur de vouloir supprimer votre photo ?')) {
+        document.getElementById('delete-form-' + idPhoto).submit();
+    }
 };
 
 /**
  * Permet d'afficher/cacher le formulaire pour modifier sa photo
  *
  * @param {boolean} visible If the form is visible or not
+ * @param {string} idForm If the form is visible or not
  */
-const toggleModifyForm = visible => {
-	const formDisplay = visible ? 'flex' : 'none';
-	document.getElementById('modify-form').style.display = formDisplay;
+const toggleModifyForm = (visible, idForm) => {
+    console.log(idForm);
+    const formDisplay = visible ? 'flex' : 'none';
+    document.querySelector('#modify-form-' + idForm).style.display = formDisplay;
 };
 
 /**

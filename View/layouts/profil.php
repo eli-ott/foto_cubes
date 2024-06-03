@@ -6,11 +6,12 @@
     </form>
 <?php else : ?>
     <?php require_once("View/layouts/infos.php"); ?>
-    <div class="photos-container flex">
-        <h2 class="photos">Mes photos :</h2> <a href="<?= URL ?>ajouter" class="flex center">
-            <img src="<?= URL ?>Public/assets/image/add-photo.svg" alt="" />
+    <div class="photos-container flex row wrap">
+        <a href="<?= URL ?>ajouter" class="flex center">
+            <img src="<?= URL ?>Public/assets/image/add-photo.svg" alt=""/>
             Ajouter une photo
         </a>
+        <h2 class="photos">Mes photos :</h2>
     </div>
     <?php require_once('View/layouts/galerie.php'); ?>
 

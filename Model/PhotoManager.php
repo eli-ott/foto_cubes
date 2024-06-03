@@ -62,7 +62,7 @@ class PhotoManager extends Model
                     $row['email'],
                     (int)$row['id_user']
                 ),
-                $width / $height < 1 ? 'horizontal' : 'vertical'
+                $width / $height > 1 ? 'horizontal' : 'vertical'
             );
         }
 
@@ -127,7 +127,7 @@ class PhotoManager extends Model
                     $row['email'],
                     $row['id_user'],
                 ),
-                $width / $height < 1 ? 'horizontal' : 'vertical'
+                $width / $height > 1 ? 'horizontal' : 'vertical'
             );
         }
 
@@ -195,6 +195,7 @@ class PhotoManager extends Model
         $req = $this->getBDD()->prepare($sql);
         $req->bindValue("idPhoto", $photo->getId());
         $req->execute();
+
 
         if ($req) {
             $status = 200;

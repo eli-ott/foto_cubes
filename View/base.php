@@ -8,6 +8,12 @@
     <meta name="description" content="<?= $description; ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+    <link rel="manifest" href="/manifest.json"/>
+    <!--IOS SUPPORT-->
+    <meta name="apple-mobile-web-app-status-bar" content="#db4938"/>
+    <meta name="theme-color" content="#3378df"/>
+
     <link href="https://fonts.googleapis.com/css2?family=Cousine:ital,wght@0,400;0,700;1,400;1,700&display=swap"
           rel="stylesheet"/>
     <link rel="stylesheet" href="<?= URL ?>Public/style/var.css">
@@ -36,6 +42,13 @@
         </div>
     </div>
 <?php endif; ?>
+
+<div class="snackbar flex row">
+    <a href="<?= URL ?>accueil"><img src="/Public/assets/image/home.svg" alt="maison" /></a>
+    <a href="<?= URL ?>galerie/1"><img src="/Public/assets/image/gallery.svg" alt="galerie" /></a>
+    <a href="<?= URL ?>ajouter"><img src="/Public/assets/image/add.svg" alt="ajouter" /></a>
+    <a href="<?= URL ?>profil/1"><img src="/Public/assets/image/person.svg" alt="compte" /></a>
+</div>
 
 <script lang="text/javascript" src="<?= URL ?>Public/javascript/alert.js"></script>
 <?php if (!empty($pageScripts)) : ?>
