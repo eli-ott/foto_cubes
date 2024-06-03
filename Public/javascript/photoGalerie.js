@@ -31,19 +31,19 @@ const toggleModifyForm = (visible, idForm) => {
  * @param {string} email L'email du photographe
  */
 const showModal = (photo, titre, pseudo, tag, email) => {
-    document.querySelector('.popup').style.display = 'flex';
+	document.querySelector('.popup').style.display = 'flex';
 
-    document.querySelector('.popup .image').src = photo;
-    document.querySelector('.titre').innerHTML = titre;
-    document.querySelector('.pseudo').innerHTML = pseudo;
-    document.querySelector('.pseudo-warn').value = pseudo;
-    document.querySelector('.tag').innerHTML = tag;
-    document.querySelector('.mail-receveur').value = email;
-}
+	document.querySelector('.popup .image').src = photo;
+	document.querySelector('.titre').innerHTML = titre;
+	document.querySelector('.pseudo').innerHTML = pseudo;
+	document.querySelector('.pseudo-warn').value = pseudo;
+	document.querySelector('.tag').innerHTML = tag;
+	document.querySelector('.mail-receveur').value = email;
+};
 
 /**
  * Permet d'enlever la modale
  */
 const hideModal = () => {
-    document.querySelector('.popup').style.display = 'none';
-}
+	document.querySelector('.popup').style.display = 'none';
+};

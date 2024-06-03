@@ -1,59 +1,88 @@
 .info-container {
-    width: 100vw;
-    padding: var(--margin-m);
-    gap: var(--margin-m);
+	width: 100vw;
+	padding: var(--margin-m);
+	gap: var(--margin-m);
 }
 
 h2 {
-    font-size: var(--desktop-font-size-m);
+	font-size: var(--desktop-font-size-m);
 }
 
 .info {
-    width: 100%;
-    gap: var(--margin-s);
+	width: 100%;
+	gap: var(--margin-s);
 }
 
-.info p {
-    align-items: center;
-    gap: var(--margin-xxs);
-    width: 35%;
+.info div {
+	align-items: center;
+	gap: var(--margin-xxs);
+	width: 35%;
 }
 
-.info p button {
-    background: none;
-    border: none;
-    outline: none;
-    cursor: pointer;
+.info div button {
+	background: none;
+	border: none;
+	outline: none;
+	cursor: pointer;
 
-    width: 20px;
-    height: 20px;
+	height: 20px;
+	width: 20px;
 }
 
-.info p button img {
-    width: 100%;
-    transform: translateY(-2px);
+.info div button img {
+	width: 100%;
+	transform: translateY(-2px);
 }
+
+.info div form div input {
+	border: none;
+	font-weight: bold;
+	border: solid 1px var(--dark);
+}
+
+.info div form .actions {
+	margin-top: var(--margin-xxs);
+	gap: var(--margin-xxs);
+}
+
+.info div form .actions button {
+	height: auto;
+	width: auto;
+	transition: 0.15s;
+	padding: 5px var(--margin-xxs);
+
+	border: solid 1px var(--dark);
+}
+
+.info div form .actions button:hover {
+	background: var(--dark);
+	color: var(--light);
+}
+
+/* .info div form div button {
+	justify-content: space-evenly;
+} */
 
 .buttons {
-    gap: var(--margin-m);
+	gap: var(--margin-m);
 }
 
 .buttons button {
-    cursor: pointer;
+	cursor: pointer;
 
-    background: none;
-    border: none;
+	background: none;
+	border: none;
 
-    font-family: var(--font-family);
-    font-size: var(--desktop-font-size-s);
+	font-family: var(--font-family);
+	font-size: var(--desktop-font-size-s);
 
-    color: var(--dark);
+	color: var(--dark);
 
-    text-decoration: underline 1px;
+	text-decoration: underline 1px;
 }
 
 @media screen and (width < 900px) {
-    .info p {
-        width: 95%;
-    }
+	.info p {
+		width: 95%;
+	}
 }

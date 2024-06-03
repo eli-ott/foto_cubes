@@ -55,6 +55,9 @@ switch ($param) {
     case 'remove-alert':
         unset($_SESSION['alert']);
         break;
+    case 'update-info':
+        $compteController->updateInfosUser();
+        break;
     default:
         throw new Exception('Le formulaire n\'est pas valide', Constants::TYPES_MESSAGES['error']);
 }
