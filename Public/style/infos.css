@@ -59,10 +59,6 @@ h2 {
 	color: var(--light);
 }
 
-/* .info div form div button {
-	justify-content: space-evenly;
-} */
-
 .buttons {
 	gap: var(--margin-m);
 }
@@ -84,5 +80,26 @@ h2 {
 @media screen and (width < 900px) {
 	.info p {
 		width: 95%;
+	}
+	.info-container {
+		padding: var(--margin-s);
+		gap: var(--margin-s);
+	}
+
+	h2 {
+		font-size: var(--mobile-font-size-m);
+	}
+
+	.info div {
+		width: 100%;
+		gap: var(--margin-xs);
+	}
+
+	.buttons {
+		gap: var(--margin-s);
+	}
+
+	.buttons button {
+		font-size: var(--mobile-font-size-s);
 	}
 }
