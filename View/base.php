@@ -44,10 +44,10 @@
 <?php endif; ?>
 
 <div class="snackbar flex row">
-    <a href="<?= URL ?>accueil"><img src="/Public/assets/image/home.svg" alt="maison" /></a>
-    <a href="<?= URL ?>galerie/1"><img src="/Public/assets/image/gallery.svg" alt="galerie" /></a>
-    <a href="<?= URL ?>ajouter"><img src="/Public/assets/image/add.svg" alt="ajouter" /></a>
-    <a href="<?= URL ?>profil/1"><img src="/Public/assets/image/person.svg" alt="compte" /></a>
+    <a href="<?= URL ?>accueil"><img src="<?= URL ?>Public/assets/image/home.svg" alt="maison" /></a>
+    <a href="<?= URL ?>galerie/1"><img src="<?= URL ?>Public/assets/image/gallery.svg" alt="galerie" /></a>
+    <a href="<?= URL ?>ajouter"><img src="<?= URL ?>Public/assets/image/add.svg" alt="ajouter" /></a>
+    <a href="<?= URL ?>profil/1"><img src="<?= URL ?>Public/assets/image/person.svg" alt="compte" /></a>
 </div>
 
 <script lang="text/javascript" src="<?= URL ?>Public/javascript/alert.js"></script>
