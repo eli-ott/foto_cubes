@@ -43,3 +43,13 @@
 .account:hover {
     background: var(--dark-75);
 }
+
+@media screen and (width < 900px) {
+    .stats-container .stats p {
+        width: 100%;
+    }
+
+    .account {
+        width: 95%;
+    }
+}
