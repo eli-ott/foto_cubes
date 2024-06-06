@@ -23,7 +23,7 @@
             <div class="preview flex center column">
                 <div class="pictures flex center">
                     <?php foreach ($photos as $preview) : ?>
-                        <div class="pic" style="--bg-image: url('<?= URL ?>Public/photos/<?= $preview["source"] ?>"></div>
+                        <div class="pic" style="--bg-image: url('<?= URL ?><?= $preview["source"] ?>"></div>
                     <?php endforeach; ?>
                 </div>
                 <a href="<?= URL ?>galerie/1" class="more">Voir plus</a>
