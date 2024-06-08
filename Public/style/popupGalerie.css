@@ -1,150 +1,162 @@
 .popup {
-    position: fixed;
-    display: none;
+	position: fixed;
+	display: none;
 
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 
-    backdrop-filter: brightness(50%);
+	backdrop-filter: brightness(50%);
 }
 
 .popup .content-container {
-    justify-content: space-between;
-    position: relative;
+	justify-content: space-between;
+	position: relative;
 
-    width: 75%;
-    height: 75%;
+	width: 75%;
+	height: 75%;
 
-    border-radius: 25px;
-    background: var(--light);
+	border-radius: 25px;
+	background: var(--light);
 }
 
 .popup .content-container .warn {
-    position: absolute;
-    outline: none;
-    background: none;
-    cursor: pointer;
-    border: none;
+	position: absolute;
+	outline: none;
+	background: none;
+	cursor: pointer;
+	border: none;
 
-    bottom: var(--margin-xxs);
-    left: var(--margin-xxs);
-    margin-left: auto;
-    transition: 0.15s;
-    padding: var(--margin-xs);
+	bottom: var(--margin-xxs);
+	left: var(--margin-xxs);
+	margin-left: auto;
+	transition: 0.15s;
+	padding: var(--margin-xs);
 
-    font-size: var(--desktop-font-size-s);
+	font-size: var(--desktop-font-size-s);
 
-    background: orange;
-    color: var(--light);
-    border-radius: var(--radius-m);
+	background: orange;
+	color: var(--light);
+	border-radius: var(--radius-m);
 }
 
 .popup .content-container .warn:hover {
-    background: red;
+	background: red;
 }
 
 .popup .content-container .croix {
-    position: absolute;
-    cursor: pointer;
+	position: absolute;
+	cursor: pointer;
 
-    width: 32px;
-    top: var(--margin-xxs);
-    left: var(--margin-xxs);
+	width: 32px;
+	top: var(--margin-xxs);
+	left: var(--margin-xxs);
 
-    border-radius: 100%;
-    background: var(--dark-50);
+	border-radius: 100%;
+	background: var(--dark-50);
 }
 
 .popup .content-container .image {
-    width: 50%;
-    height: 100%;
+	width: 50%;
+	height: 100%;
 
-    object-fit: contain;
-    border-radius: 25px 0 0 25px;
+	object-fit: contain;
+	border-radius: 25px 0 0 25px;
 
-    background: var(--dark-25);
+	background: var(--dark-25);
 }
 
 .popup .content-container .infos {
-    position: relative;
+	position: relative;
 
-    gap: var(--margin-m);
-    padding: var(--margin-s);
-    width: 50%;
-    height: 100%;
+	gap: var(--margin-m);
+	padding: var(--margin-s);
+	width: 50%;
+	height: 100%;
 }
 
 .popup .content-container .infos h2 {
-    font-size: var(--desktop-font-size-l);
+	font-size: var(--desktop-font-size-l);
 }
 
 .popup .content-container .infos .tag {
-    position: absolute;
+	position: absolute;
 
-    padding: var(--margin-xxs);
-    right: var(--margin-s);
-    top: var(--margin-s);
+	padding: var(--margin-xxs);
+	right: var(--margin-s);
+	top: var(--margin-s);
 
-    background: var(--dark);
-    color: var(--light);
-    border-radius: 10px;
+	background: var(--dark);
+	color: var(--light);
+	border-radius: 10px;
 }
 
 .popup .content-container .infos .pseudo::before {
-    content: '@';
+	content: '@';
 }
 
 .popup .content-container .infos form {
-    width: 100%;
-    gap: var(--margin-s);
+	width: 100%;
+	gap: var(--margin-s);
 }
 
 .popup .content-container .infos form h5 {
-    font-size: var(--desktop-font-size-m);
+	font-size: var(--desktop-font-size-m);
 }
 
 .popup .content-container .infos form input {
-    background: none;
-    outline: none;
+	background: none;
+	outline: none;
 
-    font-size: var(--desktop-font-size-s);
+	font-size: var(--desktop-font-size-s);
 
-    width: 100%;
-    padding: var(--margin-xs);
+	width: 100%;
+	padding: var(--margin-xs);
 
-    border: solid 2px var(--dark);
-    border-radius: var(--radius-m);
+	border: solid 2px var(--dark);
+	border-radius: var(--radius-m);
 }
 
 .popup .content-container .infos form input::placeholder {
-    color: var(--dark-50);
-    opacity: 1;
+	color: var(--dark-50);
+	opacity: 1;
 }
 
 .popup .content-container .infos form input::-ms-input-placeholder {
-    color: var(--dark-50);
+	color: var(--dark-50);
 }
 
 .popup .content-container .infos form button {
-    outline: none;
-    background: none;
-    cursor: pointer;
+	outline: none;
+	background: none;
+	cursor: pointer;
 
-    margin-left: auto;
-    transition: 0.15s;
-    width: 45%;
-    padding: var(--margin-xs);
+	margin-left: auto;
+	transition: 0.15s;
+	width: 45%;
+	padding: var(--margin-xs);
 
-    font-size: var(--desktop-font-size-s);
+	font-size: var(--desktop-font-size-s);
 
-    color: var(--dark);
-    border: solid 2px var(--dark);
-    border-radius: var(--radius-m);
+	color: var(--dark);
+	border: solid 2px var(--dark);
+	border-radius: var(--radius-m);
 }
 
 .popup .content-container .infos form button:hover {
-    background: var(--blue);
-    color: var(--dark);
+	background: var(--blue);
+	color: var(--dark);
+}
+
+@media screen and (width < 900px) {
+	.popup .content-container {
+		flex-direction: column;
+		width: 95%;
+	}
+	.popup .content-container .infos,
+	.popup .content-container .image {
+		width: 100%;
+		border-radius: var(--radius-m) var(--radius-m) 0 0;
+	}
 }
