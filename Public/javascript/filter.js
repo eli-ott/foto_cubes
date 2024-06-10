@@ -28,12 +28,13 @@ const filterPhotos = () => {
     const title = document.querySelector('#title').value;
 
     photos.forEach(photo => {
+        console.log(category);
         //default condition
-        let condition = photo.titre.includes(title) && photo.tag === category;
+        let condition = (photo.titre.includes(title) && photo.tag === category) || category === 'tout';
 
         //condition if the user chose start and end dates
         if (!isNaN(new Date(startDate).getTime()) && !isNaN(new Date(endDate).getTime())) {
-            condition = photo.titre.includes(title) && photo.tag === category && dateOverlap(new Date(photo.datePublication), [new Date(startDate), new Date(endDate)])
+            condition = (photo.titre.includes(title) && (photo.tag === category || category === 'tout')) && dateOverlap(new Date(photo.datePublication), [new Date(startDate), new Date(endDate)])
         }
 
         if (condition) {

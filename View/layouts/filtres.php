@@ -15,6 +15,7 @@
     <div class="input-container flex column start">
         <h4>Catégories :</h4>
         <select id="category">
+            <option value="tout">Aucune catégories</option>
             <?php foreach (Constants::TYPE_PHOTOS as $typePhoto) : ?>
                 <option value="<?= $typePhoto ?>"><?= $typePhoto ?></option>
             <?php endforeach; ?>
