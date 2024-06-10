@@ -1,0 +1,17 @@
+<?php
+
+require 'vendor/autoload.php';
+
+use League\Glide\ServerFactory;
+
+$sourcePath = __DIR__ . '/images/source'; // Chemin vers les images source
+$cachePath = __DIR__ . '/images/cache';   // Chemin vers le dossier de cache
+
+$server = ServerFactory::create([
+    'source' => $sourcePath,
+    'cache' => $cachePath,
+    'cache_with_file_extensions' => true,
+    'group_cache_in_folders' => false,
+]);
+
+return $server;

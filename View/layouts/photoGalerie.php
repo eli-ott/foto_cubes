@@ -1,17 +1,33 @@
 <?php
 
-use League\Flysystem\Local\LocalFilesystemAdapter;
-use League\Flysystem\Filesystem;
-use League\Glide\ServerFactory;
+// Inclure l'autoloader de Composer
+require 'vendor/autoload.php';
 
-// Setup Glide server
-$server = League\Glide\ServerFactory::create([
-    'source' => '/Public/assets/uploads',
-    'cache' => '/Public/assets/cache',
-]);
+// Inclure la configuration de Glide
+$server = require 'Services/glide-config.php';
 
-//$server->outputImage($path, $_GET);
+// Récupérer les paramètres de la requête
+$path = $_GET['path'] ?? '';
+$width = $_GET['w'] ?? null;
+$height = $_GET['h'] ?? null;
 
+$options = [];
+if ($width) {
+    $options['w'] = $width;
+}
+if ($height) {
+    $options['h'] = $height;
+}
+$options['fit'] = 'crop';
+
+try {
+    // Générer et afficher l'image
+    $server->outputImage($path, $options);
+} catch (Exception $e) {
+    // Afficher l'erreur
+    header("Content-Type: text/plain");
+    echo 'Erreur : ' . $e->getMessage();
+}
 ?>
 
 <?php foreach ($photos["photos"] as $photo) : ?>
