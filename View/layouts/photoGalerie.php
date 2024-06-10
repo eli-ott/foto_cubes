@@ -7,9 +7,9 @@ require 'vendor/autoload.php';
 $server = require 'Services/glide-config.php';
 
 // Récupérer les paramètres de la requête
-$path = $_GET['path'] ?? '';
-$width = $_GET['w'] ?? null;
-$height = $_GET['h'] ?? null;
+$path = isset($_GET['path']) ? $_GET['path'] : '';
+$width = isset($_GET['w']) ? $_GET['w'] : null;
+$height = isset($_GET['h']) ? $_GET['h'] : null;
 
 $options = [];
 if ($width) {
@@ -22,7 +22,7 @@ $options['fit'] = 'crop';
 
 try {
     // Générer et afficher l'image
-    $server->outputImage($path, $options);
+    $server->outputImage('Public/assets/uploads/3374b4ea_Photo22_22.jpg', $options);
 } catch (Exception $e) {
     // Afficher l'erreur
     header("Content-Type: text/plain");

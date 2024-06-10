@@ -4,8 +4,8 @@ require 'vendor/autoload.php';
 
 use League\Glide\ServerFactory;
 
-$sourcePath = __DIR__ . '/images/source'; // Chemin vers les images source
-$cachePath = __DIR__ . '/images/cache';   // Chemin vers le dossier de cache
+$sourcePath = __DIR__ . '/Public/assets/uploads'; // Chemin vers les images source
+$cachePath = __DIR__ . '/Public/assets/cache';   // Chemin vers le dossier de cache
 
 $server = ServerFactory::create([
     'source' => $sourcePath,
