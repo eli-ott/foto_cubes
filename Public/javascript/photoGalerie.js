@@ -1,12 +1,12 @@
 /**
  * Permet de supprimer une photo
- * 
+ *
  * @param {number} idPhoto L'id de la photo
  */
-const deletePhoto = (idPhoto) => {
-    if (confirm('Etes vous sur de vouloir supprimer votre photo ?')) {
-        document.getElementById('delete-form-' + idPhoto).submit();
-    }
+const deletePhoto = idPhoto => {
+	if (confirm('Etes vous sur de vouloir supprimer votre photo ?')) {
+		document.getElementById('delete-form-' + idPhoto).submit();
+	}
 };
 
 /**
@@ -16,9 +16,9 @@ const deletePhoto = (idPhoto) => {
  * @param {string} idForm If the form is visible or not
  */
 const toggleModifyForm = (visible, idForm) => {
-    console.log(idForm);
-    const formDisplay = visible ? 'flex' : 'none';
-    document.querySelector('#modify-form-' + idForm).style.display = formDisplay;
+	console.log(idForm);
+	const formDisplay = visible ? 'flex' : 'none';
+	document.querySelector('#modify-form-' + idForm).style.display = formDisplay;
 };
 
 /**
@@ -33,10 +33,12 @@ const toggleModifyForm = (visible, idForm) => {
 const showModal = (photo, titre, pseudo, tag, email) => {
 	document.querySelector('.popup').style.display = 'flex';
 
+	console.log(tag, document.querySelector('.pseudo-warn'));
+
 	document.querySelector('.popup .image').src = photo;
 	document.querySelector('.titre').innerHTML = titre;
 	document.querySelector('.pseudo').innerHTML = pseudo;
-	document.querySelector('.pseudo-warn').value = pseudo;
+	document.querySelector('.pseudo-warn') ? document.querySelector('.pseudo-warn').value = pseudo: '';
 	document.querySelector('.tag').innerHTML = tag;
 	document.querySelector('.mail-receveur').value = email;
 };
