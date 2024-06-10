@@ -21,8 +21,26 @@ if ($height) {
 $options['fit'] = 'crop';
 
 try {
+    // Vérifier si le fichier existe
+    $fullPath = __DIR__ . '/Public/assets/uploads/' . $path;
+    if (!file_exists($fullPath)) {
+        throw new Exception("Le fichier spécifié n'existe pas : " . $fullPath);
+    }
+
+    // Vérifier les permissions du dossier cache
+    $cacheDir = __DIR__ . "/Public/cache";
+    if (!is_writable($cacheDir)) {
+        throw new Exception("Le dossier de cache n'est pas accessible en écriture : " . $cacheDir);
+    }
+
+    // Log avant l'appel à outputImage
+    error_log('Avant outputImage : ' . $fullPath);
+
     // Générer et afficher l'image
-    $server->outputImage('Public/assets/uploads/3374b4ea_Photo22_22.jpg', $options);
+    $server->outputImage($path, $options);
+
+    // Log après l'appel à outputImage
+    error_log('Après outputImage : ' . $fullPath);
 } catch (Exception $e) {
     // Afficher l'erreur
     header("Content-Type: text/plain");
