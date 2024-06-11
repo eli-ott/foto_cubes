@@ -1,30 +1,11 @@
-<?php
-
-use League\Flysystem\Local\LocalFilesystemAdapter;
-use League\Flysystem\Filesystem;
-use League\Glide\ServerFactory;
-
-// Setup Glide server
-$server = League\Glide\ServerFactory::create([
-    'source' => '/Public/assets/uploads',
-    'cache' => '/Public/assets/cache',
-]);
-
-//$server->outputImage($path, $_GET);
-
-?>
-
 <?php foreach ($photos["photos"] as $photo) : ?>
-    <figure id="photo-<?= $photo->getId(); ?>"
-            class="image-container <?= $photo->getOrientation(); ?> flex column start">
-        <div onclick="showModal('<?= URL . $photo->getSource(); ?>', '<?= $photo->getTitre(); ?>', '<?= $photo->getPhotographe()->getPseudo(); ?>', '<?= $photo->getTag(); ?>', '<?= $photo->getPhotographe()->getEmail(); ?>')"
-             class="image">
-            <img src="<?= URL ?><?= $photo->getSource(); ?>?w=100&h=100" alt="image galerie"/>
+    <figure id="photo-<?= $photo->getId(); ?>" class="image-container <?= $photo->getOrientation(); ?> flex column start">
+        <div onclick="showModal('<?= URL . $photo->getSource(); ?>', '<?= $photo->getTitre(); ?>', '<?= $photo->getPhotographe()->getPseudo(); ?>', '<?= $photo->getTag(); ?>', '<?= $photo->getPhotographe()->getEmail(); ?>')" class="image">
+            <img src="<?= URL ?><?= $photo->getSource(); ?>?w=100&h=100" alt="image galerie" />
         </div>
         <!-- PHOTO FOR PROFIL PAGE -->
         <?php if (isset($compteActif) && $compteActif) : ?>
-            <form action="<?= URL ?>form/delete-photo" method="post" class="hide"
-                  id="delete-form-<?= $photo->getId() ?>">
+            <form action="<?= URL ?>form/delete-photo" method="post" class="hide" id="delete-form-<?= $photo->getId() ?>">
                 <input type="text" name="idPhoto" value="<?= $photo->getId(); ?>">
                 <input type="text" name="titre" value="<?= $photo->getTitre(); ?>">
                 <input type="text" name="tag" value="<?= $photo->getTag(); ?>">
@@ -32,12 +13,9 @@ $server = League\Glide\ServerFactory::create([
                 <input type="text" name="datePriseVue" value="<?= $photo->getDatePriseVue(); ?>">
                 <input type="text" name="idUser" value="<?= $photo->getPhotographe()->getId(); ?>">
             </form>
-            <form action="<?= URL ?>form/modify-photo" method="post" id="modify-form-<?= $photo->getId(); ?>"
-                  style="display: none;"
-                  class="flex column modify-form">
+            <form action="<?= URL ?>form/modify-photo" method="post" id="modify-form-<?= $photo->getId(); ?>" style="display: none;" class="flex column modify-form">
                 <div class="inputs flex column">
-                    <input type="text" name="idPhoto" value="<?= $photo->getId(); ?>"
-                           class="hide">
+                    <input type="text" name="idPhoto" value="<?= $photo->getId(); ?>" class="hide">
                     <input type="text" name="titre" value="<?= $photo->getTitre(); ?>">
                     <select name="tag" required>
                         <?php foreach (Constants::TYPE_PHOTOS as $typePhoto) : ?>
