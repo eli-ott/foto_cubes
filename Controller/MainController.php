@@ -109,8 +109,6 @@ class MainController extends Render
             Utils::redirect(URL . 'connexion');
         };
 
-        var_dump($this->compteManager->getAllUsers());
-
         $this->render([
             "title" => 'Profil Admin',
             "description" => 'Profil administrateur d\'un utilisateur de Foto',
