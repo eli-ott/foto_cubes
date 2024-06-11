@@ -58,6 +58,13 @@ switch ($param) {
     case 'update-info':
         $compteController->updateInfosUser();
         break;
+    case 'manage-account':
+        if(isset($_POST['action']) && $_POST['action'] == 'makeAdmin') {
+            $compteController->makeUserAdmin();
+        } else {
+            $compteController->flagUser();
+        }
+        break;
     default:
         throw new Exception('Le formulaire n\'est pas valide', Constants::TYPES_MESSAGES['error']);
 }

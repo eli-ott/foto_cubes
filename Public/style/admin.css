@@ -30,6 +30,44 @@
     gap: var(--margin-s);
 }
 
+.admin form {
+    gap: var(--margin-s);
+}
+
+.admin form select {
+    background: none;
+    outline: none;
+
+    font-size: var(--desktop-font-size-s);
+
+    padding: var(--margin-xs);
+
+    border: solid 2px var(--dark);
+    border-radius: var(--radius-m);
+}
+
+.admin form button {
+    outline: none;
+    cursor: pointer;
+    align-self: end;
+
+    transition: 0.15s;
+    min-width: 35%;
+    padding: var(--margin-xs);
+
+    font-size: var(--desktop-font-size-s);
+
+    color: var(--dark);
+    border: solid 2px var(--dark);
+    border-radius: var(--radius-m);
+}
+
+
+.admin form button:hover {
+    background: var(--blue);
+    color: var(--light);
+}
+
 .account {
     cursor: pointer;
 

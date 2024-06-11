@@ -9,6 +9,19 @@
             <p>Nombre de comptes warn : <b><?= $stats->getComptesWarn(); ?></b></p>
         </div>
     </div>
+    <h4>Gérer tous les comptes:</h4>
+    <form method="post" action="<?= URL ?>form/manage-account" class="flex">
+        <select name="pseudo" required>
+            <?php foreach ($users as $user): ?>
+                <option value="<?= $user['pseudo'] ?>"><?= $user['pseudo'] ?></option>
+            <?php endforeach; ?>
+        </select>
+        <select name="action" required>
+            <option value="makeAdmin">Rendre admin</option>
+            <option value="warn">Warn</option>
+        </select>
+        <button type="submit">Enregistrer</button>
+    </form>
     <?php if (!empty($comptesWarn)): ?>
         <div class="account-container flex column start">
             <h4>Les comptes warn : </h4>

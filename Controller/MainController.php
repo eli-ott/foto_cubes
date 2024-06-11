@@ -109,6 +109,8 @@ class MainController extends Render
             Utils::redirect(URL . 'connexion');
         };
 
+        var_dump($this->compteManager->getAllUsers());
+
         $this->render([
             "title" => 'Profil Admin',
             "description" => 'Profil administrateur d\'un utilisateur de Foto',
@@ -117,6 +119,7 @@ class MainController extends Render
             "pageScripts" => ['profil'],
             "pageCss" => ['admin', 'infos', 'nav', 'footer'],
             "infos" => $this->compteManager->getUserInfo($_COOKIE['id']),
+            "users" => $this->compteManager->getAllUsers(),
             "stats" => $this->compteController->getStatsAdmin(),
             "comptesWarn" => $this->compteController->getComptesWarn(),
             'view' => 'View/layouts/admin.php',

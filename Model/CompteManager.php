@@ -8,6 +8,27 @@ require_once("Services/Model.php");
 class CompteManager extends Model
 {
     /**
+     * Permet de récupérer les pseudos et les ids de tous les utilisateurs
+     * @return array Les ids et pseudos des user
+     * @throws Exception
+     */
+    public function getAllUsers(): array
+    {
+        $sql = "SELECT pseudo, id_user FROM utilisateur";
+
+        $req = $this->getBDD()->prepare($sql);
+        $req->execute();
+
+        $data = [];
+        while ($row = $req->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $row;
+        }
+
+
+        return $data;
+    }
+
+    /**
      * Permet de créer un nouveau compte
      *
      * @param Photographe $photographe Le photographe
