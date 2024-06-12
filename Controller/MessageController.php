@@ -41,11 +41,10 @@ class MessageController
 
             SendMail::sendMail($data['receiver'], $data['subject'], $data['message']);
 
-            $sender = $this->compteManager->getUserEmail($_COOKIE['id']);
-            $this->messageManager->saveMail($data['message'], $data['receiver'], $sender);
+            $this->messageManager->saveMail($data['message'], (int)$data['receiver'], $_COOKIE['id']);
 
             Utils::newAlert('Mail envoyé avec succès', Constants::TYPES_MESSAGES['success']);
-            Utils::redirect(URL . 'galerie');
+            Utils::redirect(URL . 'galerie/1');
         } catch (Exception $e) {
             Utils::newAlert($e->getMessage(), Constants::TYPES_MESSAGES['error']);
             Utils::redirect(URL . 'galerie');

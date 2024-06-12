@@ -12,8 +12,7 @@
             <form action="<?= URL ?>form/contact-photographe" method="post" class="flex column center">
                 <h5>Contacter le photographe</h5>
                 <input type="text" name="honeypot" class="hide"/>
-                <input required type="email" name="receiver" class="hide"
-                       class="mail-receveur"/>
+                <input required type="email" name="receiver" class="hide mail-receveur"/>
                 <input required type="text" name="subject" placeholder="Object">
                 <input required type="text" name="message" placeholder="Contenu du mail">
                 <button type="submit">Envoyer le mail</button>
