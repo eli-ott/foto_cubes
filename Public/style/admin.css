@@ -1,93 +1,100 @@
 .admin {
-    width: 100vw;
-    padding: var(--margin-m);
-    gap: var(--margin-m);
+	width: 100vw;
+	padding: var(--margin-m);
+	gap: var(--margin-m);
 }
 
 .admin h4 {
-    font-size: var(--desktop-font-size-l);
+	font-size: var(--desktop-font-size-m);
 }
 
 .stats-container {
-    gap: var(--margin-s);
-    width: 100%;
+	gap: var(--margin-s);
+	width: 100%;
 }
 
 .stats-container .stats {
-    width: 100%;
-    gap: var(--margin-xs);
+	width: 100%;
+	gap: var(--margin-xs);
 }
 
 .stats-container .stats p {
-    width: 45%;
+	width: 45%;
 }
 
 .account-container {
-    gap: var(--margin-s);
+	gap: var(--margin-s);
 }
 
 .account-container .accounts {
-    gap: var(--margin-s);
+	gap: var(--margin-s);
 }
 
 .admin form {
-    gap: var(--margin-s);
+	width: 100%;
+	gap: var(--margin-s);
 }
 
 .admin form select {
-    background: none;
-    outline: none;
+	background: none;
+	outline: none;
 
-    font-size: var(--desktop-font-size-s);
+	font-size: var(--desktop-font-size-s);
 
-    padding: var(--margin-xs);
+	padding: var(--margin-xs);
 
-    border: solid 2px var(--dark);
-    border-radius: var(--radius-m);
+	border: solid 2px var(--dark);
+	border-radius: var(--radius-m);
 }
 
 .admin form button {
-    outline: none;
-    cursor: pointer;
-    align-self: end;
+	outline: none;
+	cursor: pointer;
+	align-self: end;
 
-    transition: 0.15s;
-    min-width: 35%;
-    padding: var(--margin-xs);
+	transition: 0.15s;
+	padding: var(--margin-xs);
 
-    font-size: var(--desktop-font-size-s);
+	font-size: var(--desktop-font-size-s);
 
-    color: var(--dark);
-    border: solid 2px var(--dark);
-    border-radius: var(--radius-m);
+	color: var(--dark);
+	border: solid 2px var(--dark);
+	border-radius: var(--radius-m);
 }
 
-
 .admin form button:hover {
-    background: var(--blue);
-    color: var(--light);
+	background: var(--blue);
+	color: var(--light);
 }
 
 .account {
-    cursor: pointer;
+	cursor: pointer;
 
-    padding: var(--margin-xs) var(--margin-s);
-    border: solid 1px var(--dark);
-    border-radius: var(--radius-m);
+	padding: var(--margin-xs) var(--margin-s);
+	border: solid 1px var(--dark);
+	border-radius: var(--radius-m);
 
-    transition: 0.25s;
+	transition: 0.25s;
 }
 
 .account:hover {
-    background: var(--dark-75);
+	background: var(--dark-75);
 }
 
 @media screen and (width < 900px) {
-    .stats-container .stats p {
-        width: 100%;
-    }
+	.admin {
+		padding: var(--margin-s);
+		margin-bottom: var(--margin-m);
+	}
+	.stats-container .stats p {
+		width: 100%;
+	}
 
-    .account {
-        width: 95%;
-    }
+	.account-container,
+	.accounts {
+		width: 100%;
+	}
+	.account {
+		width: 95%;
+	}
 }

@@ -10,7 +10,7 @@
         </div>
     </div>
     <h4>Gérer tous les comptes:</h4>
-    <form method="post" action="<?= URL ?>form/manage-account" class="flex">
+    <form method="post" action="<?= URL ?>form/manage-account" class="flex wrap">
         <select name="pseudo" required>
             <?php foreach ($users as $user): ?>
                 <option value="<?= $user['pseudo'] ?>"><?= $user['pseudo'] ?></option>
